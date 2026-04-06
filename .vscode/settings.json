@@ -1,0 +1,25 @@
+{
+    // enable auto-linting
+    "eslint.validate": ["typescript", "javascript", "vue"],
+    "eslint.useFlatConfig": true,
+    "prettier.enable": false,
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.fixAll.eslint": "explicit"
+    },
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "editor.quickSuggestions": {
+        "strings": "on"
+    },
+    "tailwindCSS.includeLanguages": {
+        "plaintext": "vue"
+    },
+    "tailwindCSS.validate": true,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontSize": 14,
+    "editor.fontLigatures": true,
+}

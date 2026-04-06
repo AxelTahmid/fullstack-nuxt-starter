@@ -43,8 +43,8 @@ make db-status
 make db-shell
 yarn dev
 yarn build
-yarn lint
+make lint
 make typecheck
 ```
 
-`make db-migrate` also refreshes generated Kysely types into `server/db/types.generated.d.ts`. The starter still keeps [server/db/types.ts](/Users/macmini1/www/fullstack-nuxt-starter/server/db/types.ts) as the hand-authored runtime schema contract unless you choose to switch over fully.
+`make db-migrate` also refreshes generated Kysely types into `server/db/types.d.ts` via the repo's [`.kysely-codegenrc.json`](/Users/macmini1/www/fullstack-nuxt-starter/.kysely-codegenrc.json). The starter still keeps [server/db/types.ts](/Users/macmini1/www/fullstack-nuxt-starter/server/db/types.ts) as the hand-authored runtime schema contract unless you choose to switch over fully.

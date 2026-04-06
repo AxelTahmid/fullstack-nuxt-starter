@@ -4,9 +4,8 @@
   "description": "Nuxt fullstack starter with magic-link auth, Kysely, pg-boss, and a dashboard shell.",
   "private": true,
   "type": "module",
-  "packageManager": "yarn@4.13.0",
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "scripts": {
     "build": "NITRO_PRESET=node-server nuxt build",
@@ -14,14 +13,11 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "deps": "yarn upgrade-interactive",
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix --quiet",
-    "db:migrate": "tsx server/db/migrate.ts latest",
-    "db:status": "tsx server/db/migrate.ts status",
-    "db:up": "tsx server/db/migrate.ts up",
-    "db:down": "tsx server/db/migrate.ts down",
-    "db:generate-types": "kysely-codegen --out-file ./server/db/types.generated.d.ts",
-    "typecheck": "vue-tsc --noEmit"
+    "release": "standard-version",
+    "db:generate-types": "kysely-codegen"
   },
   "dependencies": {
     "@internationalized/date": "^3.12.0",
@@ -69,5 +65,6 @@
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.6"
-  }
+  },
+  "packageManager": "yarn@4.13.0"
 }

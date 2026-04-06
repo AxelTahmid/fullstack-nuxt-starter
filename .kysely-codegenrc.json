@@ -1,0 +1,9 @@
+{
+    "dialect": "postgres",
+    "outFile": "server/db/types.d.ts",
+    "envfile": ".env",
+    "url": "env(DATABASE_URL)",
+    "camelCase": false,
+    "dateParser": "timestamp",
+    "runtimeEnums": "screaming-snake-case"
+}

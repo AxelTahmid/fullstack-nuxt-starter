@@ -9,7 +9,7 @@ This starter keeps the database layer intentionally small but structured the sam
 - `server/db/migrations/*`: schema history
 - `server/db/repository/*`: query helpers you can grow by domain
 - `server/db/types.ts`: hand-authored database types for the starter schema
-- `server/db/types.generated.d.ts`: optional generated reference types from the live database schema
+- `server/db/types.d.ts`: optional generated reference types from the live database schema
 
 ## Local flow
 
@@ -45,6 +45,6 @@ Requirements:
 
 Generated output:
 
-- `server/db/types.generated.d.ts`
+- `server/db/types.d.ts`
 
 Use that file as a reference against the live database schema after migrations. If you later want to fully adopt generated DB types, switch the server-side imports intentionally instead of mixing generated and hand-authored types ad hoc.

@@ -7,6 +7,7 @@ endif
 COMPOSE ?= docker compose
 POSTGRES_SERVICE ?= postgres
 MAIL_SERVICE ?= mailpit
+NPX ?= npx
 
 .PHONY: help check-env up down fresh dev log-db log-mail db-shell db-query db-migrate db-migrate-up db-migrate-down db-gen-types db-status db-up db-down lint typecheck
 
@@ -60,25 +61,25 @@ db-query:
 
 ## db-migrate: Run all pending migrations and refresh generated DB types
 db-migrate:
-	@yarn db:migrate
+	@$(NPX) tsx server/db/migrate.ts latest
 	@$(MAKE) db-gen-types
 
 ## db-migrate-up: Run the next migration step and refresh generated DB types
 db-migrate-up:
-	@yarn db:up
+	@$(NPX) tsx server/db/migrate.ts up
 	@$(MAKE) db-gen-types
 
 ## db-migrate-down: Roll back the last migration step
 db-migrate-down:
-	@yarn db:down
+	@$(NPX) tsx server/db/migrate.ts down
 
 ## db-gen-types: Generate Kysely types from the live database schema
 db-gen-types:
-	@yarn db:generate-types
+	@$(NPX) kysely-codegen
 
 ## db-status: Show migration status
 db-status:
-	@yarn db:status
+	@$(NPX) tsx server/db/migrate.ts status
 
 ## db-up: Alias for db-migrate-up
 db-up: db-migrate-up
@@ -88,8 +89,8 @@ db-down: db-migrate-down
 
 ## lint: Run eslint
 lint:
-	@yarn lint
+	@$(NPX) eslint . --quiet
 
 ## typecheck: Run Vue and TypeScript checks
 typecheck:
-	@yarn typecheck
+	@$(NPX) vue-tsc --noEmit
