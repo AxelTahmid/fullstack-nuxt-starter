@@ -25,7 +25,7 @@ check-env:
 
 ## up: Start local support services
 up: check-env
-	@$(COMPOSE) up -d $(POSTGRES_SERVICE) $(MAIL_SERVICE)
+	@$(COMPOSE) up -d
 
 ## down: Stop local support services
 down:
@@ -33,19 +33,21 @@ down:
 
 ## fresh: Recreate local support services and volumes
 fresh: check-env
-	@$(COMPOSE) down -v --remove-orphans
-	@$(COMPOSE) up -d $(POSTGRES_SERVICE) $(MAIL_SERVICE)
+	@$(COMPOSE) down --remove-orphans
+	@$(COMPOSE) build --no-cache
+	@$(COMPOSE) up -d --build -V
+	$(MAKE) log
 
 ## dev: Prepare local services for development
 dev: up
 
 ## log-db: Follow PostgreSQL logs
 log-db:
-	@docker logs -f starter-postgres
+	@docker logs -f database
 
 ## log-mail: Follow Mailpit logs
 log-mail:
-	@docker logs -f starter-mailpit
+	@docker logs -f mailpit
 
 ## db-shell: Open a psql shell inside the PostgreSQL container
 db-shell:
