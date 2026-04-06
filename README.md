@@ -16,8 +16,8 @@ Starter template
 ```bash
 cp .env.example .env
 yarn install
-make db-up
-yarn db:migrate
+make up
+make db-migrate
 yarn dev
 ```
 
@@ -36,10 +36,15 @@ With `MAIL_MODE=console`, auth links are printed to the server logs. If you want
 ## Commands
 
 ```bash
+make up
+make db-migrate
+make db-gen-types
+make db-status
+make db-shell
 yarn dev
 yarn build
 yarn lint
-yarn typecheck
-yarn db:migrate
-yarn db:status
+make typecheck
 ```
+
+`make db-migrate` also refreshes generated Kysely types into `server/db/types.generated.d.ts`. The starter still keeps [server/db/types.ts](/Users/macmini1/www/fullstack-nuxt-starter/server/db/types.ts) as the hand-authored runtime schema contract unless you choose to switch over fully.

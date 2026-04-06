@@ -1,26 +1,95 @@
+# Load local .env if it exists (local overrides system).
 ifneq (,$(wildcard ./.env))
 	include .env
 	export
 endif
 
-.PHONY: help db-up db-down db-migrate db-status
+COMPOSE ?= docker compose
+POSTGRES_SERVICE ?= postgres
+MAIL_SERVICE ?= mailpit
 
+.PHONY: help check-env up down fresh dev log-db log-mail db-shell db-query db-migrate db-migrate-up db-migrate-down db-gen-types db-status db-up db-down lint typecheck
+
+## help: Display available targets
 help:
+	@echo "Usage:"
+	@echo "  make <target> [variables]"
+	@echo ""
 	@echo "Available targets:"
-	@echo "  make db-up"
-	@echo "  make db-down"
-	@echo "  make db-migrate"
-	@echo "  make db-status"
+	@sed -n 's/^##//p' $(MAKEFILE_LIST) | column -t -s ':' | sed -e 's/^/ /'
 
-db-up:
-	docker compose up -d postgres mailpit
+## check-env: Ensure .env exists; if not, copy from .env.example
+check-env:
+	@test -f .env || cp .env.example .env
 
-db-down:
-	docker compose down
+## up: Start local support services
+up: check-env
+	@$(COMPOSE) up -d $(POSTGRES_SERVICE) $(MAIL_SERVICE)
 
+## down: Stop local support services
+down:
+	@$(COMPOSE) down
+
+## fresh: Recreate local support services and volumes
+fresh: check-env
+	@$(COMPOSE) down -v --remove-orphans
+	@$(COMPOSE) up -d $(POSTGRES_SERVICE) $(MAIL_SERVICE)
+
+## dev: Prepare local services for development
+dev: up
+
+## log-db: Follow PostgreSQL logs
+log-db:
+	@docker logs -f starter-postgres
+
+## log-mail: Follow Mailpit logs
+log-mail:
+	@docker logs -f starter-mailpit
+
+## db-shell: Open a psql shell inside the PostgreSQL container
+db-shell:
+	@$(COMPOSE) exec $(POSTGRES_SERVICE) psql -U "$(DB_USER)" -d "$(DB_NAME)"
+
+## db-query: Run a SQL query with make db-query q='select now();'
+db-query:
+	@if [ -z "$(q)" ]; then \
+		echo "Error: q is required. Example: make db-query q='select now();'"; \
+		exit 1; \
+	fi
+	@$(COMPOSE) exec -T $(POSTGRES_SERVICE) psql -U "$(DB_USER)" -d "$(DB_NAME)" -c "$(q)"
+
+## db-migrate: Run all pending migrations and refresh generated DB types
 db-migrate:
-	yarn db:migrate
+	@yarn db:migrate
+	@$(MAKE) db-gen-types
 
+## db-migrate-up: Run the next migration step and refresh generated DB types
+db-migrate-up:
+	@yarn db:up
+	@$(MAKE) db-gen-types
+
+## db-migrate-down: Roll back the last migration step
+db-migrate-down:
+	@yarn db:down
+
+## db-gen-types: Generate Kysely types from the live database schema
+db-gen-types:
+	@yarn db:generate-types
+
+## db-status: Show migration status
 db-status:
-	yarn db:status
+	@yarn db:status
 
+## db-up: Alias for db-migrate-up
+db-up: db-migrate-up
+
+## db-down: Alias for db-migrate-down
+db-down: db-migrate-down
+
+## lint: Run eslint
+lint:
+	@yarn lint
+
+## typecheck: Run Vue and TypeScript checks
+typecheck:
+	@yarn typecheck

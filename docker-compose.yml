@@ -1,28 +1,83 @@
 services:
-  postgres:
-    image: postgres:18.1-trixie
-    container_name: starter-postgres
+  app:
+    container_name: app
+    env_file: .env
     environment:
+      - DB_HOST=database
+      # Uncomment the following lines if you want to enable polling for file watching on Windows
+      # - CHOKIDAR_USEPOLLING=true
+      # - CHOKIDAR_INTERVAL=500
+    build:
+      context: .
+      target: dev
+      dockerfile: Dockerfile
+    ports:
+      - "3030:${PORT}"
+    expose:
+      - "3030"
+    tty: true
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    links:
+      - database
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - midwives_network
+    restart: always
+
+  database:
+    image: postgres:18.1-trixie
+    command: [
+        "postgres",
+        # "-c",
+        # "io_method=io_uring",
+        "-c",
+        "ssl=off",
+        "-c",
+        "log_statement=all",
+      ]
+    container_name: db
+    env_file: ".env"
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - 5432:5432
+    expose:
+      - "5432"
     volumes:
-      - starter_pg_data:/var/lib/postgresql/data
+      - "midwives_pg_data:/var/lib/postgresql"
+    restart: on-failure
+    shm_size: 128mb
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-d", "${DB_NAME}", "-U", "${DB_USER}"]
       interval: 5s
       timeout: 3s
-      retries: 5
+      retries: 3
+    networks:
+      - midwives_network
 
+  # Mailpit for local email testing
   mailpit:
     image: axllent/mailpit:latest
-    container_name: starter-mailpit
+    container_name: mailpit
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - "1025:1025" # SMTP server port
+      - "3031:8025" # Web UI port
+    environment:
+      - MP_SMTP_AUTH_ACCEPT_ANY=true
+      - MP_SMTP_AUTH_ALLOW_INSECURE=true
+      - MP_MAX_MESSAGES=1000
+    restart: unless-stopped
+    networks:
+      - midwives_network
 
 volumes:
-  starter_pg_data:
+  midwives_pg_data:
 
+networks:
+  midwives_network:
