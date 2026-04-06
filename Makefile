@@ -1,98 +1,102 @@
-# Load local .env if it exists (local overrides system).
+# Load .env file if it exists
 ifneq (,$(wildcard ./.env))
 	include .env
 	export
 endif
 
-COMPOSE ?= docker compose
-POSTGRES_SERVICE ?= postgres
-MAIL_SERVICE ?= mailpit
-NPX ?= npx
-
-.PHONY: help check-env up down fresh dev log-db log-mail db-shell db-query db-migrate db-migrate-up db-migrate-down db-gen-types db-status db-up db-down lint typecheck
-
-## help: Display available targets
+.PHONY: help
+## help: Display this help message
 help:
 	@echo "Usage:"
 	@echo "  make <target> [variables]"
 	@echo ""
 	@echo "Available targets:"
-	@sed -n 's/^##//p' $(MAKEFILE_LIST) | column -t -s ':' | sed -e 's/^/ /'
+	@echo ${MAKEFILE_LIST}
+	@sed -n 's/^##//p' $(MAKEFILE_LIST) | column -t -s ':' |  sed -e 's/^/ /'
+
+# ----------------------------------------------------------------------
+# Environment Setup
+# ----------------------------------------------------------------------
+
+.PHONY: check-env
 
 ## check-env: Ensure .env exists; if not, copy from .env.example
 check-env:
 	@test -f .env || cp .env.example .env
 
-## up: Start local support services
-up: check-env
-	@$(COMPOSE) up -d
+# ----------------------------------------------------------------------
+# Docker Management
+# ----------------------------------------------------------------------
 
-## down: Stop local support services
+.PHONY: up down fresh init dev enter enter-db log log-db swagger
+
+## up: Start Docker containers
+up:
+	docker compose up -d
+
+## down: Stop Docker containers
 down:
-	@$(COMPOSE) down
+	docker compose down
 
-## fresh: Recreate local support services and volumes
-fresh: check-env
-	@$(COMPOSE) down --remove-orphans
-	@$(COMPOSE) build --no-cache
-	@$(COMPOSE) up -d --build -V
+## fresh: Rebuild and restart Docker containers (no cache)
+init: 
+	$(MAKE) check-env
+	docker compose down --remove-orphans
+	docker compose build --no-cache
+	docker compose up -d --build -V
 	$(MAKE) log
 
-## dev: Prepare local services for development
-dev: up
+## dev: Prepare the environment and start development mode
+# Development mode: tidy modules, restart containers, and follow logs
+dev: down up log
 
-## log-db: Follow PostgreSQL logs
+## enter: Open a shell inside the app container
+enter:
+	docker compose exec -it app sh
+
+## enter-db: Open a shell inside the database container
+enter-db:
+	docker compose exec -it database sh
+
+## log: Follow logs for the API container
+log:
+	docker logs -f app
+
+## log-db: Follow logs for the database container
 log-db:
-	@docker logs -f database
+	docker logs -f database
 
-## log-mail: Follow Mailpit logs
-log-mail:
-	@docker logs -f mailpit
+# ----------------------------------------------------------------------
+# Database Management (Kysely)
+# ----------------------------------------------------------------------
 
-## db-shell: Open a psql shell inside the PostgreSQL container
-db-shell:
-	@$(COMPOSE) exec $(POSTGRES_SERVICE) psql -U "$(DB_USER)" -d "$(DB_NAME)"
+.PHONY: db-migrate db-migrate-up db-migrate-down db-status db-gen-types
 
-## db-query: Run a SQL query with make db-query q='select now();'
-db-query:
-	@if [ -z "$(q)" ]; then \
-		echo "Error: q is required. Example: make db-query q='select now();'"; \
-		exit 1; \
-	fi
-	@$(COMPOSE) exec -T $(POSTGRES_SERVICE) psql -U "$(DB_USER)" -d "$(DB_NAME)" -c "$(q)"
-
-## db-migrate: Run all pending migrations and refresh generated DB types
+## db-migrate: Run all pending Kysely database migrations
 db-migrate:
-	@$(NPX) tsx server/db/migrate.ts latest
+	@echo "Running all pending migrations..."
+	@npx tsx server/db/migrate.ts latest
 	@$(MAKE) db-gen-types
 
-## db-migrate-up: Run the next migration step and refresh generated DB types
+## db-migrate-up: Run next pending migration
 db-migrate-up:
-	@$(NPX) tsx server/db/migrate.ts up
+	@echo "Running next migration..."
+	@npx tsx server/db/migrate.ts up
 	@$(MAKE) db-gen-types
 
-## db-migrate-down: Roll back the last migration step
+## db-migrate-down: Rollback last migration
 db-migrate-down:
-	@$(NPX) tsx server/db/migrate.ts down
+	@echo "Rolling back last migration..."
+	@npx tsx server/db/migrate.ts down
 
-## db-gen-types: Generate Kysely types from the live database schema
-db-gen-types:
-	@$(NPX) kysely-codegen
-
-## db-status: Show migration status
+## db-status: Show database migration status
 db-status:
-	@$(NPX) tsx server/db/migrate.ts status
+	@echo "Checking migration status..."
+	@npx tsx server/db/migrate.ts status
 
-## db-up: Alias for db-migrate-up
-db-up: db-migrate-up
+## db-gen-types: Generate TypeScript types from database schema
+db-gen-types:
+	@echo "Generating database types..."
+	@yarn db:generate-types
+	@echo "Types generated successfully"
 
-## db-down: Alias for db-migrate-down
-db-down: db-migrate-down
-
-## lint: Run eslint
-lint:
-	@$(NPX) eslint . --quiet
-
-## typecheck: Run Vue and TypeScript checks
-typecheck:
-	@$(NPX) vue-tsc --noEmit
