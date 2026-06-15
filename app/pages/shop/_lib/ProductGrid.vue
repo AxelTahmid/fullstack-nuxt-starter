@@ -52,7 +52,7 @@ const emit = defineEmits<{
 
 	<Card
 		v-else-if="products.length === 0"
-		class="border-dashed"
+		class="w-full min-w-0 border-dashed sm:min-w-80"
 	>
 		<CardContent class="flex flex-col items-center justify-center gap-3 py-12 text-center">
 			<div class="flex size-10 items-center justify-center rounded-lg bg-muted">

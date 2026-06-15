@@ -147,7 +147,7 @@ const rangeEnd = computed(() => {
 
 		<ShopErrorAlert v-if="error" />
 
-		<section class="grid gap-6 xl:grid-cols-[19rem_1fr]">
+		<section class="grid items-stretch gap-6 xl:grid-cols-[minmax(17rem,19rem)_minmax(24rem,1fr)]">
 			<ShopFilters
 				v-model:search="q"
 				:pending="pending"
@@ -162,7 +162,7 @@ const rangeEnd = computed(() => {
 				@select-manufacturer="setManufacturer"
 			/>
 
-			<div class="space-y-4">
+			<div class="min-w-0 space-y-4">
 				<ProductResultsHeader
 					:pending="pending"
 					:visible-count="products.length"

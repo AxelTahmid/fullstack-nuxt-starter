@@ -27,8 +27,8 @@ const emit = defineEmits<{
 </script>
 
 <template>
-	<aside class="space-y-4">
-		<Card>
+	<aside class="h-full min-w-0">
+		<Card class="h-full">
 			<CardHeader class="space-y-1 pb-3">
 				<div class="flex items-center justify-between gap-3">
 					<h2 class="flex items-center gap-2 text-base font-semibold">
@@ -134,7 +134,7 @@ const emit = defineEmits<{
 
 					<ul
 						v-if="manufacturerFacets.length > 0"
-						class="max-h-64 space-y-1 overflow-y-auto pr-1"
+						class="space-y-1 overflow-y-auto pr-1"
 					>
 						<li
 							v-for="facet in manufacturerFacets"
