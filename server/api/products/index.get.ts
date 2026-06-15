@@ -30,7 +30,7 @@ function escapeODataString(value: string) {
 }
 
 function buildItemFilter(category: string | undefined, manufacturer: string | undefined, q: string | undefined) {
-	const filters = ["Status eq true"]
+	const filters: string[] = []
 
 	if (category) {
 		filters.push(`Category eq '${escapeODataString(category)}'`)
@@ -50,7 +50,7 @@ function buildItemFilter(category: string | undefined, manufacturer: string | un
 		].join(" or "))
 	}
 
-	return filters.join(" and ")
+	return filters.length > 0 ? filters.join(" and ") : undefined
 }
 
 function itemKey(item: ICItemT) {
@@ -140,11 +140,12 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 	const q = typeof query.q === "string" && query.q.length > 0 ? query.q : undefined
 	const pageRaw = typeof query.page === "string" ? Number.parseInt(query.page, 10) : 1
 	const page = Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1
+	const filter = buildItemFilter(category, manufacturer, q)
 
 	const productsResponse = await icItemsGet({
 		path: sagePath(),
 		query: {
-			$filter: buildItemFilter(category, manufacturer, q),
+			...(filter ? { $filter: filter } : {}),
 			$top: DEFAULT_PAGE_SIZE,
 			$skip: (page - 1) * DEFAULT_PAGE_SIZE,
 			$count: true,
