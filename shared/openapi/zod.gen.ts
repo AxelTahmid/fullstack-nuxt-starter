@@ -2503,7 +2503,7 @@ export const zARCustomerWritable = z.object({
 	])),
 })
 
-export const zARCustomer2 = z.object({
+export const zARCustomerListResponseWritable = z.object({
 	"@odata.context": z.optional(z.string()),
 	"value": z.optional(z.array(zARCustomerWritable)),
 })
@@ -2558,7 +2558,7 @@ export const zICCategoryWritable = z.object({
 	])),
 })
 
-export const zICCategory2 = z.object({
+export const zICCategoryListResponseWritable = z.object({
 	"@odata.context": z.optional(z.string()),
 	"value": z.optional(z.array(zICCategoryWritable)),
 })
@@ -2840,7 +2840,7 @@ export const zICItemPricingWritable = z.object({
 	])),
 })
 
-export const zICItemPricing2 = z.object({
+export const zICItemPricingListResponseWritable = z.object({
 	"@odata.context": z.optional(z.string()),
 	"value": z.optional(z.array(zICItemPricingWritable)),
 })
@@ -3250,7 +3250,7 @@ export const zICItemWritable = z.object({
 	])),
 })
 
-export const zICItem2 = z.object({
+export const zICItemListResponseWritable = z.object({
 	"@odata.context": z.optional(z.string()),
 	"value": z.optional(z.array(zICItemWritable)),
 })
@@ -4425,7 +4425,7 @@ export const zOEInvoiceWritable = z.object({
 	])),
 })
 
-export const zOEInvoice2 = z.object({
+export const zOEInvoiceListResponseWritable = z.object({
 	"@odata.context": z.optional(z.string()),
 	"value": z.optional(z.array(zOEInvoiceWritable)),
 })

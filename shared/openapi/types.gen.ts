@@ -1817,7 +1817,7 @@ export type CommonEntityErrorWritableT = {
 	Tag?: SystemObjectWritableT
 }
 
-export type ARCustomerT2 = {
+export type ARCustomerListResponseWritableT = {
 	"@odata.context"?: string
 	"value"?: Array<ARCustomerWritableT>
 }
@@ -2053,7 +2053,7 @@ export type ARCustomerContactSelectionWritableT = {
 	}
 }
 
-export type ICCategoryT2 = {
+export type ICCategoryListResponseWritableT = {
 	"@odata.context"?: string
 	"value"?: Array<ICCategoryWritableT>
 }
@@ -2102,7 +2102,7 @@ export type ICCategoryTaxAuthorityWritableT = {
 	}
 }
 
-export type ICItemPricingT2 = {
+export type ICItemPricingListResponseWritableT = {
 	"@odata.context"?: string
 	"value"?: Array<ICItemPricingWritableT>
 }
@@ -2291,7 +2291,7 @@ export type ICItemPricingDetailWritableT = {
 	}
 }
 
-export type ICItemT2 = {
+export type ICItemListResponseWritableT = {
 	"@odata.context"?: string
 	"value"?: Array<ICItemWritableT>
 }
@@ -2629,7 +2629,7 @@ export type ICItemLotOptionalFieldWritableT = {
 	}
 }
 
-export type OEInvoiceT2 = {
+export type OEInvoiceListResponseWritableT = {
 	"@odata.context"?: string
 	"value"?: Array<OEInvoiceWritableT>
 }

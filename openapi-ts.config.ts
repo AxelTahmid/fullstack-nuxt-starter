@@ -95,9 +95,12 @@ function cleanSchemaName(name: string): string {
 	}
 
 	// OData list envelope `ODataResponse[List[<inner>]]` -> `<Inner>ListResponse`.
-	const envelope = /ODataResponse\[System\.Collections\.Generic\.List\[(.+)\]\]$/.exec(name)
+	// @hey-api appends its read/write modifier (e.g. `Writable`) after the `]]`,
+	// so capture it too: the request variant becomes `<Inner>ListResponseWritable`.
+	const envelope = /ODataResponse\[System\.Collections\.Generic\.List\[(.+?)\]\](\w*)$/.exec(name)
 	if (envelope) {
-		return `${shortenSage(envelope[1]) ?? pascalJoin(envelope[1])}ListResponse`
+		const inner = shortenSage(envelope[1]) ?? pascalJoin(envelope[1])
+		return `${inner}ListResponse${pascalJoin(envelope[2])}`
 	}
 
 	return shortenSage(name) ?? pascalJoin(name)
