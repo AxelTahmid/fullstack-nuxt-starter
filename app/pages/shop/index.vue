@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Check, LoaderCircle, Plus, Search } from "@lucide/vue"
+import { Check, ChevronLeft, ChevronRight, LoaderCircle, Plus, Search } from "@lucide/vue"
 import type { FetchError } from "ofetch"
 import type { ProductListItem, ProductListResponse } from "#shared/types/product"
 import { toast } from "~/components/toast"
@@ -21,11 +21,16 @@ await cart.refresh()
 const category = computed(() => typeof route.query.category === "string" ? route.query.category : "")
 const manufacturer = computed(() => typeof route.query.manufacturer === "string" ? route.query.manufacturer : "")
 const q = ref(typeof route.query.q === "string" ? route.query.q : "")
+const page = computed(() => {
+	const raw = typeof route.query.page === "string" ? Number.parseInt(route.query.page, 10) : 1
+	return Number.isFinite(raw) && raw > 0 ? raw : 1
+})
 
 const apiQuery = computed(() => ({
 	category: category.value || undefined,
 	manufacturer: manufacturer.value || undefined,
 	q: typeof route.query.q === "string" && route.query.q.length > 0 ? route.query.q : undefined,
+	page: page.value > 1 ? page.value : undefined,
 }))
 
 const { data, pending, refresh } = await useFetch<ProductListResponse>("/api/products", {
@@ -44,15 +49,21 @@ async function updateQuery(next: Record<string, string | undefined>) {
 }
 
 function setCategory(value: string) {
-	updateQuery({ category: value === category.value ? undefined : value })
+	updateQuery({ category: value === category.value ? undefined : value, page: undefined })
 }
 
 function setManufacturer(value: string) {
-	updateQuery({ manufacturer: value === manufacturer.value ? undefined : value })
+	updateQuery({ manufacturer: value === manufacturer.value ? undefined : value, page: undefined })
 }
 
 function submitSearch() {
-	updateQuery({ q: q.value || undefined })
+	updateQuery({ q: q.value || undefined, page: undefined })
+}
+
+function goToPage(nextPage: number) {
+	const totalPages = data.value?.totalPages ?? 1
+	const bounded = Math.min(Math.max(nextPage, 1), totalPages)
+	updateQuery({ page: bounded > 1 ? String(bounded) : undefined })
 }
 
 async function clearFilters() {
@@ -81,6 +92,24 @@ function formatPrice(cents: number) {
 }
 
 const hasFilters = computed(() => category.value || manufacturer.value || q.value)
+const pageNumbers = computed(() => {
+	const current = data.value?.page ?? page.value
+	const totalPages = data.value?.totalPages ?? 1
+	const start = Math.max(1, Math.min(current - 2, totalPages - 4))
+	const end = Math.min(totalPages, start + 4)
+
+	return Array.from({ length: end - start + 1 }, (_, index) => start + index)
+})
+const rangeStart = computed(() => {
+	const response = data.value
+	if (!response || response.total === 0) return 0
+	return (response.page - 1) * response.pageSize + 1
+})
+const rangeEnd = computed(() => {
+	const response = data.value
+	if (!response) return 0
+	return Math.min(response.total, response.page * response.pageSize)
+})
 </script>
 
 <template>
@@ -336,6 +365,52 @@ const hasFilters = computed(() => category.value || manufacturer.value || q.valu
 							</div>
 						</div>
 					</article>
+				</div>
+
+				<div
+					v-if="data && data.totalPages > 1"
+					class="border-border/60 bg-card flex flex-col gap-3 rounded-md border px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+				>
+					<p class="text-muted-foreground text-sm">
+						Showing {{ rangeStart }}-{{ rangeEnd }} of {{ data.total }} products
+					</p>
+
+					<div class="flex items-center gap-1">
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							class="size-8 rounded-md p-0"
+							:disabled="!data.hasPreviousPage || pending"
+							@click="goToPage(data.page - 1)"
+						>
+							<ChevronLeft class="size-4" />
+						</Button>
+
+						<Button
+							v-for="pageNumber in pageNumbers"
+							:key="pageNumber"
+							type="button"
+							size="sm"
+							class="size-8 rounded-md p-0 text-xs font-semibold"
+							:variant="pageNumber === data.page ? 'default' : 'outline'"
+							:disabled="pending"
+							@click="goToPage(pageNumber)"
+						>
+							{{ pageNumber }}
+						</Button>
+
+						<Button
+							type="button"
+							variant="outline"
+							size="sm"
+							class="size-8 rounded-md p-0"
+							:disabled="!data.hasNextPage || pending"
+							@click="goToPage(data.page + 1)"
+						>
+							<ChevronRight class="size-4" />
+						</Button>
+					</div>
 				</div>
 			</div>
 		</section>

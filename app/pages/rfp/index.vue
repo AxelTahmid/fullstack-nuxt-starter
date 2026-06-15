@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Check, Info, LoaderCircle, Minus, Plus } from "@lucide/vue"
+import { Check, ChevronLeft, ChevronRight, Info, LoaderCircle, Minus, Plus } from "@lucide/vue"
 import type { FetchError } from "ofetch"
 import type { ProductListItem, ProductListResponse } from "#shared/types/product"
 import { toast } from "~/components/toast"
@@ -16,8 +16,19 @@ useHead({
 
 const cart = useCart()
 await cart.refresh()
+const route = useRoute()
 
-const { data, pending } = await useFetch<ProductListResponse>("/api/products")
+const page = computed(() => {
+	const raw = typeof route.query.page === "string" ? Number.parseInt(route.query.page, 10) : 1
+	return Number.isFinite(raw) && raw > 0 ? raw : 1
+})
+const apiQuery = computed(() => ({
+	page: page.value > 1 ? page.value : undefined,
+}))
+
+const { data, pending } = await useFetch<ProductListResponse>("/api/products", {
+	query: apiQuery,
+})
 
 const CONTRACT_METADATA: Array<{ terms: string, rfp: string, vendor: string, expiryDays: number }> = [
 	{ terms: "Fixed 24 mo.", rfp: "RFP-2026-014", vendor: "Caterpillar Official", expiryDays: 540 },
@@ -32,6 +43,42 @@ const rows = computed(() => (data.value?.items ?? []).map((product, i) => ({
 	product,
 	meta: CONTRACT_METADATA[i % CONTRACT_METADATA.length],
 })))
+
+async function goToPage(nextPage: number) {
+	const totalPages = data.value?.totalPages ?? 1
+	const bounded = Math.min(Math.max(nextPage, 1), totalPages)
+	const query = { ...route.query }
+	if (bounded > 1) {
+		query.page = String(bounded)
+	}
+	else {
+		delete query.page
+	}
+
+	await navigateTo({
+		path: route.path,
+		query,
+	})
+}
+
+const pageNumbers = computed(() => {
+	const current = data.value?.page ?? page.value
+	const totalPages = data.value?.totalPages ?? 1
+	const start = Math.max(1, Math.min(current - 2, totalPages - 4))
+	const end = Math.min(totalPages, start + 4)
+
+	return Array.from({ length: end - start + 1 }, (_, index) => start + index)
+})
+const rangeStart = computed(() => {
+	const response = data.value
+	if (!response || response.total === 0) return 0
+	return (response.page - 1) * response.pageSize + 1
+})
+const rangeEnd = computed(() => {
+	const response = data.value
+	if (!response) return 0
+	return Math.min(response.total, response.page * response.pageSize)
+})
 
 const DEFAULT_QTY = 5
 const quantities = reactive<Record<string, number>>({})
@@ -292,8 +339,50 @@ async function buyNow(product: ProductListItem) {
 			</table>
 		</section>
 
-		<p class="text-muted-foreground text-center text-[0.62rem] font-semibold tracking-[0.18em] uppercase">
-			Showing 1–{{ rows.length }} of {{ rows.length }} active contracts
-		</p>
+		<div
+			v-if="data && data.totalPages > 1"
+			class="border-border/60 bg-card flex flex-col gap-3 rounded-md border px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+		>
+			<p class="text-muted-foreground text-sm">
+				Showing {{ rangeStart }}-{{ rangeEnd }} of {{ data.total }} active contracts
+			</p>
+
+			<div class="flex items-center gap-1">
+				<Button
+					type="button"
+					variant="outline"
+					size="sm"
+					class="size-8 rounded-md p-0"
+					:disabled="!data.hasPreviousPage || pending"
+					@click="goToPage(data.page - 1)"
+				>
+					<ChevronLeft class="size-4" />
+				</Button>
+
+				<Button
+					v-for="pageNumber in pageNumbers"
+					:key="pageNumber"
+					type="button"
+					size="sm"
+					class="size-8 rounded-md p-0 text-xs font-semibold"
+					:variant="pageNumber === data.page ? 'default' : 'outline'"
+					:disabled="pending"
+					@click="goToPage(pageNumber)"
+				>
+					{{ pageNumber }}
+				</Button>
+
+				<Button
+					type="button"
+					variant="outline"
+					size="sm"
+					class="size-8 rounded-md p-0"
+					:disabled="!data.hasNextPage || pending"
+					@click="goToPage(data.page + 1)"
+				>
+					<ChevronRight class="size-4" />
+				</Button>
+			</div>
+		</div>
 	</div>
 </template>

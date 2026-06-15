@@ -24,6 +24,11 @@ export interface ProductFilters {
 export interface ProductListResponse {
 	items: ProductListItem[]
 	total: number
+	page: number
+	pageSize: number
+	totalPages: number
+	hasPreviousPage: boolean
+	hasNextPage: boolean
 	facets: {
 		categories: Array<{ value: string, count: number }>
 		manufacturers: Array<{ value: string, count: number }>

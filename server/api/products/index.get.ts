@@ -156,6 +156,8 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 	const items = sageItems
 		.map(item => toProductListItem(item))
 		.filter((item): item is ProductListItem => Boolean(item))
+	const total = productsData["@odata.count"] ?? items.length
+	const totalPages = Math.max(1, Math.ceil(total / DEFAULT_PAGE_SIZE))
 	const pageFacets = countFacets(items)
 	let categoriesResponse: Awaited<ReturnType<typeof icCategoriesGet>> | undefined
 	try {
@@ -180,7 +182,12 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 
 	return {
 		items,
-		total: productsData["@odata.count"] ?? items.length,
+		total,
+		page,
+		pageSize: DEFAULT_PAGE_SIZE,
+		totalPages,
+		hasPreviousPage: page > 1,
+		hasNextPage: page < totalPages,
 		facets: {
 			categories: categories.length > 0 ? categories : pageFacets.categories,
 			manufacturers: pageFacets.manufacturers,
