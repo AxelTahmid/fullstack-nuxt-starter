@@ -4430,13 +4430,13 @@ export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbs
 	"value": z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceWritable)),
 })
 
-export const zArCustomersGetByApiversionAndTenantAndCompanyPath = z.object({
+export const zArCustomersGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zArCustomersGetByApiversionAndTenantAndCompanyQuery = z.object({
+export const zArCustomersGetQuery = z.object({
 	$filter: z.optional(z.string()),
 	$select: z.optional(z.enum([
 		"CustomerNumber",
@@ -4606,24 +4606,24 @@ export const zArCustomersGetByApiversionAndTenantAndCompanyQuery = z.object({
 /**
  * OK
  */
-export const zArCustomersGetByApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
+export const zArCustomersGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
 
 /**
  * The entity to post
  */
-export const zArCustomersPostByApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300ArWebApiModelsCustomerWritable
+export const zArCustomersPostBody = zSageCaSbsErpSage300ArWebApiModelsCustomerWritable
 
-export const zArCustomersPostByApiversionAndTenantAndCompanyPath = z.object({
+export const zArCustomersPostPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyHeaders = z.object({
+export const zArCustomersDeleteByCustomerNumberHeaders = z.object({
 	"If-Match": z.optional(z.string()),
 })
 
-export const zArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyPath = z.object({
+export const zArCustomersDeleteByCustomerNumberPath = z.object({
 	CustomerNumber: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
@@ -4633,9 +4633,9 @@ export const zArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyP
 /**
  * The entity to patch
  */
-export const zArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300ArWebApiModelsCustomerWritable
+export const zArCustomersPatchByCustomerNumberBody = zSageCaSbsErpSage300ArWebApiModelsCustomerWritable
 
-export const zArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyPath = z.object({
+export const zArCustomersPatchByCustomerNumberPath = z.object({
 	CustomerNumber: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
@@ -4645,23 +4645,23 @@ export const zArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyPa
 /**
  * The entity to put
  */
-export const zArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300ArWebApiModelsCustomerWritable
+export const zArCustomersPutByCustomerNumberBody = zSageCaSbsErpSage300ArWebApiModelsCustomerWritable
 
-export const zArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyPath = z.object({
+export const zArCustomersPutByCustomerNumberPath = z.object({
 	CustomerNumber: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyPath = z.object({
+export const zArCustomersGetByCustomerNumberPath = z.object({
 	CustomerNumber: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyQuery = z.object({
+export const zArCustomersGetByCustomerNumberQuery = z.object({
 	$select: z.optional(z.enum([
 		"CustomerNumber",
 		"ShortName",
@@ -4827,15 +4827,15 @@ export const zArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyQuer
 /**
  * OK
  */
-export const zArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
+export const zArCustomersGetByCustomerNumberResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
 
-export const zIcCategoriesGetByApiversionAndTenantAndCompanyPath = z.object({
+export const zIcCategoriesGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcCategoriesGetByApiversionAndTenantAndCompanyQuery = z.object({
+export const zIcCategoriesGetQuery = z.object({
 	$filter: z.optional(z.string()),
 	$select: z.optional(z.enum([
 		"CategoryCode",
@@ -4863,24 +4863,24 @@ export const zIcCategoriesGetByApiversionAndTenantAndCompanyQuery = z.object({
 /**
  * OK
  */
-export const zIcCategoriesGetByApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
+export const zIcCategoriesGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
 
 /**
  * The entity to post
  */
-export const zIcCategoriesPostByApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300IcWebApiModelsCategoryWritable
+export const zIcCategoriesPostBody = zSageCaSbsErpSage300IcWebApiModelsCategoryWritable
 
-export const zIcCategoriesPostByApiversionAndTenantAndCompanyPath = z.object({
+export const zIcCategoriesPostPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyHeaders = z.object({
+export const zIcCategoriesDeleteByCategoryCodeHeaders = z.object({
 	"If-Match": z.optional(z.string()),
 })
 
-export const zIcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcCategoriesDeleteByCategoryCodePath = z.object({
 	CategoryCode: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
@@ -4890,9 +4890,9 @@ export const zIcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyPa
 /**
  * The entity to patch
  */
-export const zIcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300IcWebApiModelsCategoryWritable
+export const zIcCategoriesPatchByCategoryCodeBody = zSageCaSbsErpSage300IcWebApiModelsCategoryWritable
 
-export const zIcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcCategoriesPatchByCategoryCodePath = z.object({
 	CategoryCode: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
@@ -4902,23 +4902,23 @@ export const zIcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyPat
 /**
  * The entity to put
  */
-export const zIcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300IcWebApiModelsCategoryWritable
+export const zIcCategoriesPutByCategoryCodeBody = zSageCaSbsErpSage300IcWebApiModelsCategoryWritable
 
-export const zIcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcCategoriesPutByCategoryCodePath = z.object({
 	CategoryCode: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcCategoriesGetByCategoryCodePath = z.object({
 	CategoryCode: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyQuery = z.object({
+export const zIcCategoriesGetByCategoryCodeQuery = z.object({
 	$select: z.optional(z.enum([
 		"CategoryCode",
 		"Description",
@@ -4942,15 +4942,15 @@ export const zIcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyQuery
 /**
  * OK
  */
-export const zIcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
+export const zIcCategoriesGetByCategoryCodeResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
 
-export const zIcItemPricingGetByApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemPricingGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcItemPricingGetByApiversionAndTenantAndCompanyQuery = z.object({
+export const zIcItemPricingGetQuery = z.object({
 	$filter: z.optional(z.string()),
 	$select: z.optional(z.enum([
 		"CurrencyCode",
@@ -5056,24 +5056,24 @@ export const zIcItemPricingGetByApiversionAndTenantAndCompanyQuery = z.object({
 /**
  * OK
  */
-export const zIcItemPricingGetByApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
+export const zIcItemPricingGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
 
 /**
  * The entity to post
  */
-export const zIcItemPricingPostByApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable
+export const zIcItemPricingPostBody = zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable
 
-export const zIcItemPricingPostByApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemPricingPostPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyHeaders = z.object({
+export const zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeHeaders = z.object({
 	"If-Match": z.optional(z.string()),
 })
 
-export const zIcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath = z.object({
 	CurrencyCode: z.string(),
 	UnformattedItemNumber: z.string(),
 	PriceListCode: z.string(),
@@ -5085,9 +5085,9 @@ export const zIcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricel
 /**
  * The entity to patch
  */
-export const zIcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable
+export const zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody = zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable
 
-export const zIcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath = z.object({
 	CurrencyCode: z.string(),
 	UnformattedItemNumber: z.string(),
 	PriceListCode: z.string(),
@@ -5099,9 +5099,9 @@ export const zIcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPriceli
 /**
  * The entity to put
  */
-export const zIcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable
+export const zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody = zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable
 
-export const zIcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath = z.object({
 	CurrencyCode: z.string(),
 	UnformattedItemNumber: z.string(),
 	PriceListCode: z.string(),
@@ -5110,7 +5110,7 @@ export const zIcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelist
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath = z.object({
 	CurrencyCode: z.string(),
 	UnformattedItemNumber: z.string(),
 	PriceListCode: z.string(),
@@ -5119,7 +5119,7 @@ export const zIcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelist
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyQuery = z.object({
+export const zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeQuery = z.object({
 	$select: z.optional(z.enum([
 		"CurrencyCode",
 		"UnformattedItemNumber",
@@ -5221,15 +5221,15 @@ export const zIcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelist
 /**
  * OK
  */
-export const zIcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
+export const zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
 
-export const zIcItemsGetByApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemsGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcItemsGetByApiversionAndTenantAndCompanyQuery = z.object({
+export const zIcItemsGetQuery = z.object({
 	$filter: z.optional(z.string()),
 	$select: z.optional(z.enum([
 		"UnformattedItemNumber",
@@ -5348,24 +5348,24 @@ export const zIcItemsGetByApiversionAndTenantAndCompanyQuery = z.object({
 /**
  * OK
  */
-export const zIcItemsGetByApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
+export const zIcItemsGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
 
 /**
  * The entity to post
  */
-export const zIcItemsPostByApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300IcWebApiModelsItemWritable
+export const zIcItemsPostBody = zSageCaSbsErpSage300IcWebApiModelsItemWritable
 
-export const zIcItemsPostByApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemsPostPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyHeaders = z.object({
+export const zIcItemsDeleteByUnformattedItemNumberHeaders = z.object({
 	"If-Match": z.optional(z.string()),
 })
 
-export const zIcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemsDeleteByUnformattedItemNumberPath = z.object({
 	UnformattedItemNumber: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
@@ -5375,9 +5375,9 @@ export const zIcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompa
 /**
  * The entity to patch
  */
-export const zIcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300IcWebApiModelsItemWritable
+export const zIcItemsPatchByUnformattedItemNumberBody = zSageCaSbsErpSage300IcWebApiModelsItemWritable
 
-export const zIcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemsPatchByUnformattedItemNumberPath = z.object({
 	UnformattedItemNumber: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
@@ -5387,23 +5387,23 @@ export const zIcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompan
 /**
  * The entity to put
  */
-export const zIcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyBody = zSageCaSbsErpSage300IcWebApiModelsItemWritable
+export const zIcItemsPutByUnformattedItemNumberBody = zSageCaSbsErpSage300IcWebApiModelsItemWritable
 
-export const zIcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemsPutByUnformattedItemNumberPath = z.object({
 	UnformattedItemNumber: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath = z.object({
+export const zIcItemsGetByUnformattedItemNumberPath = z.object({
 	UnformattedItemNumber: z.string(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zIcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyQuery = z.object({
+export const zIcItemsGetByUnformattedItemNumberQuery = z.object({
 	$select: z.optional(z.enum([
 		"UnformattedItemNumber",
 		"AlternateItemSetNumber",
@@ -5518,15 +5518,15 @@ export const zIcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyQ
 /**
  * OK
  */
-export const zIcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
+export const zIcItemsGetByUnformattedItemNumberResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
 
-export const zOeInvoicesGetByApiversionAndTenantAndCompanyPath = z.object({
+export const zOeInvoicesGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zOeInvoicesGetByApiversionAndTenantAndCompanyQuery = z.object({
+export const zOeInvoicesGetQuery = z.object({
 	$filter: z.optional(z.string()),
 	$select: z.optional(z.enum([
 		"InvoiceUniquifier",
@@ -5883,16 +5883,16 @@ export const zOeInvoicesGetByApiversionAndTenantAndCompanyQuery = z.object({
 /**
  * OK
  */
-export const zOeInvoicesGetByApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice
+export const zOeInvoicesGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice
 
-export const zOeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyPath = z.object({
+export const zOeInvoicesGetByInvoiceUniquifierPath = z.object({
 	InvoiceUniquifier: z.number(),
 	apiVersion: z._default(z.string(), "1.0"),
 	tenant: z._default(z.string(), "-"),
 	company: z._default(z.string(), "SAMLTD"),
 })
 
-export const zOeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyQuery = z.object({
+export const zOeInvoicesGetByInvoiceUniquifierQuery = z.object({
 	$select: z.optional(z.enum([
 		"InvoiceUniquifier",
 		"OrderNumber",
@@ -6245,4 +6245,4 @@ export const zOeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyQu
 /**
  * OK
  */
-export const zOeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice
+export const zOeInvoicesGetByInvoiceUniquifierResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice

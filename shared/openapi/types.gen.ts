@@ -3600,7 +3600,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumberWritab
 	}
 }
 
-export type ArCustomersGetByApiversionAndTenantAndCompanyData = {
+export type ArCustomersGetData = {
 	body?: never
 	path: {
 		apiVersion: string
@@ -3632,16 +3632,16 @@ export type ArCustomersGetByApiversionAndTenantAndCompanyData = {
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers"
 }
 
-export type ArCustomersGetByApiversionAndTenantAndCompanyResponses = {
+export type ArCustomersGetResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
 }
 
-export type ArCustomersGetByApiversionAndTenantAndCompanyResponse = ArCustomersGetByApiversionAndTenantAndCompanyResponses[keyof ArCustomersGetByApiversionAndTenantAndCompanyResponses]
+export type ArCustomersGetResponse = ArCustomersGetResponses[keyof ArCustomersGetResponses]
 
-export type ArCustomersPostByApiversionAndTenantAndCompanyData = {
+export type ArCustomersPostData = {
 	/**
      * The entity to post
      */
@@ -3655,14 +3655,14 @@ export type ArCustomersPostByApiversionAndTenantAndCompanyData = {
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers"
 }
 
-export type ArCustomersPostByApiversionAndTenantAndCompanyResponses = {
+export type ArCustomersPostResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type ArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyData = {
+export type ArCustomersDeleteByCustomerNumberData = {
 	body?: never
 	headers?: {
 		/**
@@ -3683,14 +3683,14 @@ export type ArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyDat
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')"
 }
 
-export type ArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyResponses = {
+export type ArCustomersDeleteByCustomerNumberResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type ArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyData = {
+export type ArCustomersPatchByCustomerNumberData = {
 	/**
      * The entity to patch
      */
@@ -3708,14 +3708,14 @@ export type ArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyData
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')"
 }
 
-export type ArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyResponses = {
+export type ArCustomersPatchByCustomerNumberResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type ArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyData = {
+export type ArCustomersPutByCustomerNumberData = {
 	/**
      * The entity to put
      */
@@ -3733,14 +3733,14 @@ export type ArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyData =
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')"
 }
 
-export type ArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyResponses = {
+export type ArCustomersPutByCustomerNumberResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyData = {
+export type ArCustomersGetByCustomerNumberData = {
 	body?: never
 	path: {
 		/**
@@ -3760,16 +3760,16 @@ export type ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyData =
 	url: "/V{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')"
 }
 
-export type ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponses = {
+export type ArCustomersGetByCustomerNumberResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
 }
 
-export type ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponse = ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponses[keyof ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponses]
+export type ArCustomersGetByCustomerNumberResponse = ArCustomersGetByCustomerNumberResponses[keyof ArCustomersGetByCustomerNumberResponses]
 
-export type IcCategoriesGetByApiversionAndTenantAndCompanyData = {
+export type IcCategoriesGetData = {
 	body?: never
 	path: {
 		apiVersion: string
@@ -3801,16 +3801,16 @@ export type IcCategoriesGetByApiversionAndTenantAndCompanyData = {
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories"
 }
 
-export type IcCategoriesGetByApiversionAndTenantAndCompanyResponses = {
+export type IcCategoriesGetResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
 }
 
-export type IcCategoriesGetByApiversionAndTenantAndCompanyResponse = IcCategoriesGetByApiversionAndTenantAndCompanyResponses[keyof IcCategoriesGetByApiversionAndTenantAndCompanyResponses]
+export type IcCategoriesGetResponse = IcCategoriesGetResponses[keyof IcCategoriesGetResponses]
 
-export type IcCategoriesPostByApiversionAndTenantAndCompanyData = {
+export type IcCategoriesPostData = {
 	/**
      * The entity to post
      */
@@ -3824,14 +3824,14 @@ export type IcCategoriesPostByApiversionAndTenantAndCompanyData = {
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories"
 }
 
-export type IcCategoriesPostByApiversionAndTenantAndCompanyResponses = {
+export type IcCategoriesPostResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyData = {
+export type IcCategoriesDeleteByCategoryCodeData = {
 	body?: never
 	headers?: {
 		/**
@@ -3852,14 +3852,14 @@ export type IcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyData
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories('{CategoryCode}')"
 }
 
-export type IcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyResponses = {
+export type IcCategoriesDeleteByCategoryCodeResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyData = {
+export type IcCategoriesPatchByCategoryCodeData = {
 	/**
      * The entity to patch
      */
@@ -3877,14 +3877,14 @@ export type IcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyData 
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories('{CategoryCode}')"
 }
 
-export type IcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyResponses = {
+export type IcCategoriesPatchByCategoryCodeResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyData = {
+export type IcCategoriesPutByCategoryCodeData = {
 	/**
      * The entity to put
      */
@@ -3902,14 +3902,14 @@ export type IcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyData = 
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories('{CategoryCode}')"
 }
 
-export type IcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyResponses = {
+export type IcCategoriesPutByCategoryCodeResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyData = {
+export type IcCategoriesGetByCategoryCodeData = {
 	body?: never
 	path: {
 		/**
@@ -3929,16 +3929,16 @@ export type IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyData = 
 	url: "/V{apiVersion}/{tenant}/{company}/IC/ICCategories('{CategoryCode}')"
 }
 
-export type IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponses = {
+export type IcCategoriesGetByCategoryCodeResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
 }
 
-export type IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponse = IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponses[keyof IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponses]
+export type IcCategoriesGetByCategoryCodeResponse = IcCategoriesGetByCategoryCodeResponses[keyof IcCategoriesGetByCategoryCodeResponses]
 
-export type IcItemPricingGetByApiversionAndTenantAndCompanyData = {
+export type IcItemPricingGetData = {
 	body?: never
 	path: {
 		apiVersion: string
@@ -3970,16 +3970,16 @@ export type IcItemPricingGetByApiversionAndTenantAndCompanyData = {
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing"
 }
 
-export type IcItemPricingGetByApiversionAndTenantAndCompanyResponses = {
+export type IcItemPricingGetResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
 }
 
-export type IcItemPricingGetByApiversionAndTenantAndCompanyResponse = IcItemPricingGetByApiversionAndTenantAndCompanyResponses[keyof IcItemPricingGetByApiversionAndTenantAndCompanyResponses]
+export type IcItemPricingGetResponse = IcItemPricingGetResponses[keyof IcItemPricingGetResponses]
 
-export type IcItemPricingPostByApiversionAndTenantAndCompanyData = {
+export type IcItemPricingPostData = {
 	/**
      * The entity to post
      */
@@ -3993,14 +3993,14 @@ export type IcItemPricingPostByApiversionAndTenantAndCompanyData = {
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing"
 }
 
-export type IcItemPricingPostByApiversionAndTenantAndCompanyResponses = {
+export type IcItemPricingPostResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData = {
+export type IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData = {
 	body?: never
 	headers?: {
 		/**
@@ -4029,14 +4029,14 @@ export type IcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelis
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing(CurrencyCode='{CurrencyCode}',UnformattedItemNumber='{UnformattedItemNumber}',PriceListCode='{PriceListCode}')"
 }
 
-export type IcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses = {
+export type IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData = {
+export type IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData = {
 	/**
      * The entity to patch
      */
@@ -4062,14 +4062,14 @@ export type IcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelist
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing(CurrencyCode='{CurrencyCode}',UnformattedItemNumber='{UnformattedItemNumber}',PriceListCode='{PriceListCode}')"
 }
 
-export type IcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses = {
+export type IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData = {
+export type IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData = {
 	/**
      * The entity to put
      */
@@ -4095,14 +4095,14 @@ export type IcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistco
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing(CurrencyCode='{CurrencyCode}',UnformattedItemNumber='{UnformattedItemNumber}',PriceListCode='{PriceListCode}')"
 }
 
-export type IcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses = {
+export type IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData = {
+export type IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData = {
 	body?: never
 	path: {
 		/**
@@ -4130,16 +4130,16 @@ export type IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistco
 	url: "/V{apiVersion}/{tenant}/{company}/IC/ICItemPricing(CurrencyCode='{CurrencyCode}',UnformattedItemNumber='{UnformattedItemNumber}',PriceListCode='{PriceListCode}')"
 }
 
-export type IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses = {
+export type IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
 }
 
-export type IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponse = IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses[keyof IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses]
+export type IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponse = IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses[keyof IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses]
 
-export type IcItemsGetByApiversionAndTenantAndCompanyData = {
+export type IcItemsGetData = {
 	body?: never
 	path: {
 		apiVersion: string
@@ -4171,16 +4171,16 @@ export type IcItemsGetByApiversionAndTenantAndCompanyData = {
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems"
 }
 
-export type IcItemsGetByApiversionAndTenantAndCompanyResponses = {
+export type IcItemsGetResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
 }
 
-export type IcItemsGetByApiversionAndTenantAndCompanyResponse = IcItemsGetByApiversionAndTenantAndCompanyResponses[keyof IcItemsGetByApiversionAndTenantAndCompanyResponses]
+export type IcItemsGetResponse = IcItemsGetResponses[keyof IcItemsGetResponses]
 
-export type IcItemsPostByApiversionAndTenantAndCompanyData = {
+export type IcItemsPostData = {
 	/**
      * The entity to post
      */
@@ -4194,14 +4194,14 @@ export type IcItemsPostByApiversionAndTenantAndCompanyData = {
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems"
 }
 
-export type IcItemsPostByApiversionAndTenantAndCompanyResponses = {
+export type IcItemsPostResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyData = {
+export type IcItemsDeleteByUnformattedItemNumberData = {
 	body?: never
 	headers?: {
 		/**
@@ -4222,14 +4222,14 @@ export type IcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompany
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems('{UnformattedItemNumber}')"
 }
 
-export type IcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses = {
+export type IcItemsDeleteByUnformattedItemNumberResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyData = {
+export type IcItemsPatchByUnformattedItemNumberData = {
 	/**
      * The entity to patch
      */
@@ -4247,14 +4247,14 @@ export type IcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyD
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems('{UnformattedItemNumber}')"
 }
 
-export type IcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses = {
+export type IcItemsPatchByUnformattedItemNumberResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyData = {
+export type IcItemsPutByUnformattedItemNumberData = {
 	/**
      * The entity to put
      */
@@ -4272,14 +4272,14 @@ export type IcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyDat
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems('{UnformattedItemNumber}')"
 }
 
-export type IcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses = {
+export type IcItemsPutByUnformattedItemNumberResponses = {
 	/**
      * OK
      */
 	200: unknown
 }
 
-export type IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyData = {
+export type IcItemsGetByUnformattedItemNumberData = {
 	body?: never
 	path: {
 		/**
@@ -4299,16 +4299,16 @@ export type IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyDat
 	url: "/V{apiVersion}/{tenant}/{company}/IC/ICItems('{UnformattedItemNumber}')"
 }
 
-export type IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses = {
+export type IcItemsGetByUnformattedItemNumberResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
 }
 
-export type IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponse = IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses[keyof IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses]
+export type IcItemsGetByUnformattedItemNumberResponse = IcItemsGetByUnformattedItemNumberResponses[keyof IcItemsGetByUnformattedItemNumberResponses]
 
-export type OeInvoicesGetByApiversionAndTenantAndCompanyData = {
+export type OeInvoicesGetData = {
 	body?: never
 	path: {
 		apiVersion: string
@@ -4340,16 +4340,16 @@ export type OeInvoicesGetByApiversionAndTenantAndCompanyData = {
 	url: "/v{apiVersion}/{tenant}/{company}/OE/OEInvoices"
 }
 
-export type OeInvoicesGetByApiversionAndTenantAndCompanyResponses = {
+export type OeInvoicesGetResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice
 }
 
-export type OeInvoicesGetByApiversionAndTenantAndCompanyResponse = OeInvoicesGetByApiversionAndTenantAndCompanyResponses[keyof OeInvoicesGetByApiversionAndTenantAndCompanyResponses]
+export type OeInvoicesGetResponse = OeInvoicesGetResponses[keyof OeInvoicesGetResponses]
 
-export type OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyData = {
+export type OeInvoicesGetByInvoiceUniquifierData = {
 	body?: never
 	path: {
 		/**
@@ -4369,11 +4369,11 @@ export type OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyData
 	url: "/v{apiVersion}/{tenant}/{company}/OE/OEInvoices({InvoiceUniquifier})"
 }
 
-export type OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponses = {
+export type OeInvoicesGetByInvoiceUniquifierResponses = {
 	/**
      * OK
      */
 	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice
 }
 
-export type OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponse = OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponses[keyof OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponses]
+export type OeInvoicesGetByInvoiceUniquifierResponse = OeInvoicesGetByInvoiceUniquifierResponses[keyof OeInvoicesGetByInvoiceUniquifierResponses]

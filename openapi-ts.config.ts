@@ -16,6 +16,47 @@ if (!apiBaseUrl) {
 
 // const auth = Buffer.from(`${username}:${password}`).toString("base64")
 
+// Path params shared by every Sage 300 OData route. They live in the
+// `/v{apiVersion}/{tenant}/{company}` prefix and add no meaning to the
+// generated symbol names, so we drop them when building operation ids.
+const SHARED_PATH_PARAMS = new Set(["apiVersion", "tenant", "company"])
+
+/**
+ * Builds a concise `operationId` from an OData route. The Sage 300 spec ships
+ * no operation ids, so @hey-api derives names from `METHOD + path` — which bakes
+ * the shared `/v{apiVersion}/{tenant}/{company}` prefix into every SDK function,
+ * type, and zod schema (e.g. `arCustomersGetByApiversionAndTenantAndCompany`).
+ *
+ * Setting the id here (before parsing) shortens the name everywhere downstream:
+ *   GET  /v{apiVersion}/{tenant}/{company}/AR/ARCustomers
+ *     -> ARCustomersGet                      -> arCustomersGet / ArCustomersGetData
+ *   GET  /v{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')
+ *     -> ARCustomersGetByCustomerNumber      -> arCustomersGetByCustomerNumber
+ */
+function buildOperationId(method: string, path: string, tag: string | undefined): string {
+	// OData key params, e.g. {CustomerNumber}, minus the shared prefix params.
+	const keys = Array.from(path.matchAll(/\{([^}]+)\}/g), match => match[1])
+		.filter((key): key is string => Boolean(key) && !SHARED_PATH_PARAMS.has(key))
+
+	// Last route segment with any OData key suffix `(...)` stripped off, e.g.
+	// `ARCustomers` from `/AR/ARCustomers('{CustomerNumber}')`.
+	const lastSegment = path
+		.split("/")
+		.filter(Boolean)
+		.pop()
+		?.replace(/\(.*\)$/, "")
+
+	// Prefer the entity set tag (`ARCustomers`); fall back to the route segment.
+	const entity = tag?.trim() || lastSegment || "operation"
+
+	const verb = method.charAt(0).toUpperCase() + method.slice(1).toLowerCase()
+	const byKeys = keys.length
+		? `By${keys.map(key => key.charAt(0).toUpperCase() + key.slice(1)).join("And")}`
+		: ""
+
+	return `${entity}${verb}${byKeys}`
+}
+
 export default defineConfig([{
 	input: {
 		// path: "../backend/openapi.json",
@@ -35,6 +76,13 @@ export default defineConfig([{
 		],
 	},
 	parser: {
+		patch: {
+			// The Sage 300 spec has no operation ids, so override them with concise
+			// names that omit the shared `/v{apiVersion}/{tenant}/{company}` prefix.
+			operations: (method, path, operation) => {
+				operation.operationId = buildOperationId(method, path, operation.tags?.[0])
+			},
+		},
 		pagination: {
 			keywords: [
 				...defaultPaginationKeywords,

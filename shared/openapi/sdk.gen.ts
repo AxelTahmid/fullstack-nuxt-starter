@@ -5,9 +5,9 @@ import * as z from "zod/mini"
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from "./client"
 import { client } from "./client.gen"
-import { arCustomersGetByApiversionAndTenantAndCompanyResponseTransformer, arCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponseTransformer, icCategoriesGetByApiversionAndTenantAndCompanyResponseTransformer, icCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponseTransformer, icItemPricingGetByApiversionAndTenantAndCompanyResponseTransformer, icItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponseTransformer, icItemsGetByApiversionAndTenantAndCompanyResponseTransformer, icItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponseTransformer, oeInvoicesGetByApiversionAndTenantAndCompanyResponseTransformer, oeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponseTransformer } from "./transformers.gen"
-import type { ArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyData, ArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyResponses, ArCustomersGetByApiversionAndTenantAndCompanyData, ArCustomersGetByApiversionAndTenantAndCompanyResponses, ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyData, ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponses, ArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyData, ArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyResponses, ArCustomersPostByApiversionAndTenantAndCompanyData, ArCustomersPostByApiversionAndTenantAndCompanyResponses, ArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyData, ArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyResponses, IcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyData, IcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyResponses, IcCategoriesGetByApiversionAndTenantAndCompanyData, IcCategoriesGetByApiversionAndTenantAndCompanyResponses, IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyData, IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponses, IcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyData, IcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyResponses, IcCategoriesPostByApiversionAndTenantAndCompanyData, IcCategoriesPostByApiversionAndTenantAndCompanyResponses, IcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyData, IcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyResponses, IcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData, IcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, IcItemPricingGetByApiversionAndTenantAndCompanyData, IcItemPricingGetByApiversionAndTenantAndCompanyResponses, IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData, IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, IcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData, IcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, IcItemPricingPostByApiversionAndTenantAndCompanyData, IcItemPricingPostByApiversionAndTenantAndCompanyResponses, IcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData, IcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, IcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyData, IcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, IcItemsGetByApiversionAndTenantAndCompanyData, IcItemsGetByApiversionAndTenantAndCompanyResponses, IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyData, IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, IcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyData, IcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, IcItemsPostByApiversionAndTenantAndCompanyData, IcItemsPostByApiversionAndTenantAndCompanyResponses, IcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyData, IcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, OeInvoicesGetByApiversionAndTenantAndCompanyData, OeInvoicesGetByApiversionAndTenantAndCompanyResponses, OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyData, OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponses } from "./types.gen"
-import { zArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyHeaders, zArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyPath, zArCustomersGetByApiversionAndTenantAndCompanyPath, zArCustomersGetByApiversionAndTenantAndCompanyQuery, zArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyPath, zArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyQuery, zArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyBody, zArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyPath, zArCustomersPostByApiversionAndTenantAndCompanyBody, zArCustomersPostByApiversionAndTenantAndCompanyPath, zArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyBody, zArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyPath, zIcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyHeaders, zIcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyPath, zIcCategoriesGetByApiversionAndTenantAndCompanyPath, zIcCategoriesGetByApiversionAndTenantAndCompanyQuery, zIcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyPath, zIcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyQuery, zIcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyBody, zIcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyPath, zIcCategoriesPostByApiversionAndTenantAndCompanyBody, zIcCategoriesPostByApiversionAndTenantAndCompanyPath, zIcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyBody, zIcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyPath, zIcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyHeaders, zIcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath, zIcItemPricingGetByApiversionAndTenantAndCompanyPath, zIcItemPricingGetByApiversionAndTenantAndCompanyQuery, zIcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath, zIcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyQuery, zIcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyBody, zIcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath, zIcItemPricingPostByApiversionAndTenantAndCompanyBody, zIcItemPricingPostByApiversionAndTenantAndCompanyPath, zIcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyBody, zIcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath, zIcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyHeaders, zIcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath, zIcItemsGetByApiversionAndTenantAndCompanyPath, zIcItemsGetByApiversionAndTenantAndCompanyQuery, zIcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath, zIcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyQuery, zIcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyBody, zIcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath, zIcItemsPostByApiversionAndTenantAndCompanyBody, zIcItemsPostByApiversionAndTenantAndCompanyPath, zIcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyBody, zIcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath, zOeInvoicesGetByApiversionAndTenantAndCompanyPath, zOeInvoicesGetByApiversionAndTenantAndCompanyQuery, zOeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyPath, zOeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyQuery } from "./zod.gen"
+import { arCustomersGetByCustomerNumberResponseTransformer, arCustomersGetResponseTransformer, icCategoriesGetByCategoryCodeResponseTransformer, icCategoriesGetResponseTransformer, icItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponseTransformer, icItemPricingGetResponseTransformer, icItemsGetByUnformattedItemNumberResponseTransformer, icItemsGetResponseTransformer, oeInvoicesGetByInvoiceUniquifierResponseTransformer, oeInvoicesGetResponseTransformer } from "./transformers.gen"
+import type { ArCustomersDeleteByCustomerNumberData, ArCustomersDeleteByCustomerNumberResponses, ArCustomersGetByCustomerNumberData, ArCustomersGetByCustomerNumberResponses, ArCustomersGetData, ArCustomersGetResponses, ArCustomersPatchByCustomerNumberData, ArCustomersPatchByCustomerNumberResponses, ArCustomersPostData, ArCustomersPostResponses, ArCustomersPutByCustomerNumberData, ArCustomersPutByCustomerNumberResponses, IcCategoriesDeleteByCategoryCodeData, IcCategoriesDeleteByCategoryCodeResponses, IcCategoriesGetByCategoryCodeData, IcCategoriesGetByCategoryCodeResponses, IcCategoriesGetData, IcCategoriesGetResponses, IcCategoriesPatchByCategoryCodeData, IcCategoriesPatchByCategoryCodeResponses, IcCategoriesPostData, IcCategoriesPostResponses, IcCategoriesPutByCategoryCodeData, IcCategoriesPutByCategoryCodeResponses, IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemPricingGetData, IcItemPricingGetResponses, IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemPricingPostData, IcItemPricingPostResponses, IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemsDeleteByUnformattedItemNumberData, IcItemsDeleteByUnformattedItemNumberResponses, IcItemsGetByUnformattedItemNumberData, IcItemsGetByUnformattedItemNumberResponses, IcItemsGetData, IcItemsGetResponses, IcItemsPatchByUnformattedItemNumberData, IcItemsPatchByUnformattedItemNumberResponses, IcItemsPostData, IcItemsPostResponses, IcItemsPutByUnformattedItemNumberData, IcItemsPutByUnformattedItemNumberResponses, OeInvoicesGetByInvoiceUniquifierData, OeInvoicesGetByInvoiceUniquifierResponses, OeInvoicesGetData, OeInvoicesGetResponses } from "./types.gen"
+import { zArCustomersDeleteByCustomerNumberHeaders, zArCustomersDeleteByCustomerNumberPath, zArCustomersGetByCustomerNumberPath, zArCustomersGetByCustomerNumberQuery, zArCustomersGetPath, zArCustomersGetQuery, zArCustomersPatchByCustomerNumberBody, zArCustomersPatchByCustomerNumberPath, zArCustomersPostBody, zArCustomersPostPath, zArCustomersPutByCustomerNumberBody, zArCustomersPutByCustomerNumberPath, zIcCategoriesDeleteByCategoryCodeHeaders, zIcCategoriesDeleteByCategoryCodePath, zIcCategoriesGetByCategoryCodePath, zIcCategoriesGetByCategoryCodeQuery, zIcCategoriesGetPath, zIcCategoriesGetQuery, zIcCategoriesPatchByCategoryCodeBody, zIcCategoriesPatchByCategoryCodePath, zIcCategoriesPostBody, zIcCategoriesPostPath, zIcCategoriesPutByCategoryCodeBody, zIcCategoriesPutByCategoryCodePath, zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeHeaders, zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeQuery, zIcItemPricingGetPath, zIcItemPricingGetQuery, zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody, zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemPricingPostBody, zIcItemPricingPostPath, zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody, zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemsDeleteByUnformattedItemNumberHeaders, zIcItemsDeleteByUnformattedItemNumberPath, zIcItemsGetByUnformattedItemNumberPath, zIcItemsGetByUnformattedItemNumberQuery, zIcItemsGetPath, zIcItemsGetQuery, zIcItemsPatchByUnformattedItemNumberBody, zIcItemsPatchByUnformattedItemNumberPath, zIcItemsPostBody, zIcItemsPostPath, zIcItemsPutByUnformattedItemNumberBody, zIcItemsPutByUnformattedItemNumberPath, zOeInvoicesGetByInvoiceUniquifierPath, zOeInvoicesGetByInvoiceUniquifierQuery, zOeInvoicesGetPath, zOeInvoicesGetQuery } from "./zod.gen"
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
 	/**
@@ -26,13 +26,13 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 /**
  * Returns the EntitySet ARCustomers
  */
-export const arCustomersGetByApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<ArCustomersGetByApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<ArCustomersGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<ArCustomersGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const arCustomersGet = <ThrowOnError extends boolean = true>(options: Options<ArCustomersGetData, ThrowOnError>): RequestResult<ArCustomersGetResponses, unknown, ThrowOnError> => (options.client ?? client).get<ArCustomersGetResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zArCustomersGetByApiversionAndTenantAndCompanyPath,
-		query: z.optional(zArCustomersGetByApiversionAndTenantAndCompanyQuery),
+		path: zArCustomersGetPath,
+		query: z.optional(zArCustomersGetQuery),
 	}).parseAsync(data),
-	responseTransformer: arCustomersGetByApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: arCustomersGetResponseTransformer,
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers",
 	...options,
 })
@@ -40,10 +40,10 @@ export const arCustomersGetByApiversionAndTenantAndCompany = <ThrowOnError exten
 /**
  * Post a new entity to EntitySet ARCustomers
  */
-export const arCustomersPostByApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<ArCustomersPostByApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<ArCustomersPostByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).post<ArCustomersPostByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const arCustomersPost = <ThrowOnError extends boolean = true>(options: Options<ArCustomersPostData, ThrowOnError>): RequestResult<ArCustomersPostResponses, unknown, ThrowOnError> => (options.client ?? client).post<ArCustomersPostResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zArCustomersPostByApiversionAndTenantAndCompanyBody,
-		path: zArCustomersPostByApiversionAndTenantAndCompanyPath,
+		body: zArCustomersPostBody,
+		path: zArCustomersPostPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers",
@@ -57,11 +57,11 @@ export const arCustomersPostByApiversionAndTenantAndCompany = <ThrowOnError exte
 /**
  * Delete entity in EntitySet ARCustomers
  */
-export const arCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<ArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<ArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).delete<ArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const arCustomersDeleteByCustomerNumber = <ThrowOnError extends boolean = true>(options: Options<ArCustomersDeleteByCustomerNumberData, ThrowOnError>): RequestResult<ArCustomersDeleteByCustomerNumberResponses, unknown, ThrowOnError> => (options.client ?? client).delete<ArCustomersDeleteByCustomerNumberResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		headers: z.optional(zArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyHeaders),
-		path: zArCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompanyPath,
+		headers: z.optional(zArCustomersDeleteByCustomerNumberHeaders),
+		path: zArCustomersDeleteByCustomerNumberPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')",
@@ -71,10 +71,10 @@ export const arCustomersDeleteByCustomernumberAndApiversionAndTenantAndCompany =
 /**
  * Update entity in EntitySet ARCustomers
  */
-export const arCustomersPatchByCustomernumberAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<ArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<ArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).patch<ArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const arCustomersPatchByCustomerNumber = <ThrowOnError extends boolean = true>(options: Options<ArCustomersPatchByCustomerNumberData, ThrowOnError>): RequestResult<ArCustomersPatchByCustomerNumberResponses, unknown, ThrowOnError> => (options.client ?? client).patch<ArCustomersPatchByCustomerNumberResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyBody,
-		path: zArCustomersPatchByCustomernumberAndApiversionAndTenantAndCompanyPath,
+		body: zArCustomersPatchByCustomerNumberBody,
+		path: zArCustomersPatchByCustomerNumberPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')",
@@ -88,10 +88,10 @@ export const arCustomersPatchByCustomernumberAndApiversionAndTenantAndCompany = 
 /**
  * Replace entity in EntitySet ARCustomers
  */
-export const arCustomersPutByCustomernumberAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<ArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<ArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).put<ArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const arCustomersPutByCustomerNumber = <ThrowOnError extends boolean = true>(options: Options<ArCustomersPutByCustomerNumberData, ThrowOnError>): RequestResult<ArCustomersPutByCustomerNumberResponses, unknown, ThrowOnError> => (options.client ?? client).put<ArCustomersPutByCustomerNumberResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyBody,
-		path: zArCustomersPutByCustomernumberAndApiversionAndTenantAndCompanyPath,
+		body: zArCustomersPutByCustomerNumberBody,
+		path: zArCustomersPutByCustomerNumberPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')",
@@ -105,13 +105,13 @@ export const arCustomersPutByCustomernumberAndApiversionAndTenantAndCompany = <T
 /**
  * Returns the entity with the key from ARCustomers
  */
-export const arCustomersGetByCustomernumberAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<ArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const arCustomersGetByCustomerNumber = <ThrowOnError extends boolean = true>(options: Options<ArCustomersGetByCustomerNumberData, ThrowOnError>): RequestResult<ArCustomersGetByCustomerNumberResponses, unknown, ThrowOnError> => (options.client ?? client).get<ArCustomersGetByCustomerNumberResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyPath,
-		query: z.optional(zArCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyQuery),
+		path: zArCustomersGetByCustomerNumberPath,
+		query: z.optional(zArCustomersGetByCustomerNumberQuery),
 	}).parseAsync(data),
-	responseTransformer: arCustomersGetByCustomernumberAndApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: arCustomersGetByCustomerNumberResponseTransformer,
 	url: "/V{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')",
 	...options,
 })
@@ -119,13 +119,13 @@ export const arCustomersGetByCustomernumberAndApiversionAndTenantAndCompany = <T
 /**
  * Returns the EntitySet ICCategories
  */
-export const icCategoriesGetByApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesGetByApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcCategoriesGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcCategoriesGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icCategoriesGet = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesGetData, ThrowOnError>): RequestResult<IcCategoriesGetResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcCategoriesGetResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zIcCategoriesGetByApiversionAndTenantAndCompanyPath,
-		query: z.optional(zIcCategoriesGetByApiversionAndTenantAndCompanyQuery),
+		path: zIcCategoriesGetPath,
+		query: z.optional(zIcCategoriesGetQuery),
 	}).parseAsync(data),
-	responseTransformer: icCategoriesGetByApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: icCategoriesGetResponseTransformer,
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories",
 	...options,
 })
@@ -133,10 +133,10 @@ export const icCategoriesGetByApiversionAndTenantAndCompany = <ThrowOnError exte
 /**
  * Post a new entity to EntitySet ICCategories
  */
-export const icCategoriesPostByApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesPostByApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcCategoriesPostByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).post<IcCategoriesPostByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icCategoriesPost = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesPostData, ThrowOnError>): RequestResult<IcCategoriesPostResponses, unknown, ThrowOnError> => (options.client ?? client).post<IcCategoriesPostResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zIcCategoriesPostByApiversionAndTenantAndCompanyBody,
-		path: zIcCategoriesPostByApiversionAndTenantAndCompanyPath,
+		body: zIcCategoriesPostBody,
+		path: zIcCategoriesPostPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories",
@@ -150,11 +150,11 @@ export const icCategoriesPostByApiversionAndTenantAndCompany = <ThrowOnError ext
 /**
  * Delete entity in EntitySet ICCategories
  */
-export const icCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).delete<IcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icCategoriesDeleteByCategoryCode = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesDeleteByCategoryCodeData, ThrowOnError>): RequestResult<IcCategoriesDeleteByCategoryCodeResponses, unknown, ThrowOnError> => (options.client ?? client).delete<IcCategoriesDeleteByCategoryCodeResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		headers: z.optional(zIcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyHeaders),
-		path: zIcCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompanyPath,
+		headers: z.optional(zIcCategoriesDeleteByCategoryCodeHeaders),
+		path: zIcCategoriesDeleteByCategoryCodePath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories('{CategoryCode}')",
@@ -164,10 +164,10 @@ export const icCategoriesDeleteByCategorycodeAndApiversionAndTenantAndCompany = 
 /**
  * Update entity in EntitySet ICCategories
  */
-export const icCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).patch<IcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icCategoriesPatchByCategoryCode = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesPatchByCategoryCodeData, ThrowOnError>): RequestResult<IcCategoriesPatchByCategoryCodeResponses, unknown, ThrowOnError> => (options.client ?? client).patch<IcCategoriesPatchByCategoryCodeResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zIcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyBody,
-		path: zIcCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompanyPath,
+		body: zIcCategoriesPatchByCategoryCodeBody,
+		path: zIcCategoriesPatchByCategoryCodePath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories('{CategoryCode}')",
@@ -181,10 +181,10 @@ export const icCategoriesPatchByCategorycodeAndApiversionAndTenantAndCompany = <
 /**
  * Replace entity in EntitySet ICCategories
  */
-export const icCategoriesPutByCategorycodeAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).put<IcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icCategoriesPutByCategoryCode = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesPutByCategoryCodeData, ThrowOnError>): RequestResult<IcCategoriesPutByCategoryCodeResponses, unknown, ThrowOnError> => (options.client ?? client).put<IcCategoriesPutByCategoryCodeResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zIcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyBody,
-		path: zIcCategoriesPutByCategorycodeAndApiversionAndTenantAndCompanyPath,
+		body: zIcCategoriesPutByCategoryCodeBody,
+		path: zIcCategoriesPutByCategoryCodePath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICCategories('{CategoryCode}')",
@@ -198,13 +198,13 @@ export const icCategoriesPutByCategorycodeAndApiversionAndTenantAndCompany = <Th
 /**
  * Returns the entity with the key from ICCategories
  */
-export const icCategoriesGetByCategorycodeAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icCategoriesGetByCategoryCode = <ThrowOnError extends boolean = true>(options: Options<IcCategoriesGetByCategoryCodeData, ThrowOnError>): RequestResult<IcCategoriesGetByCategoryCodeResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcCategoriesGetByCategoryCodeResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zIcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyPath,
-		query: z.optional(zIcCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyQuery),
+		path: zIcCategoriesGetByCategoryCodePath,
+		query: z.optional(zIcCategoriesGetByCategoryCodeQuery),
 	}).parseAsync(data),
-	responseTransformer: icCategoriesGetByCategorycodeAndApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: icCategoriesGetByCategoryCodeResponseTransformer,
 	url: "/V{apiVersion}/{tenant}/{company}/IC/ICCategories('{CategoryCode}')",
 	...options,
 })
@@ -212,13 +212,13 @@ export const icCategoriesGetByCategorycodeAndApiversionAndTenantAndCompany = <Th
 /**
  * Returns the EntitySet ICItemPricing
  */
-export const icItemPricingGetByApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingGetByApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemPricingGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcItemPricingGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemPricingGet = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingGetData, ThrowOnError>): RequestResult<IcItemPricingGetResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcItemPricingGetResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zIcItemPricingGetByApiversionAndTenantAndCompanyPath,
-		query: z.optional(zIcItemPricingGetByApiversionAndTenantAndCompanyQuery),
+		path: zIcItemPricingGetPath,
+		query: z.optional(zIcItemPricingGetQuery),
 	}).parseAsync(data),
-	responseTransformer: icItemPricingGetByApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: icItemPricingGetResponseTransformer,
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing",
 	...options,
 })
@@ -226,10 +226,10 @@ export const icItemPricingGetByApiversionAndTenantAndCompany = <ThrowOnError ext
 /**
  * Post a new entity to EntitySet ICItemPricing
  */
-export const icItemPricingPostByApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingPostByApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemPricingPostByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).post<IcItemPricingPostByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemPricingPost = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingPostData, ThrowOnError>): RequestResult<IcItemPricingPostResponses, unknown, ThrowOnError> => (options.client ?? client).post<IcItemPricingPostResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zIcItemPricingPostByApiversionAndTenantAndCompanyBody,
-		path: zIcItemPricingPostByApiversionAndTenantAndCompanyPath,
+		body: zIcItemPricingPostBody,
+		path: zIcItemPricingPostPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing",
@@ -243,11 +243,11 @@ export const icItemPricingPostByApiversionAndTenantAndCompany = <ThrowOnError ex
 /**
  * Delete entity in EntitySet ICItemPricing
  */
-export const icItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).delete<IcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCode = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, ThrowOnError>): RequestResult<IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, unknown, ThrowOnError> => (options.client ?? client).delete<IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		headers: z.optional(zIcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyHeaders),
-		path: zIcItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath,
+		headers: z.optional(zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeHeaders),
+		path: zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing(CurrencyCode='{CurrencyCode}',UnformattedItemNumber='{UnformattedItemNumber}',PriceListCode='{PriceListCode}')",
@@ -257,10 +257,10 @@ export const icItemPricingDeleteByCurrencycodeAndUnformatteditemnumberAndPriceli
 /**
  * Update entity in EntitySet ICItemPricing
  */
-export const icItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).patch<IcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCode = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, ThrowOnError>): RequestResult<IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, unknown, ThrowOnError> => (options.client ?? client).patch<IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zIcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyBody,
-		path: zIcItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath,
+		body: zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody,
+		path: zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing(CurrencyCode='{CurrencyCode}',UnformattedItemNumber='{UnformattedItemNumber}',PriceListCode='{PriceListCode}')",
@@ -274,10 +274,10 @@ export const icItemPricingPatchByCurrencycodeAndUnformatteditemnumberAndPricelis
 /**
  * Replace entity in EntitySet ICItemPricing
  */
-export const icItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).put<IcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCode = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, ThrowOnError>): RequestResult<IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, unknown, ThrowOnError> => (options.client ?? client).put<IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zIcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyBody,
-		path: zIcItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath,
+		body: zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody,
+		path: zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItemPricing(CurrencyCode='{CurrencyCode}',UnformattedItemNumber='{UnformattedItemNumber}',PriceListCode='{PriceListCode}')",
@@ -291,13 +291,13 @@ export const icItemPricingPutByCurrencycodeAndUnformatteditemnumberAndPricelistc
 /**
  * Returns the entity with the key from ICItemPricing
  */
-export const icItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCode = <ThrowOnError extends boolean = true>(options: Options<IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, ThrowOnError>): RequestResult<IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zIcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyPath,
-		query: z.optional(zIcItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyQuery),
+		path: zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath,
+		query: z.optional(zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeQuery),
 	}).parseAsync(data),
-	responseTransformer: icItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistcodeAndApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: icItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponseTransformer,
 	url: "/V{apiVersion}/{tenant}/{company}/IC/ICItemPricing(CurrencyCode='{CurrencyCode}',UnformattedItemNumber='{UnformattedItemNumber}',PriceListCode='{PriceListCode}')",
 	...options,
 })
@@ -305,13 +305,13 @@ export const icItemPricingGetByCurrencycodeAndUnformatteditemnumberAndPricelistc
 /**
  * Returns the EntitySet ICItems
  */
-export const icItemsGetByApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemsGetByApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemsGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcItemsGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemsGet = <ThrowOnError extends boolean = true>(options: Options<IcItemsGetData, ThrowOnError>): RequestResult<IcItemsGetResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcItemsGetResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zIcItemsGetByApiversionAndTenantAndCompanyPath,
-		query: z.optional(zIcItemsGetByApiversionAndTenantAndCompanyQuery),
+		path: zIcItemsGetPath,
+		query: z.optional(zIcItemsGetQuery),
 	}).parseAsync(data),
-	responseTransformer: icItemsGetByApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: icItemsGetResponseTransformer,
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems",
 	...options,
 })
@@ -319,10 +319,10 @@ export const icItemsGetByApiversionAndTenantAndCompany = <ThrowOnError extends b
 /**
  * Post a new entity to EntitySet ICItems
  */
-export const icItemsPostByApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemsPostByApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemsPostByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).post<IcItemsPostByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemsPost = <ThrowOnError extends boolean = true>(options: Options<IcItemsPostData, ThrowOnError>): RequestResult<IcItemsPostResponses, unknown, ThrowOnError> => (options.client ?? client).post<IcItemsPostResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zIcItemsPostByApiversionAndTenantAndCompanyBody,
-		path: zIcItemsPostByApiversionAndTenantAndCompanyPath,
+		body: zIcItemsPostBody,
+		path: zIcItemsPostPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems",
@@ -336,11 +336,11 @@ export const icItemsPostByApiversionAndTenantAndCompany = <ThrowOnError extends 
 /**
  * Delete entity in EntitySet ICItems
  */
-export const icItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).delete<IcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemsDeleteByUnformattedItemNumber = <ThrowOnError extends boolean = true>(options: Options<IcItemsDeleteByUnformattedItemNumberData, ThrowOnError>): RequestResult<IcItemsDeleteByUnformattedItemNumberResponses, unknown, ThrowOnError> => (options.client ?? client).delete<IcItemsDeleteByUnformattedItemNumberResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		headers: z.optional(zIcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyHeaders),
-		path: zIcItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath,
+		headers: z.optional(zIcItemsDeleteByUnformattedItemNumberHeaders),
+		path: zIcItemsDeleteByUnformattedItemNumberPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems('{UnformattedItemNumber}')",
@@ -350,10 +350,10 @@ export const icItemsDeleteByUnformatteditemnumberAndApiversionAndTenantAndCompan
 /**
  * Update entity in EntitySet ICItems
  */
-export const icItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).patch<IcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemsPatchByUnformattedItemNumber = <ThrowOnError extends boolean = true>(options: Options<IcItemsPatchByUnformattedItemNumberData, ThrowOnError>): RequestResult<IcItemsPatchByUnformattedItemNumberResponses, unknown, ThrowOnError> => (options.client ?? client).patch<IcItemsPatchByUnformattedItemNumberResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zIcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyBody,
-		path: zIcItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath,
+		body: zIcItemsPatchByUnformattedItemNumberBody,
+		path: zIcItemsPatchByUnformattedItemNumberPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems('{UnformattedItemNumber}')",
@@ -367,10 +367,10 @@ export const icItemsPatchByUnformatteditemnumberAndApiversionAndTenantAndCompany
 /**
  * Replace entity in EntitySet ICItems
  */
-export const icItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).put<IcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemsPutByUnformattedItemNumber = <ThrowOnError extends boolean = true>(options: Options<IcItemsPutByUnformattedItemNumberData, ThrowOnError>): RequestResult<IcItemsPutByUnformattedItemNumberResponses, unknown, ThrowOnError> => (options.client ?? client).put<IcItemsPutByUnformattedItemNumberResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
-		body: zIcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyBody,
-		path: zIcItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath,
+		body: zIcItemsPutByUnformattedItemNumberBody,
+		path: zIcItemsPutByUnformattedItemNumberPath,
 		query: z.optional(z.never()),
 	}).parseAsync(data),
 	url: "/v{apiVersion}/{tenant}/{company}/IC/ICItems('{UnformattedItemNumber}')",
@@ -384,13 +384,13 @@ export const icItemsPutByUnformatteditemnumberAndApiversionAndTenantAndCompany =
 /**
  * Returns the entity with the key from ICItems
  */
-export const icItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const icItemsGetByUnformattedItemNumber = <ThrowOnError extends boolean = true>(options: Options<IcItemsGetByUnformattedItemNumberData, ThrowOnError>): RequestResult<IcItemsGetByUnformattedItemNumberResponses, unknown, ThrowOnError> => (options.client ?? client).get<IcItemsGetByUnformattedItemNumberResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zIcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyPath,
-		query: z.optional(zIcItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyQuery),
+		path: zIcItemsGetByUnformattedItemNumberPath,
+		query: z.optional(zIcItemsGetByUnformattedItemNumberQuery),
 	}).parseAsync(data),
-	responseTransformer: icItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: icItemsGetByUnformattedItemNumberResponseTransformer,
 	url: "/V{apiVersion}/{tenant}/{company}/IC/ICItems('{UnformattedItemNumber}')",
 	...options,
 })
@@ -398,13 +398,13 @@ export const icItemsGetByUnformatteditemnumberAndApiversionAndTenantAndCompany =
 /**
  * Returns the EntitySet OEInvoices
  */
-export const oeInvoicesGetByApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<OeInvoicesGetByApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<OeInvoicesGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<OeInvoicesGetByApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const oeInvoicesGet = <ThrowOnError extends boolean = true>(options: Options<OeInvoicesGetData, ThrowOnError>): RequestResult<OeInvoicesGetResponses, unknown, ThrowOnError> => (options.client ?? client).get<OeInvoicesGetResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zOeInvoicesGetByApiversionAndTenantAndCompanyPath,
-		query: z.optional(zOeInvoicesGetByApiversionAndTenantAndCompanyQuery),
+		path: zOeInvoicesGetPath,
+		query: z.optional(zOeInvoicesGetQuery),
 	}).parseAsync(data),
-	responseTransformer: oeInvoicesGetByApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: oeInvoicesGetResponseTransformer,
 	url: "/v{apiVersion}/{tenant}/{company}/OE/OEInvoices",
 	...options,
 })
@@ -412,13 +412,13 @@ export const oeInvoicesGetByApiversionAndTenantAndCompany = <ThrowOnError extend
 /**
  * Returns the entity with the key from OEInvoices
  */
-export const oeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompany = <ThrowOnError extends boolean = true>(options: Options<OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyData, ThrowOnError>): RequestResult<OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError> => (options.client ?? client).get<OeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponses, unknown, ThrowOnError>({
+export const oeInvoicesGetByInvoiceUniquifier = <ThrowOnError extends boolean = true>(options: Options<OeInvoicesGetByInvoiceUniquifierData, ThrowOnError>): RequestResult<OeInvoicesGetByInvoiceUniquifierResponses, unknown, ThrowOnError> => (options.client ?? client).get<OeInvoicesGetByInvoiceUniquifierResponses, unknown, ThrowOnError>({
 	requestValidator: async data => await z.object({
 		body: z.optional(z.never()),
-		path: zOeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyPath,
-		query: z.optional(zOeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyQuery),
+		path: zOeInvoicesGetByInvoiceUniquifierPath,
+		query: z.optional(zOeInvoicesGetByInvoiceUniquifierQuery),
 	}).parseAsync(data),
-	responseTransformer: oeInvoicesGetByInvoiceuniquifierAndApiversionAndTenantAndCompanyResponseTransformer,
+	responseTransformer: oeInvoicesGetByInvoiceUniquifierResponseTransformer,
 	url: "/v{apiVersion}/{tenant}/{company}/OE/OEInvoices({InvoiceUniquifier})",
 	...options,
 })
