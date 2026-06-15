@@ -1,14 +1,10 @@
 import type {
-	ICCategoryListResponseT,
-	ICCategoryT,
 	ICItemListResponseT,
 	ICItemT,
 } from "#shared/sage300"
 import {
-	icCategoriesGet,
 	icItemsGet,
 } from "#shared/sage300"
-import { log } from "#shared/log"
 import type { ProductListItem, ProductListResponse } from "#shared/types/product"
 import { requireSessionUser } from "~~/server/utils/auth"
 
@@ -116,10 +112,10 @@ function countFacets(items: ProductListItem[]) {
 	const categories = new Map<string, number>()
 	const manufacturers = new Map<string, number>()
 
-	for (const item of items) {
+	items.forEach((item) => {
 		categories.set(item.category, (categories.get(item.category) ?? 0) + 1)
 		manufacturers.set(item.manufacturer, (manufacturers.get(item.manufacturer) ?? 0) + 1)
-	}
+	})
 
 	return {
 		categories: [...categories.entries()]
@@ -158,27 +154,7 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 		.filter((item): item is ProductListItem => Boolean(item))
 	const total = productsData["@odata.count"] ?? items.length
 	const totalPages = Math.max(1, Math.ceil(total / DEFAULT_PAGE_SIZE))
-	const pageFacets = countFacets(items)
-	let categoriesResponse: Awaited<ReturnType<typeof icCategoriesGet>> | undefined
-	try {
-		categoriesResponse = await icCategoriesGet({
-			path: sagePath(),
-			query: {
-				$top: 500,
-				$count: true,
-			},
-		})
-	}
-	catch (error) {
-		log.warn({ error }, "[sage300] Could not load IC categories for product facets")
-	}
-	const categoriesData = categoriesResponse?.data as ICCategoryListResponseT | undefined
-	const categories = (categoriesData?.value ?? [])
-		.map((category: ICCategoryT) => ({
-			value: category.CategoryCode?.trim() || category.Description?.trim() || "",
-			count: 0,
-		}))
-		.filter(category => category.value.length > 0)
+	const facets = countFacets(items)
 
 	return {
 		items,
@@ -188,9 +164,6 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 		totalPages,
 		hasPreviousPage: page > 1,
 		hasNextPage: page < totalPages,
-		facets: {
-			categories: categories.length > 0 ? categories : pageFacets.categories,
-			manufacturers: pageFacets.manufacturers,
-		},
+		facets,
 	}
 })
