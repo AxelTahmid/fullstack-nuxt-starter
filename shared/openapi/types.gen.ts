@@ -5,27 +5,27 @@ export type ClientOptions = {
 	baseUrl: "http://192.168.0.5/Sage300WebApi" | (string & {})
 }
 
-export type SystemWebODataQueryODataQueryOptions = {
+export type SystemWebODataQueryODataQueryOptionsT = {
 	[key: string]: unknown
 }
 
-export type SystemObject = {
+export type SystemObjectT = {
 	[key: string]: unknown
 }
 
-export type SageCaSbsErpSage300CommonModelsEntityError = {
+export type CommonEntityErrorT = {
 	Message?: string
 	Priority?: "SevereError" | "Message" | "Warning" | "Error" | "Security"
 	readonly PriorityString?: string
-	Tag?: SystemObject
+	Tag?: SystemObjectT
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer = {
+export type ARCustomerListResponseT = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300ArWebApiModelsCustomer>
+	"value"?: Array<ARCustomerT>
 }
 
-export type SageCaSbsErpSage300ArWebApiModelsCustomer = {
+export type ARCustomerT = {
 	CustomerNumber?: string
 	ShortName?: string
 	GroupCode?: string
@@ -181,12 +181,12 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomer = {
 	Mode?: "NormalMode" | "UnconditionalInsertsUpdates"
 	SageBillingAndPaymentCustomer?: "No" | "Yes"
 	BusinessRegistrationNumber?: string
-	CustomerOptionalFieldValues?: Array<SageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValue>
-	CustomerContactSelection?: Array<SageCaSbsErpSage300ArWebApiModelsCustomerContactSelection>
+	CustomerOptionalFieldValues?: Array<ARCustomerOptionalFieldValueT>
+	CustomerContactSelection?: Array<ARCustomerContactSelectionT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValue = {
+export type ARCustomerOptionalFieldValueT = {
 	CustomerNumber?: string
 	OptionalField?: string
 	Value?: string
@@ -207,7 +207,7 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValue = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -220,11 +220,11 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValue = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300ArWebApiModelsCustomerContactSelection = {
+export type ARCustomerContactSelectionT = {
 	CustomerNumber?: string
 	ContactCode?: string
 	SelectApplication?: "All" | "AccountsReceivable" | "OrderEntry"
@@ -239,7 +239,7 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomerContactSelection = {
 	OECreditDebitNotes?: boolean
 	OEQuotes?: boolean
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -252,16 +252,16 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomerContactSelection = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory = {
+export type ICCategoryListResponseT = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300IcWebApiModelsCategory>
+	"value"?: Array<ICCategoryT>
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsCategory = {
+export type ICCategoryT = {
 	CategoryCode?: string
 	Description?: string
 	CostOfGoodsSoldAccount?: string
@@ -276,11 +276,11 @@ export type SageCaSbsErpSage300IcWebApiModelsCategory = {
 	DateInactive?: Date
 	DamagedGoodsAccount?: string
 	InternalUsageAccount?: string
-	CategoryTaxAuthorities?: Array<SageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthority>
+	CategoryTaxAuthorities?: Array<ICCategoryTaxAuthorityT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthority = {
+export type ICCategoryTaxAuthorityT = {
 	Category?: string
 	TaxAuthority?: string
 	PurchaseTaxClass?: number
@@ -288,7 +288,7 @@ export type SageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthority = {
 	PurchaseTaxClassDescription?: string
 	SalesTaxClassDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -301,16 +301,16 @@ export type SageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthority = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing = {
+export type ICItemPricingListResponseT = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300IcWebApiModelsItemPricing>
+	"value"?: Array<ICItemPricingT>
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemPricing = {
+export type ICItemPricingT = {
 	CurrencyCode?: string
 	UnformattedItemNumber?: string
 	PriceListCode?: string
@@ -401,13 +401,13 @@ export type SageCaSbsErpSage300IcWebApiModelsItemPricing = {
 	ItemLocationCostAllowable?: boolean
 	PriceListStartDate?: Date
 	PriceListEndDate?: Date
-	PriceListTaxAuthorities?: Array<SageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthority>
-	PricingPriceChecks?: Array<SageCaSbsErpSage300IcWebApiModelsPricingPriceCheck>
-	ItemPricingDetails?: Array<SageCaSbsErpSage300IcWebApiModelsItemPricingDetail>
+	PriceListTaxAuthorities?: Array<ICPriceListTaxAuthorityT>
+	PricingPriceChecks?: Array<ICPricingPriceCheckT>
+	ItemPricingDetails?: Array<ICItemPricingDetailT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthority = {
+export type ICPriceListTaxAuthorityT = {
 	CurrencyCode?: string
 	ItemNumber?: string
 	PriceListCode?: string
@@ -417,7 +417,7 @@ export type SageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthority = {
 	CustomerTaxClassDescription?: string
 	TaxAuthorityDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -430,11 +430,11 @@ export type SageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthority = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsPricingPriceCheck = {
+export type ICPricingPriceCheckT = {
 	CurrencyCode?: string
 	UnformattedItemNumber?: string
 	PriceListCode?: string
@@ -445,7 +445,7 @@ export type SageCaSbsErpSage300IcWebApiModelsPricingPriceCheck = {
 	GreaterthanAmount?: number
 	LessthanAmount?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -458,11 +458,11 @@ export type SageCaSbsErpSage300IcWebApiModelsPricingPriceCheck = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemPricingDetail = {
+export type ICItemPricingDetailT = {
 	CurrencyCode?: string
 	UnformattedItemNumber?: string
 	PriceListCode?: string
@@ -477,7 +477,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemPricingDetail = {
 	PreviousPrice?: number
 	DefaultUnit?: boolean
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -490,16 +490,16 @@ export type SageCaSbsErpSage300IcWebApiModelsItemPricingDetail = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem = {
+export type ICItemListResponseT = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300IcWebApiModelsItem>
+	"value"?: Array<ICItemT>
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItem = {
+export type ICItemT = {
 	UnformattedItemNumber?: string
 	AlternateItemSetNumber?: bigint
 	Description?: string
@@ -599,23 +599,23 @@ export type SageCaSbsErpSage300IcWebApiModelsItem = {
 	PreferredVendor?: string
 	PreferredVendorItem?: string
 	TariffCode?: string
-	ItemUnitsOfMeasure?: Array<SageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasure>
-	ItemTaxAuthorities?: Array<SageCaSbsErpSage300IcWebApiModelsItemTaxAuthority>
-	VendorItemNumbers?: Array<SageCaSbsErpSage300IcWebApiModelsVendorItemNumber>
-	ItemOptionalFields?: Array<SageCaSbsErpSage300IcWebApiModelsItemOptionalField>
-	CustomerItemNumbers?: Array<SageCaSbsErpSage300IcWebApiModelsCustomerItemNumber>
-	ItemSerialOptionalFields?: Array<SageCaSbsErpSage300IcWebApiModelsItemSerialOptionalField>
-	ItemLotOptionalFields?: Array<SageCaSbsErpSage300IcWebApiModelsItemLotOptionalField>
+	ItemUnitsOfMeasure?: Array<ICItemUnitsOfMeasureT>
+	ItemTaxAuthorities?: Array<ICItemTaxAuthorityT>
+	VendorItemNumbers?: Array<ICVendorItemNumberT>
+	ItemOptionalFields?: Array<ICItemOptionalFieldT>
+	CustomerItemNumbers?: Array<ICCustomerItemNumberT>
+	ItemSerialOptionalFields?: Array<ICItemSerialOptionalFieldT>
+	ItemLotOptionalFields?: Array<ICItemLotOptionalFieldT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasure = {
+export type ICItemUnitsOfMeasureT = {
 	ItemNumber?: string
 	UnitOfMeasure?: string
 	ConversionFactor?: number
 	FACTOR?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -628,11 +628,11 @@ export type SageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasure = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemTaxAuthority = {
+export type ICItemTaxAuthorityT = {
 	ItemNumber?: string
 	TaxAuthority?: string
 	PurchaseTaxClass?: number
@@ -641,7 +641,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemTaxAuthority = {
 	SalesTaxClassDescription?: string
 	TaxAuthorityDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -654,11 +654,11 @@ export type SageCaSbsErpSage300IcWebApiModelsItemTaxAuthority = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsVendorItemNumber = {
+export type ICVendorItemNumberT = {
 	ItemNumber?: string
 	VendorType?: "Vendor1" | "Vendor2" | "Vendor3" | "Vendor4" | "Vendor5" | "Vendor6" | "Vendor7" | "Vendor8" | "Vendor9"
 	VendorNumber?: string
@@ -673,7 +673,7 @@ export type SageCaSbsErpSage300IcWebApiModelsVendorItemNumber = {
 	OrderMinimumSIA?: number
 	PreferredVendorSIA?: boolean
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -686,11 +686,11 @@ export type SageCaSbsErpSage300IcWebApiModelsVendorItemNumber = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemOptionalField = {
+export type ICItemOptionalFieldT = {
 	ItemNumber?: string
 	OptionalField?: string
 	Value?: string
@@ -711,7 +711,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemOptionalField = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -724,11 +724,11 @@ export type SageCaSbsErpSage300IcWebApiModelsItemOptionalField = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsCustomerItemNumber = {
+export type ICCustomerItemNumberT = {
 	ItemNumber?: string
 	CustomerNumber?: string
 	CustomerName?: string
@@ -739,7 +739,7 @@ export type SageCaSbsErpSage300IcWebApiModelsCustomerItemNumber = {
 	Instructions?: string
 	FMTITEMNO?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -752,11 +752,11 @@ export type SageCaSbsErpSage300IcWebApiModelsCustomerItemNumber = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemSerialOptionalField = {
+export type ICItemSerialOptionalFieldT = {
 	ItemNumber?: string
 	OptionalField?: string
 	Value?: string
@@ -777,7 +777,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemSerialOptionalField = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -790,11 +790,11 @@ export type SageCaSbsErpSage300IcWebApiModelsItemSerialOptionalField = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemLotOptionalField = {
+export type ICItemLotOptionalFieldT = {
 	ItemNumber?: string
 	OptionalField?: string
 	Value?: string
@@ -815,7 +815,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemLotOptionalField = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -828,16 +828,16 @@ export type SageCaSbsErpSage300IcWebApiModelsItemLotOptionalField = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice = {
+export type OEInvoiceListResponseT = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300OeWebApiModelsInvoice>
+	"value"?: Array<OEInvoiceT>
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoice = {
+export type OEInvoiceT = {
 	InvoiceUniquifier?: number
 	OrderNumber?: string
 	ICDayEndTransactionNumber?: number
@@ -1177,15 +1177,15 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoice = {
 	SageCRMOpportunityLines?: number
 	PreAuthExistsForInvoice?: boolean
 	ExportDeclarationNumber?: string
-	InvoiceDetails?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceDetail>
-	InvoiceCommentsInstructions?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstruction>
-	InvoicePaymentSchedules?: Array<SageCaSbsErpSage300OeWebApiModelsInvoicePaymentSchedule>
-	MultipleShipmentsToInvoice?: Array<SageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoice>
-	InvoiceOptionalFields?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceOptionalField>
+	InvoiceDetails?: Array<OEInvoiceDetailT>
+	InvoiceCommentsInstructions?: Array<OEInvoiceCommentsInstructionT>
+	InvoicePaymentSchedules?: Array<OEInvoicePaymentScheduleT>
+	MultipleShipmentsToInvoice?: Array<OEMultipleShipmentsToInvoiceT>
+	InvoiceOptionalFields?: Array<OEInvoiceOptionalFieldT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetail = {
+export type OEInvoiceDetailT = {
 	InvoiceUniquifier?: number
 	LineUniquifier?: number
 	LineType?: "Item" | "Miscellaneous"
@@ -1400,13 +1400,13 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetail = {
 	SageCRMOpportunityID?: bigint
 	NoninteractivePriceApproval?: boolean
 	ExportDeclarationNumber?: string
-	InvoiceDetailOptionalFields?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalField>
-	InvoiceBOMDetails?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceBomDetail>
-	InvoiceKittingDetails?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetail>
-	InvoiceDetailSerialNumbers?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumber>
-	InvoiceDetailLotNumbers?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumber>
+	InvoiceDetailOptionalFields?: Array<OEInvoiceDetailOptionalFieldT>
+	InvoiceBOMDetails?: Array<OEInvoiceBOMDetailT>
+	InvoiceKittingDetails?: Array<OEInvoiceKittingDetailT>
+	InvoiceDetailSerialNumbers?: Array<OEInvoiceDetailSerialNumberT>
+	InvoiceDetailLotNumbers?: Array<OEInvoiceDetailLotNumberT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1419,18 +1419,18 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetail = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstruction = {
+export type OEInvoiceCommentsInstructionT = {
 	InvoiceUniquifier?: number
 	LineUniquifier?: number
 	DetailNumber?: number
 	CommentsInstructionsType?: "Comment" | "Instruction"
 	CommentsInstructions?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1443,11 +1443,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstruction = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoicePaymentSchedule = {
+export type OEInvoicePaymentScheduleT = {
 	InvoiceUniquifier?: number
 	PaymentNumber?: number
 	DiscountBase?: number
@@ -1459,7 +1459,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoicePaymentSchedule = {
 	PercentageDue?: number
 	AmountDue?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1472,18 +1472,18 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoicePaymentSchedule = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoice = {
+export type OEMultipleShipmentsToInvoiceT = {
 	InvoiceUniquifier?: number
 	LineNumber?: number
 	ShipmentUniquifier?: number
 	ShipmentNumber?: string
 	PONumber?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1496,11 +1496,11 @@ export type SageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoice = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceOptionalField = {
+export type OEInvoiceOptionalFieldT = {
 	InvoiceUniquifier?: number
 	OptionalField?: string
 	Value?: string
@@ -1521,7 +1521,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceOptionalField = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1534,11 +1534,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceOptionalField = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalField = {
+export type OEInvoiceDetailOptionalFieldT = {
 	InvoiceUniquifier?: number
 	LineUniquifier?: number
 	OptionalField?: string
@@ -1560,7 +1560,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalField = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1573,11 +1573,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalField = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceBomDetail = {
+export type OEInvoiceBOMDetailT = {
 	InvoiceUniquifier?: number
 	DetailLineNumber?: number
 	ParentComponentNumber?: bigint
@@ -1593,7 +1593,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceBomDetail = {
 	ComponentsBOMBuildUnitConv?: number
 	UnitConversion?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1606,11 +1606,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceBomDetail = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetail = {
+export type OEInvoiceKittingDetailT = {
 	InvoiceUniquifier?: number
 	DetailLineNumber?: number
 	ParentComponentNumber?: bigint
@@ -1675,10 +1675,10 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetail = {
 	AllocateFromSerial?: string
 	AllocateFromLot?: string
 	SerialLotWindowHandle?: bigint
-	InvoiceKittingSerialNumbers?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumber>
-	InvoiceKittingDetailLotNumber?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumber>
+	InvoiceKittingSerialNumbers?: Array<OEInvoiceKittingSerialNumberT>
+	InvoiceKittingDetailLotNumber?: Array<OEInvoiceKittingDetailLotNumberT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1691,11 +1691,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetail = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumber = {
+export type OEInvoiceDetailSerialNumberT = {
 	InvoiceUniquifier?: number
 	LineNumber?: number
 	SerialNumber?: string
@@ -1703,7 +1703,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumber = {
 	Cost?: number
 	TransactionQuantity?: bigint
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1716,11 +1716,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumber = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumber = {
+export type OEInvoiceDetailLotNumberT = {
 	InvoiceUniquifier?: number
 	LineNumber?: number
 	LotNumber?: string
@@ -1730,7 +1730,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumber = {
 	TransactionQuantity?: number
 	Cost?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1743,11 +1743,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumber = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumber = {
+export type OEInvoiceKittingSerialNumberT = {
 	InvoiceUniquifier?: number
 	DetailLineNumber?: number
 	ParentComponentNumber?: bigint
@@ -1757,7 +1757,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumber = {
 	Cost?: number
 	TransactionQuantity?: bigint
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1770,11 +1770,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumber = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumber = {
+export type OEInvoiceKittingDetailLotNumberT = {
 	InvoiceUniquifier?: number
 	LineNumber?: number
 	ParentComponentNumber?: bigint
@@ -1786,7 +1786,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumber = {
 	TransactionQuantity?: number
 	Cost?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityError>
+	Warnings?: Array<CommonEntityErrorT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -1799,30 +1799,30 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumber = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObject
+		[key: string]: SystemObjectT
 	}
 }
 
-export type SystemWebODataQueryODataQueryOptionsWritable = {
+export type SystemWebODataQueryODataQueryOptionsWritableT = {
 	[key: string]: unknown
 }
 
-export type SystemObjectWritable = {
+export type SystemObjectWritableT = {
 	[key: string]: unknown
 }
 
-export type SageCaSbsErpSage300CommonModelsEntityErrorWritable = {
+export type CommonEntityErrorWritableT = {
 	Message?: string
 	Priority?: "SevereError" | "Message" | "Warning" | "Error" | "Security"
-	Tag?: SystemObjectWritable
+	Tag?: SystemObjectWritableT
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomerWritable = {
+export type ARCustomerT2 = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300ArWebApiModelsCustomerWritable>
+	"value"?: Array<ARCustomerWritableT>
 }
 
-export type SageCaSbsErpSage300ArWebApiModelsCustomerWritable = {
+export type ARCustomerWritableT = {
 	CustomerNumber?: string
 	ShortName?: string
 	GroupCode?: string
@@ -1978,12 +1978,12 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomerWritable = {
 	Mode?: "NormalMode" | "UnconditionalInsertsUpdates"
 	SageBillingAndPaymentCustomer?: "No" | "Yes"
 	BusinessRegistrationNumber?: string
-	CustomerOptionalFieldValues?: Array<SageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValueWritable>
-	CustomerContactSelection?: Array<SageCaSbsErpSage300ArWebApiModelsCustomerContactSelectionWritable>
+	CustomerOptionalFieldValues?: Array<ARCustomerOptionalFieldValueWritableT>
+	CustomerContactSelection?: Array<ARCustomerContactSelectionWritableT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValueWritable = {
+export type ARCustomerOptionalFieldValueWritableT = {
 	CustomerNumber?: string
 	OptionalField?: string
 	Value?: string
@@ -2004,7 +2004,7 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValueWritable 
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2017,11 +2017,11 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValueWritable 
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300ArWebApiModelsCustomerContactSelectionWritable = {
+export type ARCustomerContactSelectionWritableT = {
 	CustomerNumber?: string
 	ContactCode?: string
 	SelectApplication?: "All" | "AccountsReceivable" | "OrderEntry"
@@ -2036,7 +2036,7 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomerContactSelectionWritable = 
 	OECreditDebitNotes?: boolean
 	OEQuotes?: boolean
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2049,16 +2049,16 @@ export type SageCaSbsErpSage300ArWebApiModelsCustomerContactSelectionWritable = 
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategoryWritable = {
+export type ICCategoryT2 = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300IcWebApiModelsCategoryWritable>
+	"value"?: Array<ICCategoryWritableT>
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsCategoryWritable = {
+export type ICCategoryWritableT = {
 	CategoryCode?: string
 	Description?: string
 	CostOfGoodsSoldAccount?: string
@@ -2073,11 +2073,11 @@ export type SageCaSbsErpSage300IcWebApiModelsCategoryWritable = {
 	DateInactive?: Date
 	DamagedGoodsAccount?: string
 	InternalUsageAccount?: string
-	CategoryTaxAuthorities?: Array<SageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthorityWritable>
+	CategoryTaxAuthorities?: Array<ICCategoryTaxAuthorityWritableT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthorityWritable = {
+export type ICCategoryTaxAuthorityWritableT = {
 	Category?: string
 	TaxAuthority?: string
 	PurchaseTaxClass?: number
@@ -2085,7 +2085,7 @@ export type SageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthorityWritable = {
 	PurchaseTaxClassDescription?: string
 	SalesTaxClassDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2098,16 +2098,16 @@ export type SageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthorityWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricingWritable = {
+export type ICItemPricingT2 = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300IcWebApiModelsItemPricingWritable>
+	"value"?: Array<ICItemPricingWritableT>
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemPricingWritable = {
+export type ICItemPricingWritableT = {
 	CurrencyCode?: string
 	UnformattedItemNumber?: string
 	PriceListCode?: string
@@ -2198,13 +2198,13 @@ export type SageCaSbsErpSage300IcWebApiModelsItemPricingWritable = {
 	ItemLocationCostAllowable?: boolean
 	PriceListStartDate?: Date
 	PriceListEndDate?: Date
-	PriceListTaxAuthorities?: Array<SageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthorityWritable>
-	PricingPriceChecks?: Array<SageCaSbsErpSage300IcWebApiModelsPricingPriceCheckWritable>
-	ItemPricingDetails?: Array<SageCaSbsErpSage300IcWebApiModelsItemPricingDetailWritable>
+	PriceListTaxAuthorities?: Array<ICPriceListTaxAuthorityWritableT>
+	PricingPriceChecks?: Array<ICPricingPriceCheckWritableT>
+	ItemPricingDetails?: Array<ICItemPricingDetailWritableT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthorityWritable = {
+export type ICPriceListTaxAuthorityWritableT = {
 	CurrencyCode?: string
 	ItemNumber?: string
 	PriceListCode?: string
@@ -2214,7 +2214,7 @@ export type SageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthorityWritable = {
 	CustomerTaxClassDescription?: string
 	TaxAuthorityDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2227,11 +2227,11 @@ export type SageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthorityWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsPricingPriceCheckWritable = {
+export type ICPricingPriceCheckWritableT = {
 	CurrencyCode?: string
 	UnformattedItemNumber?: string
 	PriceListCode?: string
@@ -2242,7 +2242,7 @@ export type SageCaSbsErpSage300IcWebApiModelsPricingPriceCheckWritable = {
 	GreaterthanAmount?: number
 	LessthanAmount?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2255,11 +2255,11 @@ export type SageCaSbsErpSage300IcWebApiModelsPricingPriceCheckWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemPricingDetailWritable = {
+export type ICItemPricingDetailWritableT = {
 	CurrencyCode?: string
 	UnformattedItemNumber?: string
 	PriceListCode?: string
@@ -2274,7 +2274,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemPricingDetailWritable = {
 	PreviousPrice?: number
 	DefaultUnit?: boolean
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2287,16 +2287,16 @@ export type SageCaSbsErpSage300IcWebApiModelsItemPricingDetailWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemWritable = {
+export type ICItemT2 = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300IcWebApiModelsItemWritable>
+	"value"?: Array<ICItemWritableT>
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemWritable = {
+export type ICItemWritableT = {
 	UnformattedItemNumber?: string
 	AlternateItemSetNumber?: bigint
 	Description?: string
@@ -2396,23 +2396,23 @@ export type SageCaSbsErpSage300IcWebApiModelsItemWritable = {
 	PreferredVendor?: string
 	PreferredVendorItem?: string
 	TariffCode?: string
-	ItemUnitsOfMeasure?: Array<SageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasureWritable>
-	ItemTaxAuthorities?: Array<SageCaSbsErpSage300IcWebApiModelsItemTaxAuthorityWritable>
-	VendorItemNumbers?: Array<SageCaSbsErpSage300IcWebApiModelsVendorItemNumberWritable>
-	ItemOptionalFields?: Array<SageCaSbsErpSage300IcWebApiModelsItemOptionalFieldWritable>
-	CustomerItemNumbers?: Array<SageCaSbsErpSage300IcWebApiModelsCustomerItemNumberWritable>
-	ItemSerialOptionalFields?: Array<SageCaSbsErpSage300IcWebApiModelsItemSerialOptionalFieldWritable>
-	ItemLotOptionalFields?: Array<SageCaSbsErpSage300IcWebApiModelsItemLotOptionalFieldWritable>
+	ItemUnitsOfMeasure?: Array<ICItemUnitsOfMeasureWritableT>
+	ItemTaxAuthorities?: Array<ICItemTaxAuthorityWritableT>
+	VendorItemNumbers?: Array<ICVendorItemNumberWritableT>
+	ItemOptionalFields?: Array<ICItemOptionalFieldWritableT>
+	CustomerItemNumbers?: Array<ICCustomerItemNumberWritableT>
+	ItemSerialOptionalFields?: Array<ICItemSerialOptionalFieldWritableT>
+	ItemLotOptionalFields?: Array<ICItemLotOptionalFieldWritableT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasureWritable = {
+export type ICItemUnitsOfMeasureWritableT = {
 	ItemNumber?: string
 	UnitOfMeasure?: string
 	ConversionFactor?: number
 	FACTOR?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2425,11 +2425,11 @@ export type SageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasureWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemTaxAuthorityWritable = {
+export type ICItemTaxAuthorityWritableT = {
 	ItemNumber?: string
 	TaxAuthority?: string
 	PurchaseTaxClass?: number
@@ -2438,7 +2438,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemTaxAuthorityWritable = {
 	SalesTaxClassDescription?: string
 	TaxAuthorityDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2451,11 +2451,11 @@ export type SageCaSbsErpSage300IcWebApiModelsItemTaxAuthorityWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsVendorItemNumberWritable = {
+export type ICVendorItemNumberWritableT = {
 	ItemNumber?: string
 	VendorType?: "Vendor1" | "Vendor2" | "Vendor3" | "Vendor4" | "Vendor5" | "Vendor6" | "Vendor7" | "Vendor8" | "Vendor9"
 	VendorNumber?: string
@@ -2470,7 +2470,7 @@ export type SageCaSbsErpSage300IcWebApiModelsVendorItemNumberWritable = {
 	OrderMinimumSIA?: number
 	PreferredVendorSIA?: boolean
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2483,11 +2483,11 @@ export type SageCaSbsErpSage300IcWebApiModelsVendorItemNumberWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemOptionalFieldWritable = {
+export type ICItemOptionalFieldWritableT = {
 	ItemNumber?: string
 	OptionalField?: string
 	Value?: string
@@ -2508,7 +2508,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemOptionalFieldWritable = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2521,11 +2521,11 @@ export type SageCaSbsErpSage300IcWebApiModelsItemOptionalFieldWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsCustomerItemNumberWritable = {
+export type ICCustomerItemNumberWritableT = {
 	ItemNumber?: string
 	CustomerNumber?: string
 	CustomerName?: string
@@ -2536,7 +2536,7 @@ export type SageCaSbsErpSage300IcWebApiModelsCustomerItemNumberWritable = {
 	Instructions?: string
 	FMTITEMNO?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2549,11 +2549,11 @@ export type SageCaSbsErpSage300IcWebApiModelsCustomerItemNumberWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemSerialOptionalFieldWritable = {
+export type ICItemSerialOptionalFieldWritableT = {
 	ItemNumber?: string
 	OptionalField?: string
 	Value?: string
@@ -2574,7 +2574,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemSerialOptionalFieldWritable = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2587,11 +2587,11 @@ export type SageCaSbsErpSage300IcWebApiModelsItemSerialOptionalFieldWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300IcWebApiModelsItemLotOptionalFieldWritable = {
+export type ICItemLotOptionalFieldWritableT = {
 	ItemNumber?: string
 	OptionalField?: string
 	Value?: string
@@ -2612,7 +2612,7 @@ export type SageCaSbsErpSage300IcWebApiModelsItemLotOptionalFieldWritable = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -2625,16 +2625,16 @@ export type SageCaSbsErpSage300IcWebApiModelsItemLotOptionalFieldWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoiceWritable = {
+export type OEInvoiceT2 = {
 	"@odata.context"?: string
-	"value"?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceWritable>
+	"value"?: Array<OEInvoiceWritableT>
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceWritable = {
+export type OEInvoiceWritableT = {
 	InvoiceUniquifier?: number
 	OrderNumber?: string
 	ICDayEndTransactionNumber?: number
@@ -2974,15 +2974,15 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceWritable = {
 	SageCRMOpportunityLines?: number
 	PreAuthExistsForInvoice?: boolean
 	ExportDeclarationNumber?: string
-	InvoiceDetails?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceDetailWritable>
-	InvoiceCommentsInstructions?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstructionWritable>
-	InvoicePaymentSchedules?: Array<SageCaSbsErpSage300OeWebApiModelsInvoicePaymentScheduleWritable>
-	MultipleShipmentsToInvoice?: Array<SageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoiceWritable>
-	InvoiceOptionalFields?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceOptionalFieldWritable>
+	InvoiceDetails?: Array<OEInvoiceDetailWritableT>
+	InvoiceCommentsInstructions?: Array<OEInvoiceCommentsInstructionWritableT>
+	InvoicePaymentSchedules?: Array<OEInvoicePaymentScheduleWritableT>
+	MultipleShipmentsToInvoice?: Array<OEMultipleShipmentsToInvoiceWritableT>
+	InvoiceOptionalFields?: Array<OEInvoiceOptionalFieldWritableT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailWritable = {
+export type OEInvoiceDetailWritableT = {
 	InvoiceUniquifier?: number
 	LineUniquifier?: number
 	LineType?: "Item" | "Miscellaneous"
@@ -3197,13 +3197,13 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailWritable = {
 	SageCRMOpportunityID?: bigint
 	NoninteractivePriceApproval?: boolean
 	ExportDeclarationNumber?: string
-	InvoiceDetailOptionalFields?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalFieldWritable>
-	InvoiceBOMDetails?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceBomDetailWritable>
-	InvoiceKittingDetails?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailWritable>
-	InvoiceDetailSerialNumbers?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumberWritable>
-	InvoiceDetailLotNumbers?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumberWritable>
+	InvoiceDetailOptionalFields?: Array<OEInvoiceDetailOptionalFieldWritableT>
+	InvoiceBOMDetails?: Array<OEInvoiceBOMDetailWritableT>
+	InvoiceKittingDetails?: Array<OEInvoiceKittingDetailWritableT>
+	InvoiceDetailSerialNumbers?: Array<OEInvoiceDetailSerialNumberWritableT>
+	InvoiceDetailLotNumbers?: Array<OEInvoiceDetailLotNumberWritableT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3216,18 +3216,18 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstructionWritable = {
+export type OEInvoiceCommentsInstructionWritableT = {
 	InvoiceUniquifier?: number
 	LineUniquifier?: number
 	DetailNumber?: number
 	CommentsInstructionsType?: "Comment" | "Instruction"
 	CommentsInstructions?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3240,11 +3240,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstructionWritable 
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoicePaymentScheduleWritable = {
+export type OEInvoicePaymentScheduleWritableT = {
 	InvoiceUniquifier?: number
 	PaymentNumber?: number
 	DiscountBase?: number
@@ -3256,7 +3256,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoicePaymentScheduleWritable = {
 	PercentageDue?: number
 	AmountDue?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3269,18 +3269,18 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoicePaymentScheduleWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoiceWritable = {
+export type OEMultipleShipmentsToInvoiceWritableT = {
 	InvoiceUniquifier?: number
 	LineNumber?: number
 	ShipmentUniquifier?: number
 	ShipmentNumber?: string
 	PONumber?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3293,11 +3293,11 @@ export type SageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoiceWritable 
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceOptionalFieldWritable = {
+export type OEInvoiceOptionalFieldWritableT = {
 	InvoiceUniquifier?: number
 	OptionalField?: string
 	Value?: string
@@ -3318,7 +3318,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceOptionalFieldWritable = {
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3331,11 +3331,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceOptionalFieldWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalFieldWritable = {
+export type OEInvoiceDetailOptionalFieldWritableT = {
 	InvoiceUniquifier?: number
 	LineUniquifier?: number
 	OptionalField?: string
@@ -3357,7 +3357,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalFieldWritable 
 	OptionalFieldDescription?: string
 	ValueDescription?: string
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3370,11 +3370,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalFieldWritable 
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceBomDetailWritable = {
+export type OEInvoiceBOMDetailWritableT = {
 	InvoiceUniquifier?: number
 	DetailLineNumber?: number
 	ParentComponentNumber?: bigint
@@ -3390,7 +3390,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceBomDetailWritable = {
 	ComponentsBOMBuildUnitConv?: number
 	UnitConversion?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3403,11 +3403,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceBomDetailWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailWritable = {
+export type OEInvoiceKittingDetailWritableT = {
 	InvoiceUniquifier?: number
 	DetailLineNumber?: number
 	ParentComponentNumber?: bigint
@@ -3472,10 +3472,10 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailWritable = {
 	AllocateFromSerial?: string
 	AllocateFromLot?: string
 	SerialLotWindowHandle?: bigint
-	InvoiceKittingSerialNumbers?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumberWritable>
-	InvoiceKittingDetailLotNumber?: Array<SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumberWritable>
+	InvoiceKittingSerialNumbers?: Array<OEInvoiceKittingSerialNumberWritableT>
+	InvoiceKittingDetailLotNumber?: Array<OEInvoiceKittingDetailLotNumberWritableT>
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3488,11 +3488,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumberWritable = {
+export type OEInvoiceDetailSerialNumberWritableT = {
 	InvoiceUniquifier?: number
 	LineNumber?: number
 	SerialNumber?: string
@@ -3500,7 +3500,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumberWritable =
 	Cost?: number
 	TransactionQuantity?: bigint
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3513,11 +3513,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumberWritable =
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumberWritable = {
+export type OEInvoiceDetailLotNumberWritableT = {
 	InvoiceUniquifier?: number
 	LineNumber?: number
 	LotNumber?: string
@@ -3527,7 +3527,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumberWritable = {
 	TransactionQuantity?: number
 	Cost?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3540,11 +3540,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumberWritable = {
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumberWritable = {
+export type OEInvoiceKittingSerialNumberWritableT = {
 	InvoiceUniquifier?: number
 	DetailLineNumber?: number
 	ParentComponentNumber?: bigint
@@ -3554,7 +3554,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumberWritable 
 	Cost?: number
 	TransactionQuantity?: bigint
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3567,11 +3567,11 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumberWritable 
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
-export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumberWritable = {
+export type OEInvoiceKittingDetailLotNumberWritableT = {
 	InvoiceUniquifier?: number
 	LineNumber?: number
 	ParentComponentNumber?: bigint
@@ -3583,7 +3583,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumberWritab
 	TransactionQuantity?: number
 	Cost?: number
 	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
-	Warnings?: Array<SageCaSbsErpSage300CommonModelsEntityErrorWritable>
+	Warnings?: Array<CommonEntityErrorWritableT>
 	ETag?: string
 	IsDeleted?: boolean
 	IsNewLine?: boolean
@@ -3596,7 +3596,7 @@ export type SageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumberWritab
 	}
 	IsSelected?: boolean
 	Misc?: {
-		[key: string]: SystemObjectWritable
+		[key: string]: SystemObjectWritableT
 	}
 }
 
@@ -3636,7 +3636,7 @@ export type ArCustomersGetResponses = {
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
+	200: ARCustomerListResponseT
 }
 
 export type ArCustomersGetResponse = ArCustomersGetResponses[keyof ArCustomersGetResponses]
@@ -3645,7 +3645,7 @@ export type ArCustomersPostData = {
 	/**
      * The entity to post
      */
-	body: SageCaSbsErpSage300ArWebApiModelsCustomerWritable
+	body: ARCustomerWritableT
 	path: {
 		apiVersion: string
 		tenant: string
@@ -3694,7 +3694,7 @@ export type ArCustomersPatchByCustomerNumberData = {
 	/**
      * The entity to patch
      */
-	body: SageCaSbsErpSage300ArWebApiModelsCustomerWritable
+	body: ARCustomerWritableT
 	path: {
 		/**
          * key: CustomerNumber
@@ -3719,7 +3719,7 @@ export type ArCustomersPutByCustomerNumberData = {
 	/**
      * The entity to put
      */
-	body: SageCaSbsErpSage300ArWebApiModelsCustomerWritable
+	body: ARCustomerWritableT
 	path: {
 		/**
          * key: CustomerNumber
@@ -3764,7 +3764,7 @@ export type ArCustomersGetByCustomerNumberResponses = {
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
+	200: ARCustomerListResponseT
 }
 
 export type ArCustomersGetByCustomerNumberResponse = ArCustomersGetByCustomerNumberResponses[keyof ArCustomersGetByCustomerNumberResponses]
@@ -3805,7 +3805,7 @@ export type IcCategoriesGetResponses = {
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
+	200: ICCategoryListResponseT
 }
 
 export type IcCategoriesGetResponse = IcCategoriesGetResponses[keyof IcCategoriesGetResponses]
@@ -3814,7 +3814,7 @@ export type IcCategoriesPostData = {
 	/**
      * The entity to post
      */
-	body: SageCaSbsErpSage300IcWebApiModelsCategoryWritable
+	body: ICCategoryWritableT
 	path: {
 		apiVersion: string
 		tenant: string
@@ -3863,7 +3863,7 @@ export type IcCategoriesPatchByCategoryCodeData = {
 	/**
      * The entity to patch
      */
-	body: SageCaSbsErpSage300IcWebApiModelsCategoryWritable
+	body: ICCategoryWritableT
 	path: {
 		/**
          * key: CategoryCode
@@ -3888,7 +3888,7 @@ export type IcCategoriesPutByCategoryCodeData = {
 	/**
      * The entity to put
      */
-	body: SageCaSbsErpSage300IcWebApiModelsCategoryWritable
+	body: ICCategoryWritableT
 	path: {
 		/**
          * key: CategoryCode
@@ -3933,7 +3933,7 @@ export type IcCategoriesGetByCategoryCodeResponses = {
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
+	200: ICCategoryListResponseT
 }
 
 export type IcCategoriesGetByCategoryCodeResponse = IcCategoriesGetByCategoryCodeResponses[keyof IcCategoriesGetByCategoryCodeResponses]
@@ -3974,7 +3974,7 @@ export type IcItemPricingGetResponses = {
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
+	200: ICItemPricingListResponseT
 }
 
 export type IcItemPricingGetResponse = IcItemPricingGetResponses[keyof IcItemPricingGetResponses]
@@ -3983,7 +3983,7 @@ export type IcItemPricingPostData = {
 	/**
      * The entity to post
      */
-	body: SageCaSbsErpSage300IcWebApiModelsItemPricingWritable
+	body: ICItemPricingWritableT
 	path: {
 		apiVersion: string
 		tenant: string
@@ -4040,7 +4040,7 @@ export type IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceList
 	/**
      * The entity to patch
      */
-	body: SageCaSbsErpSage300IcWebApiModelsItemPricingWritable
+	body: ICItemPricingWritableT
 	path: {
 		/**
          * key: CurrencyCode
@@ -4073,7 +4073,7 @@ export type IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCo
 	/**
      * The entity to put
      */
-	body: SageCaSbsErpSage300IcWebApiModelsItemPricingWritable
+	body: ICItemPricingWritableT
 	path: {
 		/**
          * key: CurrencyCode
@@ -4134,7 +4134,7 @@ export type IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCo
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
+	200: ICItemPricingListResponseT
 }
 
 export type IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponse = IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses[keyof IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses]
@@ -4175,7 +4175,7 @@ export type IcItemsGetResponses = {
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
+	200: ICItemListResponseT
 }
 
 export type IcItemsGetResponse = IcItemsGetResponses[keyof IcItemsGetResponses]
@@ -4184,7 +4184,7 @@ export type IcItemsPostData = {
 	/**
      * The entity to post
      */
-	body: SageCaSbsErpSage300IcWebApiModelsItemWritable
+	body: ICItemWritableT
 	path: {
 		apiVersion: string
 		tenant: string
@@ -4233,7 +4233,7 @@ export type IcItemsPatchByUnformattedItemNumberData = {
 	/**
      * The entity to patch
      */
-	body: SageCaSbsErpSage300IcWebApiModelsItemWritable
+	body: ICItemWritableT
 	path: {
 		/**
          * key: UnformattedItemNumber
@@ -4258,7 +4258,7 @@ export type IcItemsPutByUnformattedItemNumberData = {
 	/**
      * The entity to put
      */
-	body: SageCaSbsErpSage300IcWebApiModelsItemWritable
+	body: ICItemWritableT
 	path: {
 		/**
          * key: UnformattedItemNumber
@@ -4303,7 +4303,7 @@ export type IcItemsGetByUnformattedItemNumberResponses = {
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
+	200: ICItemListResponseT
 }
 
 export type IcItemsGetByUnformattedItemNumberResponse = IcItemsGetByUnformattedItemNumberResponses[keyof IcItemsGetByUnformattedItemNumberResponses]
@@ -4344,7 +4344,7 @@ export type OeInvoicesGetResponses = {
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice
+	200: OEInvoiceListResponseT
 }
 
 export type OeInvoicesGetResponse = OeInvoicesGetResponses[keyof OeInvoicesGetResponses]
@@ -4373,7 +4373,7 @@ export type OeInvoicesGetByInvoiceUniquifierResponses = {
 	/**
      * OK
      */
-	200: SwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice
+	200: OEInvoiceListResponseT
 }
 
 export type OeInvoicesGetByInvoiceUniquifierResponse = OeInvoicesGetByInvoiceUniquifierResponses[keyof OeInvoicesGetByInvoiceUniquifierResponses]

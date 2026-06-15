@@ -7,7 +7,7 @@ export const zSystemWebODataQueryODataQueryOptions = z.record(z.string(), z.unkn
 
 export const zSystemObject = z.record(z.string(), z.unknown())
 
-export const zSageCaSbsErpSage300CommonModelsEntityError = z.object({
+export const zCommonEntityError = z.object({
 	Message: z.optional(z.string()),
 	Priority: z.optional(z.enum([
 		"SevereError",
@@ -20,7 +20,7 @@ export const zSageCaSbsErpSage300CommonModelsEntityError = z.object({
 	Tag: z.optional(zSystemObject),
 })
 
-export const zSageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValue = z.object({
+export const zARCustomerOptionalFieldValue = z.object({
 	CustomerNumber: z.optional(z.string()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -58,7 +58,7 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValue = z.ob
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -71,7 +71,7 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValue = z.ob
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300ArWebApiModelsCustomerContactSelection = z.object({
+export const zARCustomerContactSelection = z.object({
 	CustomerNumber: z.optional(z.string()),
 	ContactCode: z.optional(z.string()),
 	SelectApplication: z.optional(z.enum([
@@ -95,7 +95,7 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerContactSelection = z.obje
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -108,7 +108,7 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerContactSelection = z.obje
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300ArWebApiModelsCustomer = z.object({
+export const zARCustomer = z.object({
 	CustomerNumber: z.optional(z.string()),
 	ShortName: z.optional(z.string()),
 	GroupCode: z.optional(z.string()),
@@ -280,8 +280,8 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomer = z.object({
 	Mode: z.optional(z.enum(["NormalMode", "UnconditionalInsertsUpdates"])),
 	SageBillingAndPaymentCustomer: z.optional(z.enum(["No", "Yes"])),
 	BusinessRegistrationNumber: z.optional(z.string()),
-	CustomerOptionalFieldValues: z.optional(z.array(zSageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValue)),
-	CustomerContactSelection: z.optional(z.array(zSageCaSbsErpSage300ArWebApiModelsCustomerContactSelection)),
+	CustomerOptionalFieldValues: z.optional(z.array(zARCustomerOptionalFieldValue)),
+	CustomerContactSelection: z.optional(z.array(zARCustomerContactSelection)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -290,12 +290,12 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomer = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer = z.object({
+export const zARCustomerListResponse = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300ArWebApiModelsCustomer)),
+	"value": z.optional(z.array(zARCustomer)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthority = z.object({
+export const zICCategoryTaxAuthority = z.object({
 	Category: z.optional(z.string()),
 	TaxAuthority: z.optional(z.string()),
 	PurchaseTaxClass: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
@@ -308,7 +308,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthority = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -321,7 +321,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthority = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsCategory = z.object({
+export const zICCategory = z.object({
 	CategoryCode: z.optional(z.string()),
 	Description: z.optional(z.string()),
 	CostOfGoodsSoldAccount: z.optional(z.string()),
@@ -336,7 +336,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCategory = z.object({
 	DateInactive: z.optional(z.iso.datetime()),
 	DamagedGoodsAccount: z.optional(z.string()),
 	InternalUsageAccount: z.optional(z.string()),
-	CategoryTaxAuthorities: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthority)),
+	CategoryTaxAuthorities: z.optional(z.array(zICCategoryTaxAuthority)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -345,12 +345,12 @@ export const zSageCaSbsErpSage300IcWebApiModelsCategory = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory = z.object({
+export const zICCategoryListResponse = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsCategory)),
+	"value": z.optional(z.array(zICCategory)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthority = z.object({
+export const zICPriceListTaxAuthority = z.object({
 	CurrencyCode: z.optional(z.string()),
 	ItemNumber: z.optional(z.string()),
 	PriceListCode: z.optional(z.string()),
@@ -365,7 +365,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthority = z.object(
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -378,7 +378,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthority = z.object(
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsPricingPriceCheck = z.object({
+export const zICPricingPriceCheck = z.object({
 	CurrencyCode: z.optional(z.string()),
 	UnformattedItemNumber: z.optional(z.string()),
 	PriceListCode: z.optional(z.string()),
@@ -394,7 +394,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsPricingPriceCheck = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -407,7 +407,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsPricingPriceCheck = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemPricingDetail = z.object({
+export const zICItemPricingDetail = z.object({
 	CurrencyCode: z.optional(z.string()),
 	UnformattedItemNumber: z.optional(z.string()),
 	PriceListCode: z.optional(z.string()),
@@ -434,7 +434,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemPricingDetail = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -447,7 +447,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemPricingDetail = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemPricing = z.object({
+export const zICItemPricing = z.object({
 	CurrencyCode: z.optional(z.string()),
 	UnformattedItemNumber: z.optional(z.string()),
 	PriceListCode: z.optional(z.string()),
@@ -616,9 +616,9 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemPricing = z.object({
 	ItemLocationCostAllowable: z.optional(z.boolean()),
 	PriceListStartDate: z.optional(z.iso.datetime()),
 	PriceListEndDate: z.optional(z.iso.datetime()),
-	PriceListTaxAuthorities: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthority)),
-	PricingPriceChecks: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsPricingPriceCheck)),
-	ItemPricingDetails: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemPricingDetail)),
+	PriceListTaxAuthorities: z.optional(z.array(zICPriceListTaxAuthority)),
+	PricingPriceChecks: z.optional(z.array(zICPricingPriceCheck)),
+	ItemPricingDetails: z.optional(z.array(zICItemPricingDetail)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -627,12 +627,12 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemPricing = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing = z.object({
+export const zICItemPricingListResponse = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemPricing)),
+	"value": z.optional(z.array(zICItemPricing)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasure = z.object({
+export const zICItemUnitsOfMeasure = z.object({
 	ItemNumber: z.optional(z.string()),
 	UnitOfMeasure: z.optional(z.string()),
 	ConversionFactor: z.optional(z.number()),
@@ -643,7 +643,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasure = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -656,7 +656,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasure = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemTaxAuthority = z.object({
+export const zICItemTaxAuthority = z.object({
 	ItemNumber: z.optional(z.string()),
 	TaxAuthority: z.optional(z.string()),
 	PurchaseTaxClass: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
@@ -670,7 +670,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemTaxAuthority = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -683,7 +683,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemTaxAuthority = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsVendorItemNumber = z.object({
+export const zICVendorItemNumber = z.object({
 	ItemNumber: z.optional(z.string()),
 	VendorType: z.optional(z.enum([
 		"Vendor1",
@@ -713,7 +713,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsVendorItemNumber = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -726,7 +726,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsVendorItemNumber = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemOptionalField = z.object({
+export const zICItemOptionalField = z.object({
 	ItemNumber: z.optional(z.string()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -764,7 +764,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemOptionalField = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -777,7 +777,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemOptionalField = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsCustomerItemNumber = z.object({
+export const zICCustomerItemNumber = z.object({
 	ItemNumber: z.optional(z.string()),
 	CustomerNumber: z.optional(z.string()),
 	CustomerName: z.optional(z.string()),
@@ -793,7 +793,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCustomerItemNumber = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -806,7 +806,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCustomerItemNumber = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemSerialOptionalField = z.object({
+export const zICItemSerialOptionalField = z.object({
 	ItemNumber: z.optional(z.string()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -844,7 +844,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemSerialOptionalField = z.objec
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -857,7 +857,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemSerialOptionalField = z.objec
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemLotOptionalField = z.object({
+export const zICItemLotOptionalField = z.object({
 	ItemNumber: z.optional(z.string()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -895,7 +895,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemLotOptionalField = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -908,7 +908,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemLotOptionalField = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItem = z.object({
+export const zICItem = z.object({
 	UnformattedItemNumber: z.optional(z.string()),
 	AlternateItemSetNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
 	Description: z.optional(z.string()),
@@ -1022,13 +1022,13 @@ export const zSageCaSbsErpSage300IcWebApiModelsItem = z.object({
 	PreferredVendor: z.optional(z.string()),
 	PreferredVendorItem: z.optional(z.string()),
 	TariffCode: z.optional(z.string()),
-	ItemUnitsOfMeasure: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasure)),
-	ItemTaxAuthorities: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemTaxAuthority)),
-	VendorItemNumbers: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsVendorItemNumber)),
-	ItemOptionalFields: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemOptionalField)),
-	CustomerItemNumbers: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsCustomerItemNumber)),
-	ItemSerialOptionalFields: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemSerialOptionalField)),
-	ItemLotOptionalFields: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemLotOptionalField)),
+	ItemUnitsOfMeasure: z.optional(z.array(zICItemUnitsOfMeasure)),
+	ItemTaxAuthorities: z.optional(z.array(zICItemTaxAuthority)),
+	VendorItemNumbers: z.optional(z.array(zICVendorItemNumber)),
+	ItemOptionalFields: z.optional(z.array(zICItemOptionalField)),
+	CustomerItemNumbers: z.optional(z.array(zICCustomerItemNumber)),
+	ItemSerialOptionalFields: z.optional(z.array(zICItemSerialOptionalField)),
+	ItemLotOptionalFields: z.optional(z.array(zICItemLotOptionalField)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -1037,12 +1037,12 @@ export const zSageCaSbsErpSage300IcWebApiModelsItem = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem = z.object({
+export const zICItemListResponse = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItem)),
+	"value": z.optional(z.array(zICItem)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstruction = z.object({
+export const zOEInvoiceCommentsInstruction = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineUniquifier: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	DetailNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
@@ -1054,7 +1054,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstruction = z.ob
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1067,7 +1067,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstruction = z.ob
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoicePaymentSchedule = z.object({
+export const zOEInvoicePaymentSchedule = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	PaymentNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	DiscountBase: z.optional(z.number()),
@@ -1084,7 +1084,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoicePaymentSchedule = z.object
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1097,7 +1097,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoicePaymentSchedule = z.object
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoice = z.object({
+export const zOEMultipleShipmentsToInvoice = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ShipmentUniquifier: z.optional(z.number()),
@@ -1109,7 +1109,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoice = z.ob
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1122,7 +1122,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoice = z.ob
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceOptionalField = z.object({
+export const zOEInvoiceOptionalField = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -1160,7 +1160,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceOptionalField = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1173,7 +1173,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceOptionalField = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalField = z.object({
+export const zOEInvoiceDetailOptionalField = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineUniquifier: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	OptionalField: z.optional(z.string()),
@@ -1212,7 +1212,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalField = z.ob
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1225,7 +1225,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalField = z.ob
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceBomDetail = z.object({
+export const zOEInvoiceBOMDetail = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	DetailLineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ParentComponentNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
@@ -1246,7 +1246,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceBomDetail = z.object({
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1259,7 +1259,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceBomDetail = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumber = z.object({
+export const zOEInvoiceDetailSerialNumber = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	SerialNumber: z.optional(z.string()),
@@ -1272,7 +1272,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumber = z.obj
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1285,7 +1285,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumber = z.obj
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumber = z.object({
+export const zOEInvoiceDetailLotNumber = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	LotNumber: z.optional(z.string()),
@@ -1300,7 +1300,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumber = z.object
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1313,7 +1313,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumber = z.object
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumber = z.object({
+export const zOEInvoiceKittingSerialNumber = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	DetailLineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ParentComponentNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
@@ -1328,7 +1328,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumber = z.ob
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1341,7 +1341,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumber = z.ob
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumber = z.object({
+export const zOEInvoiceKittingDetailLotNumber = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ParentComponentNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
@@ -1358,7 +1358,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumber = z
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1371,7 +1371,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumber = z
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetail = z.object({
+export const zOEInvoiceKittingDetail = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	DetailLineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ParentComponentNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
@@ -1459,15 +1459,15 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetail = z.object({
 	AllocateFromSerial: z.optional(z.string()),
 	AllocateFromLot: z.optional(z.string()),
 	SerialLotWindowHandle: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
-	InvoiceKittingSerialNumbers: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumber)),
-	InvoiceKittingDetailLotNumber: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumber)),
+	InvoiceKittingSerialNumbers: z.optional(z.array(zOEInvoiceKittingSerialNumber)),
+	InvoiceKittingDetailLotNumber: z.optional(z.array(zOEInvoiceKittingDetailLotNumber)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1480,7 +1480,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetail = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetail = z.object({
+export const zOEInvoiceDetail = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineUniquifier: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	LineType: z.optional(z.enum(["Item", "Miscellaneous"])),
@@ -1759,18 +1759,18 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetail = z.object({
 	SageCRMOpportunityID: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
 	NoninteractivePriceApproval: z.optional(z.boolean()),
 	ExportDeclarationNumber: z.optional(z.string()),
-	InvoiceDetailOptionalFields: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalField)),
-	InvoiceBOMDetails: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceBomDetail)),
-	InvoiceKittingDetails: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetail)),
-	InvoiceDetailSerialNumbers: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumber)),
-	InvoiceDetailLotNumbers: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumber)),
+	InvoiceDetailOptionalFields: z.optional(z.array(zOEInvoiceDetailOptionalField)),
+	InvoiceBOMDetails: z.optional(z.array(zOEInvoiceBOMDetail)),
+	InvoiceKittingDetails: z.optional(z.array(zOEInvoiceKittingDetail)),
+	InvoiceDetailSerialNumbers: z.optional(z.array(zOEInvoiceDetailSerialNumber)),
+	InvoiceDetailLotNumbers: z.optional(z.array(zOEInvoiceDetailLotNumber)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityError)),
+	Warnings: z.optional(z.array(zCommonEntityError)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -1783,7 +1783,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetail = z.object({
 	Misc: z.optional(z.record(z.string(), zSystemObject)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoice = z.object({
+export const zOEInvoice = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	OrderNumber: z.optional(z.string()),
 	ICDayEndTransactionNumber: z.optional(z.number()),
@@ -2199,11 +2199,11 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoice = z.object({
 	SageCRMOpportunityLines: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	PreAuthExistsForInvoice: z.optional(z.boolean()),
 	ExportDeclarationNumber: z.optional(z.string()),
-	InvoiceDetails: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceDetail)),
-	InvoiceCommentsInstructions: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstruction)),
-	InvoicePaymentSchedules: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoicePaymentSchedule)),
-	MultipleShipmentsToInvoice: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoice)),
-	InvoiceOptionalFields: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceOptionalField)),
+	InvoiceDetails: z.optional(z.array(zOEInvoiceDetail)),
+	InvoiceCommentsInstructions: z.optional(z.array(zOEInvoiceCommentsInstruction)),
+	InvoicePaymentSchedules: z.optional(z.array(zOEInvoicePaymentSchedule)),
+	MultipleShipmentsToInvoice: z.optional(z.array(zOEMultipleShipmentsToInvoice)),
+	InvoiceOptionalFields: z.optional(z.array(zOEInvoiceOptionalField)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -2212,16 +2212,16 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoice = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice = z.object({
+export const zOEInvoiceListResponse = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoice)),
+	"value": z.optional(z.array(zOEInvoice)),
 })
 
 export const zSystemWebODataQueryODataQueryOptionsWritable = z.record(z.string(), z.unknown())
 
 export const zSystemObjectWritable = z.record(z.string(), z.unknown())
 
-export const zSageCaSbsErpSage300CommonModelsEntityErrorWritable = z.object({
+export const zCommonEntityErrorWritable = z.object({
 	Message: z.optional(z.string()),
 	Priority: z.optional(z.enum([
 		"SevereError",
@@ -2233,7 +2233,7 @@ export const zSageCaSbsErpSage300CommonModelsEntityErrorWritable = z.object({
 	Tag: z.optional(zSystemObjectWritable),
 })
 
-export const zSageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValueWritable = z.object({
+export const zARCustomerOptionalFieldValueWritable = z.object({
 	CustomerNumber: z.optional(z.string()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -2271,7 +2271,7 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValueWritabl
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2284,7 +2284,7 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValueWritabl
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300ArWebApiModelsCustomerContactSelectionWritable = z.object({
+export const zARCustomerContactSelectionWritable = z.object({
 	CustomerNumber: z.optional(z.string()),
 	ContactCode: z.optional(z.string()),
 	SelectApplication: z.optional(z.enum([
@@ -2308,7 +2308,7 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerContactSelectionWritable 
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2321,7 +2321,7 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerContactSelectionWritable 
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300ArWebApiModelsCustomerWritable = z.object({
+export const zARCustomerWritable = z.object({
 	CustomerNumber: z.optional(z.string()),
 	ShortName: z.optional(z.string()),
 	GroupCode: z.optional(z.string()),
@@ -2493,8 +2493,8 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerWritable = z.object({
 	Mode: z.optional(z.enum(["NormalMode", "UnconditionalInsertsUpdates"])),
 	SageBillingAndPaymentCustomer: z.optional(z.enum(["No", "Yes"])),
 	BusinessRegistrationNumber: z.optional(z.string()),
-	CustomerOptionalFieldValues: z.optional(z.array(zSageCaSbsErpSage300ArWebApiModelsCustomerOptionalFieldValueWritable)),
-	CustomerContactSelection: z.optional(z.array(zSageCaSbsErpSage300ArWebApiModelsCustomerContactSelectionWritable)),
+	CustomerOptionalFieldValues: z.optional(z.array(zARCustomerOptionalFieldValueWritable)),
+	CustomerContactSelection: z.optional(z.array(zARCustomerContactSelectionWritable)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -2503,12 +2503,12 @@ export const zSageCaSbsErpSage300ArWebApiModelsCustomerWritable = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomerWritable = z.object({
+export const zARCustomer2 = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300ArWebApiModelsCustomerWritable)),
+	"value": z.optional(z.array(zARCustomerWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthorityWritable = z.object({
+export const zICCategoryTaxAuthorityWritable = z.object({
 	Category: z.optional(z.string()),
 	TaxAuthority: z.optional(z.string()),
 	PurchaseTaxClass: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
@@ -2521,7 +2521,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthorityWritable = z.
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2534,7 +2534,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthorityWritable = z.
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsCategoryWritable = z.object({
+export const zICCategoryWritable = z.object({
 	CategoryCode: z.optional(z.string()),
 	Description: z.optional(z.string()),
 	CostOfGoodsSoldAccount: z.optional(z.string()),
@@ -2549,7 +2549,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCategoryWritable = z.object({
 	DateInactive: z.optional(z.iso.datetime()),
 	DamagedGoodsAccount: z.optional(z.string()),
 	InternalUsageAccount: z.optional(z.string()),
-	CategoryTaxAuthorities: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsCategoryTaxAuthorityWritable)),
+	CategoryTaxAuthorities: z.optional(z.array(zICCategoryTaxAuthorityWritable)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -2558,12 +2558,12 @@ export const zSageCaSbsErpSage300IcWebApiModelsCategoryWritable = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategoryWritable = z.object({
+export const zICCategory2 = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsCategoryWritable)),
+	"value": z.optional(z.array(zICCategoryWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthorityWritable = z.object({
+export const zICPriceListTaxAuthorityWritable = z.object({
 	CurrencyCode: z.optional(z.string()),
 	ItemNumber: z.optional(z.string()),
 	PriceListCode: z.optional(z.string()),
@@ -2578,7 +2578,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthorityWritable = z
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2591,7 +2591,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthorityWritable = z
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsPricingPriceCheckWritable = z.object({
+export const zICPricingPriceCheckWritable = z.object({
 	CurrencyCode: z.optional(z.string()),
 	UnformattedItemNumber: z.optional(z.string()),
 	PriceListCode: z.optional(z.string()),
@@ -2607,7 +2607,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsPricingPriceCheckWritable = z.obj
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2620,7 +2620,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsPricingPriceCheckWritable = z.obj
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemPricingDetailWritable = z.object({
+export const zICItemPricingDetailWritable = z.object({
 	CurrencyCode: z.optional(z.string()),
 	UnformattedItemNumber: z.optional(z.string()),
 	PriceListCode: z.optional(z.string()),
@@ -2647,7 +2647,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemPricingDetailWritable = z.obj
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2660,7 +2660,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemPricingDetailWritable = z.obj
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable = z.object({
+export const zICItemPricingWritable = z.object({
 	CurrencyCode: z.optional(z.string()),
 	UnformattedItemNumber: z.optional(z.string()),
 	PriceListCode: z.optional(z.string()),
@@ -2829,9 +2829,9 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable = z.object({
 	ItemLocationCostAllowable: z.optional(z.boolean()),
 	PriceListStartDate: z.optional(z.iso.datetime()),
 	PriceListEndDate: z.optional(z.iso.datetime()),
-	PriceListTaxAuthorities: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsPriceListTaxAuthorityWritable)),
-	PricingPriceChecks: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsPricingPriceCheckWritable)),
-	ItemPricingDetails: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemPricingDetailWritable)),
+	PriceListTaxAuthorities: z.optional(z.array(zICPriceListTaxAuthorityWritable)),
+	PricingPriceChecks: z.optional(z.array(zICPricingPriceCheckWritable)),
+	ItemPricingDetails: z.optional(z.array(zICItemPricingDetailWritable)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -2840,12 +2840,12 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricingWritable = z.object({
+export const zICItemPricing2 = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable)),
+	"value": z.optional(z.array(zICItemPricingWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasureWritable = z.object({
+export const zICItemUnitsOfMeasureWritable = z.object({
 	ItemNumber: z.optional(z.string()),
 	UnitOfMeasure: z.optional(z.string()),
 	ConversionFactor: z.optional(z.number()),
@@ -2856,7 +2856,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasureWritable = z.ob
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2869,7 +2869,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasureWritable = z.ob
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemTaxAuthorityWritable = z.object({
+export const zICItemTaxAuthorityWritable = z.object({
 	ItemNumber: z.optional(z.string()),
 	TaxAuthority: z.optional(z.string()),
 	PurchaseTaxClass: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
@@ -2883,7 +2883,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemTaxAuthorityWritable = z.obje
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2896,7 +2896,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemTaxAuthorityWritable = z.obje
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsVendorItemNumberWritable = z.object({
+export const zICVendorItemNumberWritable = z.object({
 	ItemNumber: z.optional(z.string()),
 	VendorType: z.optional(z.enum([
 		"Vendor1",
@@ -2926,7 +2926,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsVendorItemNumberWritable = z.obje
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2939,7 +2939,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsVendorItemNumberWritable = z.obje
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemOptionalFieldWritable = z.object({
+export const zICItemOptionalFieldWritable = z.object({
 	ItemNumber: z.optional(z.string()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -2977,7 +2977,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemOptionalFieldWritable = z.obj
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -2990,7 +2990,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemOptionalFieldWritable = z.obj
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsCustomerItemNumberWritable = z.object({
+export const zICCustomerItemNumberWritable = z.object({
 	ItemNumber: z.optional(z.string()),
 	CustomerNumber: z.optional(z.string()),
 	CustomerName: z.optional(z.string()),
@@ -3006,7 +3006,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCustomerItemNumberWritable = z.ob
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3019,7 +3019,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsCustomerItemNumberWritable = z.ob
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemSerialOptionalFieldWritable = z.object({
+export const zICItemSerialOptionalFieldWritable = z.object({
 	ItemNumber: z.optional(z.string()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -3057,7 +3057,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemSerialOptionalFieldWritable =
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3070,7 +3070,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemSerialOptionalFieldWritable =
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemLotOptionalFieldWritable = z.object({
+export const zICItemLotOptionalFieldWritable = z.object({
 	ItemNumber: z.optional(z.string()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -3108,7 +3108,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemLotOptionalFieldWritable = z.
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3121,7 +3121,7 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemLotOptionalFieldWritable = z.
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300IcWebApiModelsItemWritable = z.object({
+export const zICItemWritable = z.object({
 	UnformattedItemNumber: z.optional(z.string()),
 	AlternateItemSetNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
 	Description: z.optional(z.string()),
@@ -3235,13 +3235,13 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemWritable = z.object({
 	PreferredVendor: z.optional(z.string()),
 	PreferredVendorItem: z.optional(z.string()),
 	TariffCode: z.optional(z.string()),
-	ItemUnitsOfMeasure: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemUnitsOfMeasureWritable)),
-	ItemTaxAuthorities: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemTaxAuthorityWritable)),
-	VendorItemNumbers: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsVendorItemNumberWritable)),
-	ItemOptionalFields: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemOptionalFieldWritable)),
-	CustomerItemNumbers: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsCustomerItemNumberWritable)),
-	ItemSerialOptionalFields: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemSerialOptionalFieldWritable)),
-	ItemLotOptionalFields: z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemLotOptionalFieldWritable)),
+	ItemUnitsOfMeasure: z.optional(z.array(zICItemUnitsOfMeasureWritable)),
+	ItemTaxAuthorities: z.optional(z.array(zICItemTaxAuthorityWritable)),
+	VendorItemNumbers: z.optional(z.array(zICVendorItemNumberWritable)),
+	ItemOptionalFields: z.optional(z.array(zICItemOptionalFieldWritable)),
+	CustomerItemNumbers: z.optional(z.array(zICCustomerItemNumberWritable)),
+	ItemSerialOptionalFields: z.optional(z.array(zICItemSerialOptionalFieldWritable)),
+	ItemLotOptionalFields: z.optional(z.array(zICItemLotOptionalFieldWritable)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -3250,12 +3250,12 @@ export const zSageCaSbsErpSage300IcWebApiModelsItemWritable = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemWritable = z.object({
+export const zICItem2 = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300IcWebApiModelsItemWritable)),
+	"value": z.optional(z.array(zICItemWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstructionWritable = z.object({
+export const zOEInvoiceCommentsInstructionWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineUniquifier: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	DetailNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
@@ -3267,7 +3267,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstructionWritabl
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3280,7 +3280,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstructionWritabl
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoicePaymentScheduleWritable = z.object({
+export const zOEInvoicePaymentScheduleWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	PaymentNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	DiscountBase: z.optional(z.number()),
@@ -3297,7 +3297,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoicePaymentScheduleWritable = 
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3310,7 +3310,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoicePaymentScheduleWritable = 
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoiceWritable = z.object({
+export const zOEMultipleShipmentsToInvoiceWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ShipmentUniquifier: z.optional(z.number()),
@@ -3322,7 +3322,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoiceWritabl
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3335,7 +3335,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoiceWritabl
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceOptionalFieldWritable = z.object({
+export const zOEInvoiceOptionalFieldWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	OptionalField: z.optional(z.string()),
 	Value: z.optional(z.string()),
@@ -3373,7 +3373,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceOptionalFieldWritable = z.
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3386,7 +3386,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceOptionalFieldWritable = z.
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalFieldWritable = z.object({
+export const zOEInvoiceDetailOptionalFieldWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineUniquifier: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	OptionalField: z.optional(z.string()),
@@ -3425,7 +3425,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalFieldWritabl
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3438,7 +3438,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalFieldWritabl
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceBomDetailWritable = z.object({
+export const zOEInvoiceBOMDetailWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	DetailLineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ParentComponentNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
@@ -3459,7 +3459,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceBomDetailWritable = z.obje
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3472,7 +3472,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceBomDetailWritable = z.obje
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumberWritable = z.object({
+export const zOEInvoiceDetailSerialNumberWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	SerialNumber: z.optional(z.string()),
@@ -3485,7 +3485,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumberWritable
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3498,7 +3498,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumberWritable
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumberWritable = z.object({
+export const zOEInvoiceDetailLotNumberWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	LotNumber: z.optional(z.string()),
@@ -3513,7 +3513,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumberWritable = 
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3526,7 +3526,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumberWritable = 
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumberWritable = z.object({
+export const zOEInvoiceKittingSerialNumberWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	DetailLineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ParentComponentNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
@@ -3541,7 +3541,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumberWritabl
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3554,7 +3554,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumberWritabl
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumberWritable = z.object({
+export const zOEInvoiceKittingDetailLotNumberWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ParentComponentNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
@@ -3571,7 +3571,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumberWrit
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3584,7 +3584,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumberWrit
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailWritable = z.object({
+export const zOEInvoiceKittingDetailWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	DetailLineNumber: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	ParentComponentNumber: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
@@ -3672,15 +3672,15 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailWritable = z.
 	AllocateFromSerial: z.optional(z.string()),
 	AllocateFromLot: z.optional(z.string()),
 	SerialLotWindowHandle: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
-	InvoiceKittingSerialNumbers: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingSerialNumberWritable)),
-	InvoiceKittingDetailLotNumber: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailLotNumberWritable)),
+	InvoiceKittingSerialNumbers: z.optional(z.array(zOEInvoiceKittingSerialNumberWritable)),
+	InvoiceKittingDetailLotNumber: z.optional(z.array(zOEInvoiceKittingDetailLotNumberWritable)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3693,7 +3693,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailWritable = z.
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailWritable = z.object({
+export const zOEInvoiceDetailWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	LineUniquifier: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	LineType: z.optional(z.enum(["Item", "Miscellaneous"])),
@@ -3972,18 +3972,18 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailWritable = z.object(
 	SageCRMOpportunityID: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
 	NoninteractivePriceApproval: z.optional(z.boolean()),
 	ExportDeclarationNumber: z.optional(z.string()),
-	InvoiceDetailOptionalFields: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailOptionalFieldWritable)),
-	InvoiceBOMDetails: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceBomDetailWritable)),
-	InvoiceKittingDetails: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceKittingDetailWritable)),
-	InvoiceDetailSerialNumbers: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailSerialNumberWritable)),
-	InvoiceDetailLotNumbers: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailLotNumberWritable)),
+	InvoiceDetailOptionalFields: z.optional(z.array(zOEInvoiceDetailOptionalFieldWritable)),
+	InvoiceBOMDetails: z.optional(z.array(zOEInvoiceBOMDetailWritable)),
+	InvoiceKittingDetails: z.optional(z.array(zOEInvoiceKittingDetailWritable)),
+	InvoiceDetailSerialNumbers: z.optional(z.array(zOEInvoiceDetailSerialNumberWritable)),
+	InvoiceDetailLotNumbers: z.optional(z.array(zOEInvoiceDetailLotNumberWritable)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
 		"Insert",
 		"Delete",
 	])),
-	Warnings: z.optional(z.array(zSageCaSbsErpSage300CommonModelsEntityErrorWritable)),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
 	ETag: z.optional(z.string()),
 	IsDeleted: z.optional(z.boolean()),
 	IsNewLine: z.optional(z.boolean()),
@@ -3996,7 +3996,7 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailWritable = z.object(
 	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
 })
 
-export const zSageCaSbsErpSage300OeWebApiModelsInvoiceWritable = z.object({
+export const zOEInvoiceWritable = z.object({
 	InvoiceUniquifier: z.optional(z.number()),
 	OrderNumber: z.optional(z.string()),
 	ICDayEndTransactionNumber: z.optional(z.number()),
@@ -4412,11 +4412,11 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceWritable = z.object({
 	SageCRMOpportunityLines: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
 	PreAuthExistsForInvoice: z.optional(z.boolean()),
 	ExportDeclarationNumber: z.optional(z.string()),
-	InvoiceDetails: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceDetailWritable)),
-	InvoiceCommentsInstructions: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceCommentsInstructionWritable)),
-	InvoicePaymentSchedules: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoicePaymentScheduleWritable)),
-	MultipleShipmentsToInvoice: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsMultipleShipmentsToInvoiceWritable)),
-	InvoiceOptionalFields: z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceOptionalFieldWritable)),
+	InvoiceDetails: z.optional(z.array(zOEInvoiceDetailWritable)),
+	InvoiceCommentsInstructions: z.optional(z.array(zOEInvoiceCommentsInstructionWritable)),
+	InvoicePaymentSchedules: z.optional(z.array(zOEInvoicePaymentScheduleWritable)),
+	MultipleShipmentsToInvoice: z.optional(z.array(zOEMultipleShipmentsToInvoiceWritable)),
+	InvoiceOptionalFields: z.optional(z.array(zOEInvoiceOptionalFieldWritable)),
 	UpdateOperation: z.optional(z.enum([
 		"Unspecified",
 		"Update",
@@ -4425,9 +4425,9 @@ export const zSageCaSbsErpSage300OeWebApiModelsInvoiceWritable = z.object({
 	])),
 })
 
-export const zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoiceWritable = z.object({
+export const zOEInvoice2 = z.object({
 	"@odata.context": z.optional(z.string()),
-	"value": z.optional(z.array(zSageCaSbsErpSage300OeWebApiModelsInvoiceWritable)),
+	"value": z.optional(z.array(zOEInvoiceWritable)),
 })
 
 export const zArCustomersGetPath = z.object({
@@ -4606,12 +4606,12 @@ export const zArCustomersGetQuery = z.object({
 /**
  * OK
  */
-export const zArCustomersGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
+export const zArCustomersGetResponse = zARCustomerListResponse
 
 /**
  * The entity to post
  */
-export const zArCustomersPostBody = zSageCaSbsErpSage300ArWebApiModelsCustomerWritable
+export const zArCustomersPostBody = zARCustomerWritable
 
 export const zArCustomersPostPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
@@ -4633,7 +4633,7 @@ export const zArCustomersDeleteByCustomerNumberPath = z.object({
 /**
  * The entity to patch
  */
-export const zArCustomersPatchByCustomerNumberBody = zSageCaSbsErpSage300ArWebApiModelsCustomerWritable
+export const zArCustomersPatchByCustomerNumberBody = zARCustomerWritable
 
 export const zArCustomersPatchByCustomerNumberPath = z.object({
 	CustomerNumber: z.string(),
@@ -4645,7 +4645,7 @@ export const zArCustomersPatchByCustomerNumberPath = z.object({
 /**
  * The entity to put
  */
-export const zArCustomersPutByCustomerNumberBody = zSageCaSbsErpSage300ArWebApiModelsCustomerWritable
+export const zArCustomersPutByCustomerNumberBody = zARCustomerWritable
 
 export const zArCustomersPutByCustomerNumberPath = z.object({
 	CustomerNumber: z.string(),
@@ -4827,7 +4827,7 @@ export const zArCustomersGetByCustomerNumberQuery = z.object({
 /**
  * OK
  */
-export const zArCustomersGetByCustomerNumberResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300ArWebApiModelsCustomer
+export const zArCustomersGetByCustomerNumberResponse = zARCustomerListResponse
 
 export const zIcCategoriesGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
@@ -4863,12 +4863,12 @@ export const zIcCategoriesGetQuery = z.object({
 /**
  * OK
  */
-export const zIcCategoriesGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
+export const zIcCategoriesGetResponse = zICCategoryListResponse
 
 /**
  * The entity to post
  */
-export const zIcCategoriesPostBody = zSageCaSbsErpSage300IcWebApiModelsCategoryWritable
+export const zIcCategoriesPostBody = zICCategoryWritable
 
 export const zIcCategoriesPostPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
@@ -4890,7 +4890,7 @@ export const zIcCategoriesDeleteByCategoryCodePath = z.object({
 /**
  * The entity to patch
  */
-export const zIcCategoriesPatchByCategoryCodeBody = zSageCaSbsErpSage300IcWebApiModelsCategoryWritable
+export const zIcCategoriesPatchByCategoryCodeBody = zICCategoryWritable
 
 export const zIcCategoriesPatchByCategoryCodePath = z.object({
 	CategoryCode: z.string(),
@@ -4902,7 +4902,7 @@ export const zIcCategoriesPatchByCategoryCodePath = z.object({
 /**
  * The entity to put
  */
-export const zIcCategoriesPutByCategoryCodeBody = zSageCaSbsErpSage300IcWebApiModelsCategoryWritable
+export const zIcCategoriesPutByCategoryCodeBody = zICCategoryWritable
 
 export const zIcCategoriesPutByCategoryCodePath = z.object({
 	CategoryCode: z.string(),
@@ -4942,7 +4942,7 @@ export const zIcCategoriesGetByCategoryCodeQuery = z.object({
 /**
  * OK
  */
-export const zIcCategoriesGetByCategoryCodeResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsCategory
+export const zIcCategoriesGetByCategoryCodeResponse = zICCategoryListResponse
 
 export const zIcItemPricingGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
@@ -5056,12 +5056,12 @@ export const zIcItemPricingGetQuery = z.object({
 /**
  * OK
  */
-export const zIcItemPricingGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
+export const zIcItemPricingGetResponse = zICItemPricingListResponse
 
 /**
  * The entity to post
  */
-export const zIcItemPricingPostBody = zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable
+export const zIcItemPricingPostBody = zICItemPricingWritable
 
 export const zIcItemPricingPostPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
@@ -5085,7 +5085,7 @@ export const zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceL
 /**
  * The entity to patch
  */
-export const zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody = zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable
+export const zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody = zICItemPricingWritable
 
 export const zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath = z.object({
 	CurrencyCode: z.string(),
@@ -5099,7 +5099,7 @@ export const zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceLi
 /**
  * The entity to put
  */
-export const zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody = zSageCaSbsErpSage300IcWebApiModelsItemPricingWritable
+export const zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody = zICItemPricingWritable
 
 export const zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath = z.object({
 	CurrencyCode: z.string(),
@@ -5221,7 +5221,7 @@ export const zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceList
 /**
  * OK
  */
-export const zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItemPricing
+export const zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponse = zICItemPricingListResponse
 
 export const zIcItemsGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
@@ -5348,12 +5348,12 @@ export const zIcItemsGetQuery = z.object({
 /**
  * OK
  */
-export const zIcItemsGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
+export const zIcItemsGetResponse = zICItemListResponse
 
 /**
  * The entity to post
  */
-export const zIcItemsPostBody = zSageCaSbsErpSage300IcWebApiModelsItemWritable
+export const zIcItemsPostBody = zICItemWritable
 
 export const zIcItemsPostPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
@@ -5375,7 +5375,7 @@ export const zIcItemsDeleteByUnformattedItemNumberPath = z.object({
 /**
  * The entity to patch
  */
-export const zIcItemsPatchByUnformattedItemNumberBody = zSageCaSbsErpSage300IcWebApiModelsItemWritable
+export const zIcItemsPatchByUnformattedItemNumberBody = zICItemWritable
 
 export const zIcItemsPatchByUnformattedItemNumberPath = z.object({
 	UnformattedItemNumber: z.string(),
@@ -5387,7 +5387,7 @@ export const zIcItemsPatchByUnformattedItemNumberPath = z.object({
 /**
  * The entity to put
  */
-export const zIcItemsPutByUnformattedItemNumberBody = zSageCaSbsErpSage300IcWebApiModelsItemWritable
+export const zIcItemsPutByUnformattedItemNumberBody = zICItemWritable
 
 export const zIcItemsPutByUnformattedItemNumberPath = z.object({
 	UnformattedItemNumber: z.string(),
@@ -5518,7 +5518,7 @@ export const zIcItemsGetByUnformattedItemNumberQuery = z.object({
 /**
  * OK
  */
-export const zIcItemsGetByUnformattedItemNumberResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300IcWebApiModelsItem
+export const zIcItemsGetByUnformattedItemNumberResponse = zICItemListResponse
 
 export const zOeInvoicesGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),
@@ -5883,7 +5883,7 @@ export const zOeInvoicesGetQuery = z.object({
 /**
  * OK
  */
-export const zOeInvoicesGetResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice
+export const zOeInvoicesGetResponse = zOEInvoiceListResponse
 
 export const zOeInvoicesGetByInvoiceUniquifierPath = z.object({
 	InvoiceUniquifier: z.number(),
@@ -6245,4 +6245,4 @@ export const zOeInvoicesGetByInvoiceUniquifierQuery = z.object({
 /**
  * OK
  */
-export const zOeInvoicesGetByInvoiceUniquifierResponse = zSwashbuckleODataODataResponseSystemCollectionsGenericListSageCaSbsErpSage300OeWebApiModelsInvoice
+export const zOeInvoicesGetByInvoiceUniquifierResponse = zOEInvoiceListResponse
