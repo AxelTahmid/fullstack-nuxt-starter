@@ -2,5 +2,5 @@ pre-commit:
   commands:
     lint:
       glob: "*.{ts,vue,json,css,md}"
-      run: npx eslint --ignore-pattern "shared/openapi/" {staged_files} --fix
+      run: npx eslint --ignore-pattern "shared/sage300/" {staged_files} --fix
       stage_fixed: true
