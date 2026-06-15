@@ -1,6 +1,6 @@
 import { PgBoss, type ConstructorOptions } from "pg-boss"
-import { log } from "~~/shared/log"
-import { Queue } from "~~/server/db/queue"
+import { log } from "#shared/log"
+import { Queue } from "#server/db/queue"
 
 declare module "nitropack" {
 	interface NitroApp {

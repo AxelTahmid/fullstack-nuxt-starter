@@ -5,10 +5,10 @@ import "dotenv/config"
 
 // const username = process.env.OPENAPI_USERNAME
 // const password = process.env.OPENAPI_PASSWORD
-const apiBaseUrl = process.env.OPENAPI_BASE_URL
+const apiBaseUrl = process.env.SAGE300_OPENAPI_SPEC
 
 if (!apiBaseUrl) {
-	throw new Error("OPENAPI_BASE_URL is not defined in environment variables.")
+	throw new Error("SAGE300_OPENAPI_SPEC is not defined in environment variables.")
 }
 // if ((username && !password) || (!username && password)) {
 // 	throw new Error("Both OPENAPI_USERNAME and OPENAPI_PASSWORD must be set together.")

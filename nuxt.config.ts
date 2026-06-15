@@ -66,6 +66,17 @@ export default defineNuxtConfig({
 			baseURL: process.env.NUXT_PUBLIC_BASE_URL || "http://localhost:3000",
 			demoMode: process.env.DEMO_MODE === "true",
 		},
+		sage300: {
+			// ! MUST REMOVE BASIC AUTH IN PRODUCTION.
+			username: process.env.SAGE300_USERNAME || "DEV",
+			password: process.env.SAGE300_PASSWORD,
+			auth: Buffer.from(`${process.env.SAGE300_USERNAME}:${process.env.SAGE300_PASSWORD}`).toString("base64"),
+			apiBaseURL: process.env.SAGE300_API_BASE_URL || "http://192.168.0.5/Sage300WebApi",
+			apiVersion: process.env.SAGE300_API_VERSION || "1.0",
+			tenant: process.env.SAGE300_TENANT || "-",
+			company: process.env.SAGE300_COMPANY || "CMSTST",
+			timeout: process.env.SAGE300_TIMEOUT ? Number.parseInt(process.env.SAGE300_TIMEOUT, 10) : 30000,
+		},
 		auth: {
 			magicLinkTtlMinutes: process.env.AUTH_MAGIC_LINK_TTL_MINUTES
 				? Number.parseInt(process.env.AUTH_MAGIC_LINK_TTL_MINUTES, 10)
