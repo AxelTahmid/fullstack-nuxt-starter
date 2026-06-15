@@ -17,7 +17,8 @@
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix --quiet",
     "release": "standard-version",
-    "db:generate-types": "kysely-codegen"
+    "db:generate-types": "kysely-codegen",
+    "openapi" : "openapi-ts"
   },
   "dependencies": {
     "@internationalized/date": "^3.12.2",
