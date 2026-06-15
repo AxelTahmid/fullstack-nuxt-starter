@@ -19,8 +19,8 @@ export default defineEventHandler(async (event) => {
 
 	if (!user) {
 		const isFirstUser = await userRepo.countUsers() === 0
-		user = await authRepo.createUser(email, isFirstUser ? "admin" : "member")
-		log.info({ email, role: user.role }, "Created starter user")
+		user = await authRepo.createUser(email, isFirstUser ? "admin" : "customer")
+		log.info({ email, role: user.role }, "Created user")
 	}
 
 	const ipAddress = getRequestIP(event)

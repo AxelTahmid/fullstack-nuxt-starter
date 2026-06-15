@@ -70,11 +70,15 @@ export default defineNuxtConfig({
 			// ! MUST REMOVE BASIC AUTH IN PRODUCTION.
 			username: process.env.SAGE300_USERNAME || "DEV",
 			password: process.env.SAGE300_PASSWORD,
-			auth: Buffer.from(`${process.env.SAGE300_USERNAME}:${process.env.SAGE300_PASSWORD}`).toString("base64"),
+			auth: process.env.SAGE300_USERNAME && process.env.SAGE300_PASSWORD
+				? Buffer.from(`${process.env.SAGE300_USERNAME}:${process.env.SAGE300_PASSWORD}`).toString("base64")
+				: "",
 			apiBaseURL: process.env.SAGE300_API_BASE_URL || "http://192.168.0.5/Sage300WebApi",
 			apiVersion: process.env.SAGE300_API_VERSION || "1.0",
 			tenant: process.env.SAGE300_TENANT || "-",
 			company: process.env.SAGE300_COMPANY || "CMSTST",
+			currencyCode: process.env.SAGE300_CURRENCY_CODE || "CAD",
+			priceListCode: process.env.SAGE300_PRICE_LIST_CODE || "",
 			timeout: process.env.SAGE300_TIMEOUT ? Number.parseInt(process.env.SAGE300_TIMEOUT, 10) : 30000,
 		},
 		auth: {

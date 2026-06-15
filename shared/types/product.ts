@@ -1,15 +1,16 @@
 export type StockStatus = "in_stock" | "low_stock" | "out_of_stock" | "made_to_order"
 
 export interface ProductListItem {
-	id: number
+	id: number | null
+	sourceKey: string
 	sku: string
 	name: string
 	description: string
 	category: string
 	manufacturer: string
 	imageUrl: string | null
-	priceCents: number
-	stockStatus: string
+	priceCents: number | null
+	stockStatus: StockStatus
 	tags: string[]
 }
 

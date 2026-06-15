@@ -26,7 +26,7 @@ type UserRow = {
 	id: number
 	email: string
 	name: string | null
-	role: "admin" | "member"
+	role: "admin" | "customer"
 	email_verified: boolean
 	last_active_at: string | null
 	created_at: string
@@ -34,7 +34,7 @@ type UserRow = {
 
 const roleOptions = [
 	{ label: "Admin", value: "admin" },
-	{ label: "Member", value: "member" },
+	{ label: "Customer", value: "customer" },
 ]
 
 const verificationOptions = [

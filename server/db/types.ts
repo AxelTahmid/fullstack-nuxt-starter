@@ -5,28 +5,6 @@
 
 import type { ColumnType } from "kysely"
 
-export enum EnquiryPriority {
-	HIGH = "high",
-	LOW = "low",
-	MEDIUM = "medium",
-	URGENT = "urgent",
-}
-
-export enum EnquiryStatus {
-	RECEIVED = "received",
-	RESOLVED = "resolved",
-	RESPONDED = "responded",
-	REVIEWING = "reviewing",
-	SENT = "sent",
-}
-
-export enum OrderStatus {
-	DELIVERED = "delivered",
-	PLACED = "placed",
-	PROCESSING = "processing",
-	SHIPPED = "shipped",
-}
-
 export enum QueueJobState {
 	ACTIVE = "active",
 	CANCELLED = "cancelled",
@@ -34,11 +12,6 @@ export enum QueueJobState {
 	CREATED = "created",
 	FAILED = "failed",
 	RETRY = "retry",
-}
-
-export enum RoleType {
-	ADMIN = "admin",
-	MEMBER = "member",
 }
 
 export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
@@ -71,15 +44,6 @@ export interface BrandSettings {
 	updated_at: Timestamp | null
 }
 
-export interface CartItems {
-	created_at: Generated<Timestamp>
-	id: Generated<number>
-	product_id: number
-	quantity: Generated<number>
-	updated_at: Timestamp | null
-	user_id: number
-}
-
 export interface EmailAuthTokens {
 	created_at: Generated<Timestamp>
 	expires_at: Timestamp
@@ -90,73 +54,6 @@ export interface EmailAuthTokens {
 	used_at: Timestamp | null
 	user_agent: string | null
 	user_id: number
-}
-
-export interface Enquiries {
-	created_at: Generated<Timestamp>
-	enquiry_number: string
-	id: Generated<number>
-	priority: Generated<EnquiryPriority>
-	product_sku: string | null
-	status: Generated<EnquiryStatus>
-	subject: string
-	supplier_name: string
-	updated_at: Timestamp | null
-	user_id: number
-}
-
-export interface EnquiryMessages {
-	attachment_name: string | null
-	author_name: string
-	author_role: string
-	body: string
-	created_at: Generated<Timestamp>
-	enquiry_id: number
-	id: Generated<number>
-}
-
-export interface OrderItems {
-	created_at: Generated<Timestamp>
-	id: Generated<number>
-	name: string
-	order_id: number
-	product_id: number
-	quantity: number
-	sku: string
-	unit_price_cents: number
-}
-
-export interface Orders {
-	carrier: string
-	created_at: Generated<Timestamp>
-	delivery_site: string
-	id: Generated<number>
-	order_number: string
-	payment_method: string
-	placed_at: Generated<Timestamp>
-	po_number: string | null
-	shipping_cents: Generated<number>
-	status: Generated<OrderStatus>
-	subtotal_cents: number
-	tax_cents: Generated<number>
-	total_cents: number
-	updated_at: Timestamp | null
-	user_id: number
-}
-
-export interface Products {
-	category: string
-	created_at: Generated<Timestamp>
-	description: string
-	id: Generated<number>
-	image_url: string | null
-	manufacturer: string
-	name: string
-	price_cents: number
-	sku: string
-	stock_status: Generated<string>
-	tags: Generated<string[]>
-	updated_at: Timestamp | null
 }
 
 export interface QueueBam {
@@ -268,19 +165,15 @@ export interface Users {
 	id: Generated<number>
 	last_active_at: Timestamp | null
 	name: string | null
-	role: Generated<RoleType>
+	role: Generated<string>
+	sage_customer_name: string | null
+	sage_customer_number: string | null
 	updated_at: Timestamp | null
 }
 
 export interface DB {
 	"brand_settings": BrandSettings
-	"cart_items": CartItems
 	"email_auth_tokens": EmailAuthTokens
-	"enquiries": Enquiries
-	"enquiry_messages": EnquiryMessages
-	"order_items": OrderItems
-	"orders": Orders
-	"products": Products
 	"queue.bam": QueueBam
 	"queue.job": QueueJob
 	"queue.queue": QueueQueue

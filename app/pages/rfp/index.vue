@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Check, Info, LoaderCircle, Minus, Plus } from "@lucide/vue"
 import type { FetchError } from "ofetch"
-import type { ProductListResponse } from "#shared/types/product"
+import type { ProductListItem, ProductListResponse } from "#shared/types/product"
 import { toast } from "~/components/toast"
 import { useCart } from "~/composables/useCart"
 
@@ -34,40 +34,40 @@ const rows = computed(() => (data.value?.items ?? []).map((product, i) => ({
 })))
 
 const DEFAULT_QTY = 5
-const quantities = reactive<Record<number, number>>({})
+const quantities = reactive<Record<string, number>>({})
 
-function qtyFor(productId: number) {
-	return quantities[productId] ?? DEFAULT_QTY
+function qtyFor(sourceKey: string) {
+	return quantities[sourceKey] ?? DEFAULT_QTY
 }
 
-function increment(productId: number) {
-	quantities[productId] = qtyFor(productId) + 1
+function increment(sourceKey: string) {
+	quantities[sourceKey] = qtyFor(sourceKey) + 1
 }
 
-function decrement(productId: number) {
-	const next = qtyFor(productId) - 1
-	quantities[productId] = next < 1 ? 1 : next
+function decrement(sourceKey: string) {
+	const next = qtyFor(sourceKey) - 1
+	quantities[sourceKey] = next < 1 ? 1 : next
 }
 
-function setQtyFromEvent(productId: number, event: Event) {
+function setQtyFromEvent(sourceKey: string, event: Event) {
 	const target = event.target as HTMLInputElement | null
 	if (!target)
 		return
 	const parsed = Number.parseInt(target.value, 10)
 	if (!Number.isFinite(parsed) || parsed < 1) {
-		quantities[productId] = 1
+		quantities[sourceKey] = 1
 		target.value = "1"
 		return
 	}
-	quantities[productId] = parsed
+	quantities[sourceKey] = parsed
 }
 
-const addingId = ref<number | null>(null)
-async function buyNow(productId: number) {
-	addingId.value = productId
-	const quantity = qtyFor(productId)
+const addingKey = ref<string | null>(null)
+async function buyNow(product: ProductListItem) {
+	addingKey.value = product.sourceKey
+	const quantity = qtyFor(product.sourceKey)
 	try {
-		await cart.addItem(productId, quantity)
+		await cart.addItem(product.sourceKey, quantity)
 		toast.success(`${quantity} unit${quantity === 1 ? "" : "s"} added to cart.`)
 	}
 	catch (error) {
@@ -75,12 +75,8 @@ async function buyNow(productId: number) {
 		toast.error(fetchError.data?.message || "Unable to add item.")
 	}
 	finally {
-		addingId.value = null
+		addingKey.value = null
 	}
-}
-
-function formatPrice(cents: number) {
-	return `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 </script>
 
@@ -174,7 +170,7 @@ function formatPrice(cents: number) {
 				<tbody>
 					<tr
 						v-for="row in rows"
-						:key="row.product.id"
+						:key="row.product.sourceKey"
 						class="border-border/40 border-b last:border-b-0"
 					>
 						<td class="px-6 py-5">
@@ -201,15 +197,12 @@ function formatPrice(cents: number) {
 						</td>
 
 						<td class="px-4 py-5">
-							<p
-								class="metric-value text-foreground text-lg font-extrabold"
-								style="font-family: var(--font-display);"
-							>
-								{{ formatPrice(row.product.priceCents) }}
+							<p class="text-foreground text-sm font-semibold">
+								Current Sage price
 							</p>
 
 							<p class="text-muted-foreground mt-0.5 text-[0.62rem] font-semibold tracking-wide uppercase">
-								{{ row.meta?.terms }}
+								Calculated in cart
 							</p>
 						</td>
 
@@ -238,8 +231,8 @@ function formatPrice(cents: number) {
 								<Button
 									type="button"
 									class="border-border/70 text-muted-foreground hover:border-primary hover:text-primary flex size-8 items-center justify-center rounded-md border transition-all disabled:opacity-50"
-									:disabled="qtyFor(row.product.id) <= 1"
-									@click="decrement(row.product.id)"
+									:disabled="qtyFor(row.product.sourceKey) <= 1"
+									@click="decrement(row.product.sourceKey)"
 								>
 									<Minus class="size-3.5" />
 								</Button>
@@ -247,17 +240,17 @@ function formatPrice(cents: number) {
 								<Input
 									type="number"
 									min="1"
-									:value="qtyFor(row.product.id)"
+									:value="qtyFor(row.product.sourceKey)"
 									class="metric-value border-border/60 bg-background text-foreground focus:border-primary focus:ring-primary/30 w-14 [appearance:textfield] rounded-md border px-2 py-1 text-center text-base font-extrabold tabular-nums focus:ring-2 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
 									style="font-family: var(--font-display);"
-									@input="setQtyFromEvent(row.product.id, $event)"
-									@blur="setQtyFromEvent(row.product.id, $event)"
+									@input="setQtyFromEvent(row.product.sourceKey, $event)"
+									@blur="setQtyFromEvent(row.product.sourceKey, $event)"
 								/>
 
 								<Button
 									type="button"
 									class="border-border/70 text-muted-foreground hover:border-primary hover:text-primary flex size-8 items-center justify-center rounded-md border transition-all"
-									@click="increment(row.product.id)"
+									@click="increment(row.product.sourceKey)"
 								>
 									<Plus class="size-3.5" />
 								</Button>
@@ -276,16 +269,16 @@ function formatPrice(cents: number) {
 								<Button
 									type="button"
 									class="bg-primary text-primary-foreground inline-flex items-center gap-1.5 rounded-md px-4 py-2 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all hover:brightness-110 disabled:opacity-60"
-									:disabled="addingId === row.product.id"
-									@click="buyNow(row.product.id)"
+									:disabled="addingKey === row.product.sourceKey"
+									@click="buyNow(row.product)"
 								>
 									<LoaderCircle
-										v-if="addingId === row.product.id"
+										v-if="addingKey === row.product.sourceKey"
 										class="size-3.5 animate-spin"
 									/>
 
 									<Check
-										v-else-if="cart.summary.value.lines.some(l => l.productId === row.product.id)"
+										v-else-if="cart.summary.value.lines.some(l => l.sku === row.product.sourceKey)"
 										class="size-3.5"
 									/>
 

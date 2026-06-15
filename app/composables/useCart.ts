@@ -26,10 +26,10 @@ export function useCart() {
 		}
 	}
 
-	async function addItem(productId: number, quantity = 1) {
+	async function addItem(sourceKey: string, quantity = 1) {
 		await $fetch("/api/cart/items", {
 			method: "POST",
-			body: { productId, quantity },
+			body: { sourceKey, quantity },
 		})
 		await refresh()
 	}

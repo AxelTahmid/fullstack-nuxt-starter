@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 	if (!user) {
 		throw createError({
 			statusCode: 500,
-			statusMessage: "Demo user not seeded. Run `make db-seed`.",
+			statusMessage: "Demo customer not seeded. Run `make db-seed`.",
 		})
 	}
 

@@ -1,6 +1,6 @@
 export interface CartLine {
 	id: number
-	productId: number
+	sourceKey: string
 	sku: string
 	name: string
 	category: string

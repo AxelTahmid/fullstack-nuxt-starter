@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Check, LoaderCircle, Plus, Search } from "@lucide/vue"
 import type { FetchError } from "ofetch"
-import type { ProductListResponse } from "#shared/types/product"
+import type { ProductListItem, ProductListResponse } from "#shared/types/product"
 import { toast } from "~/components/toast"
 import { useCart } from "~/composables/useCart"
 
@@ -15,7 +15,6 @@ useHead({
 })
 
 const route = useRoute()
-const router = useRouter()
 const cart = useCart()
 await cart.refresh()
 
@@ -61,11 +60,11 @@ async function clearFilters() {
 	await navigateTo({ path: route.path, query: {} })
 }
 
-const addingId = ref<number | null>(null)
-async function handleAdd(productId: number) {
-	addingId.value = productId
+const addingKey = ref<string | null>(null)
+async function handleAdd(product: ProductListItem) {
+	addingKey.value = product.sourceKey
 	try {
-		await cart.addItem(productId, 1)
+		await cart.addItem(product.sourceKey, 1)
 		toast.success("Added to cart.")
 	}
 	catch (error) {
@@ -73,7 +72,7 @@ async function handleAdd(productId: number) {
 		toast.error(fetchError.data?.message || "Unable to add to cart.")
 	}
 	finally {
-		addingId.value = null
+		addingKey.value = null
 	}
 }
 
@@ -261,7 +260,7 @@ const hasFilters = computed(() => category.value || manufacturer.value || q.valu
 				>
 					<article
 						v-for="product in data.items"
-						:key="product.id"
+						:key="product.sourceKey"
 						class="group border-border/60 bg-card hover:border-primary/40 flex flex-col overflow-hidden rounded-md border transition-all"
 					>
 						<div class="bg-muted aspect-4/3 overflow-hidden">
@@ -301,30 +300,30 @@ const hasFilters = computed(() => category.value || manufacturer.value || q.valu
 							<div class="mt-auto flex items-end justify-between pt-3">
 								<div>
 									<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.14em] uppercase">
-										MSRP
+										Current Price
 									</p>
 
 									<p
 										class="metric-value text-foreground text-2xl font-extrabold"
 										style="font-family: var(--font-display);"
 									>
-										{{ formatPrice(product.priceCents) }}
+										{{ product.priceCents === null ? "In cart" : formatPrice(product.priceCents) }}
 									</p>
 								</div>
 
 								<Button
 									type="button"
 									class="bg-primary text-primary-foreground flex items-center gap-1.5 rounded-md px-3 py-2 text-[0.68rem] font-bold tracking-[0.14em] uppercase transition-all hover:brightness-110 disabled:opacity-60"
-									:disabled="addingId === product.id"
-									@click="handleAdd(product.id)"
+									:disabled="addingKey === product.sourceKey"
+									@click="handleAdd(product)"
 								>
 									<LoaderCircle
-										v-if="addingId === product.id"
+										v-if="addingKey === product.sourceKey"
 										class="size-4 animate-spin"
 									/>
 
 									<Check
-										v-else-if="cart.summary.value.lines.some(l => l.productId === product.id)"
+										v-else-if="cart.summary.value.lines.some(l => l.sku === product.sourceKey)"
 										class="size-4"
 									/>
 

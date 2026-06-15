@@ -34,7 +34,7 @@ class AuthRepository extends Database {
 	async findUserByEmail(email: string) {
 		return this.db
 			.selectFrom("users")
-			.where("email", "=", email.toLowerCase())
+			.where(sql`lower(email)`, "=", email.toLowerCase())
 			.selectAll()
 			.executeTakeFirst()
 	}

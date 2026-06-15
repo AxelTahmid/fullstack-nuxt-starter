@@ -10,7 +10,7 @@ export const checkoutSchema = z.object({
 export type CheckoutInput = z.infer<typeof checkoutSchema>
 
 export const cartItemAddSchema = z.object({
-	productId: z.number().int().positive(),
+	sourceKey: z.string().trim().min(1),
 	quantity: z.number().int().positive().default(1),
 })
 

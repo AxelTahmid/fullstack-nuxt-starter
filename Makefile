@@ -79,7 +79,7 @@ db-migrate:
 	@$(MAKE) db-gen-types
 	@$(MAKE) db-seed
 
-## db-seed: Seed demo data (products, demo user, enquiries)
+## db-seed: Seed demo customer data
 db-seed:
 	@echo "Seeding demo data..."
 	@docker compose exec app npx tsx server/db/seed.ts
@@ -105,4 +105,3 @@ db-gen-types:
 	@echo "Generating database types..."
 	@docker compose exec app yarn db:generate-types
 	@echo "Types generated successfully"
-

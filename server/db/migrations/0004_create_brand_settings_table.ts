@@ -1,7 +1,6 @@
-import type { Kysely } from "kysely"
-import { sql } from "kysely"
+import { sql, type Kysely } from "kysely"
 
-export async function up(db: Kysely<unknown>) {
+export async function up(db: Kysely<unknown>): Promise<void> {
 	await db.schema
 		.createTable("brand_settings")
 		.addColumn("id", "integer", col => col.primaryKey())
@@ -20,7 +19,7 @@ export async function up(db: Kysely<unknown>) {
 		CREATE TRIGGER set_brand_settings_updated_at
 		BEFORE UPDATE ON brand_settings
 		FOR EACH ROW
-		EXECUTE PROCEDURE set_updated_at()
+		EXECUTE FUNCTION set_updated_at();
 	`.execute(db)
 
 	await db
@@ -37,6 +36,6 @@ export async function up(db: Kysely<unknown>) {
 		.execute()
 }
 
-export async function down(db: Kysely<unknown>) {
+export async function down(db: Kysely<unknown>): Promise<void> {
 	await db.schema.dropTable("brand_settings").ifExists().execute()
 }

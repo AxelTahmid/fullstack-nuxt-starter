@@ -1,5 +1,6 @@
 import { updateBrandSchema } from "#shared/schemas/brand"
 import type { BrandSettings } from "#shared/types/brand"
+import type { BrandSettingsUpdateRecord } from "~~/server/db/types"
 import { brandRepo } from "~~/server/utils/db"
 import { requireSessionUser } from "~~/server/utils/auth"
 
@@ -12,7 +13,7 @@ export default defineEventHandler(async (event): Promise<BrandSettings> => {
 
 	const body = await readValidatedBody(event, updateBrandSchema.parse)
 
-	const patch: Record<string, unknown> = {}
+	const patch: BrandSettingsUpdateRecord = {}
 	if (body.orgName !== undefined)
 		patch.org_name = body.orgName
 	if (body.tagline !== undefined)

@@ -1,20 +1,133 @@
+import type {
+	ICCategoryListResponseT,
+	ICCategoryT,
+	ICItemListResponseT,
+	ICItemT,
+} from "#shared/sage300"
+import {
+	icCategoriesGet,
+	icItemsGet,
+} from "#shared/sage300"
+import { log } from "#shared/log"
 import type { ProductListItem, ProductListResponse } from "#shared/types/product"
-import type { ProductRecord } from "~~/server/db/types"
-import { productsRepo } from "~~/server/utils/db"
 import { requireSessionUser } from "~~/server/utils/auth"
 
-function toListItem(row: ProductRecord): ProductListItem {
+const DEFAULT_PAGE_SIZE = 24
+const DEFAULT_MANUFACTURER = "Sage 300"
+
+function sagePath() {
+	const { sage300 } = useRuntimeConfig()
+
 	return {
-		id: row.id,
-		sku: row.sku,
-		name: row.name,
-		description: row.description,
-		category: row.category,
-		manufacturer: row.manufacturer,
-		imageUrl: row.image_url,
-		priceCents: row.price_cents,
-		stockStatus: row.stock_status,
-		tags: row.tags,
+		apiVersion: String(sage300.apiVersion),
+		tenant: String(sage300.tenant),
+		company: String(sage300.company),
+	}
+}
+
+function escapeODataString(value: string) {
+	return value.replace(/'/g, "''")
+}
+
+function buildItemFilter(category: string | undefined, manufacturer: string | undefined, q: string | undefined) {
+	const filters = ["Status eq true"]
+
+	if (category) {
+		filters.push(`Category eq '${escapeODataString(category)}'`)
+	}
+
+	if (manufacturer && manufacturer !== DEFAULT_MANUFACTURER) {
+		filters.push(`PreferredVendor eq '${escapeODataString(manufacturer)}'`)
+	}
+
+	if (q?.trim()) {
+		const search = escapeODataString(q.trim())
+		filters.push([
+			`contains(Description,'${search}')`,
+			`contains(ItemNumber,'${search}')`,
+			`contains(UnformattedItemNumber,'${search}')`,
+			`contains(Category,'${search}')`,
+		].join(" or "))
+	}
+
+	return filters.join(" and ")
+}
+
+function itemKey(item: ICItemT) {
+	return item.UnformattedItemNumber || item.ItemNumber || ""
+}
+
+function itemName(item: ICItemT) {
+	return item.Description?.trim() || item.ItemNumber?.trim() || item.UnformattedItemNumber?.trim() || "Unnamed Sage item"
+}
+
+function itemDescription(item: ICItemT) {
+	const comments = [item.Comment1, item.Comment2, item.Comment3, item.Comment4]
+		.map(comment => comment?.trim())
+		.filter((comment): comment is string => Boolean(comment))
+
+	return comments.join(" ") || item.Description?.trim() || "Sage 300 inventory item"
+}
+
+function stockStatus(item: ICItemT): ProductListItem["stockStatus"] {
+	if (item.Sellable === false || item.Status === false) {
+		return "out_of_stock"
+	}
+
+	const available = item.QuantityAvailable ?? item.QuantityOnHand
+	if (typeof available !== "number") {
+		return "in_stock"
+	}
+
+	if (available <= 0) {
+		return "out_of_stock"
+	}
+
+	return available <= 5 ? "low_stock" : "in_stock"
+}
+
+function toProductListItem(item: ICItemT): ProductListItem | undefined {
+	const sourceKey = itemKey(item)
+
+	if (!sourceKey) {
+		return
+	}
+
+	return {
+		id: null,
+		sourceKey,
+		sku: item.ItemNumber || sourceKey,
+		name: itemName(item),
+		description: itemDescription(item),
+		category: item.Category?.trim() || "Uncategorized",
+		manufacturer: item.PreferredVendor?.trim() || DEFAULT_MANUFACTURER,
+		imageUrl: null,
+		priceCents: null,
+		stockStatus: stockStatus(item),
+		tags: [
+			item.StockingUnitOfMeasure,
+			item.DefaultPriceListCode,
+			item.StockItem ? "stock-item" : undefined,
+		].filter((tag): tag is string => Boolean(tag)),
+	}
+}
+
+function countFacets(items: ProductListItem[]) {
+	const categories = new Map<string, number>()
+	const manufacturers = new Map<string, number>()
+
+	for (const item of items) {
+		categories.set(item.category, (categories.get(item.category) ?? 0) + 1)
+		manufacturers.set(item.manufacturer, (manufacturers.get(item.manufacturer) ?? 0) + 1)
+	}
+
+	return {
+		categories: [...categories.entries()]
+			.map(([value, count]) => ({ value, count }))
+			.sort((a, b) => a.value.localeCompare(b.value)),
+		manufacturers: [...manufacturers.entries()]
+			.map(([value, count]) => ({ value, count }))
+			.sort((a, b) => a.value.localeCompare(b.value)),
 	}
 }
 
@@ -27,18 +140,49 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 	const q = typeof query.q === "string" && query.q.length > 0 ? query.q : undefined
 	const pageRaw = typeof query.page === "string" ? Number.parseInt(query.page, 10) : 1
 	const page = Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1
-	const limit = 24
-	const offset = (page - 1) * limit
 
-	const [rows, total, facets] = await Promise.all([
-		productsRepo.list({ category, manufacturer, q, limit, offset }),
-		productsRepo.countFiltered({ category, manufacturer, q }),
-		productsRepo.listFacets(),
-	])
+	const productsResponse = await icItemsGet({
+		path: sagePath(),
+		query: {
+			$filter: buildItemFilter(category, manufacturer, q),
+			$top: DEFAULT_PAGE_SIZE,
+			$skip: (page - 1) * DEFAULT_PAGE_SIZE,
+			$count: true,
+		},
+	})
+	const productsData = productsResponse.data as ICItemListResponseT & { "@odata.count"?: number }
+	const sageItems = productsData.value ?? []
+	const items = sageItems
+		.map(item => toProductListItem(item))
+		.filter((item): item is ProductListItem => Boolean(item))
+	const pageFacets = countFacets(items)
+	let categoriesResponse: Awaited<ReturnType<typeof icCategoriesGet>> | undefined
+	try {
+		categoriesResponse = await icCategoriesGet({
+			path: sagePath(),
+			query: {
+				$top: 500,
+				$count: true,
+			},
+		})
+	}
+	catch (error) {
+		log.warn({ error }, "[sage300] Could not load IC categories for product facets")
+	}
+	const categoriesData = categoriesResponse?.data as ICCategoryListResponseT | undefined
+	const categories = (categoriesData?.value ?? [])
+		.map((category: ICCategoryT) => ({
+			value: category.CategoryCode?.trim() || category.Description?.trim() || "",
+			count: 0,
+		}))
+		.filter(category => category.value.length > 0)
 
 	return {
-		items: rows.map(toListItem),
-		total,
-		facets,
+		items,
+		total: productsData["@odata.count"] ?? items.length,
+		facets: {
+			categories: categories.length > 0 ? categories : pageFacets.categories,
+			manufacturers: pageFacets.manufacturers,
+		},
 	}
 })

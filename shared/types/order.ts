@@ -2,7 +2,7 @@ export type OrderStatus = "placed" | "processing" | "shipped" | "delivered"
 
 export interface OrderLine {
 	id: number
-	productId: number
+	sourceKey: string
 	sku: string
 	name: string
 	unitPriceCents: number
