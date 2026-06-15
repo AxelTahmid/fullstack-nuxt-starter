@@ -5,9 +5,9 @@ import * as z from "zod/mini"
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from "./client"
 import { client } from "./client.gen"
-import { arCustomersGetByCustomerNumberResponseTransformer, arCustomersGetResponseTransformer, icCategoriesGetByCategoryCodeResponseTransformer, icCategoriesGetResponseTransformer, icItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponseTransformer, icItemPricingGetResponseTransformer, icItemsGetByUnformattedItemNumberResponseTransformer, icItemsGetResponseTransformer, oeInvoicesGetByInvoiceUniquifierResponseTransformer, oeInvoicesGetResponseTransformer } from "./transformers.gen"
-import type { ArCustomersDeleteByCustomerNumberData, ArCustomersDeleteByCustomerNumberResponses, ArCustomersGetByCustomerNumberData, ArCustomersGetByCustomerNumberResponses, ArCustomersGetData, ArCustomersGetResponses, ArCustomersPatchByCustomerNumberData, ArCustomersPatchByCustomerNumberResponses, ArCustomersPostData, ArCustomersPostResponses, ArCustomersPutByCustomerNumberData, ArCustomersPutByCustomerNumberResponses, IcCategoriesDeleteByCategoryCodeData, IcCategoriesDeleteByCategoryCodeResponses, IcCategoriesGetByCategoryCodeData, IcCategoriesGetByCategoryCodeResponses, IcCategoriesGetData, IcCategoriesGetResponses, IcCategoriesPatchByCategoryCodeData, IcCategoriesPatchByCategoryCodeResponses, IcCategoriesPostData, IcCategoriesPostResponses, IcCategoriesPutByCategoryCodeData, IcCategoriesPutByCategoryCodeResponses, IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemPricingGetData, IcItemPricingGetResponses, IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemPricingPostData, IcItemPricingPostResponses, IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemsDeleteByUnformattedItemNumberData, IcItemsDeleteByUnformattedItemNumberResponses, IcItemsGetByUnformattedItemNumberData, IcItemsGetByUnformattedItemNumberResponses, IcItemsGetData, IcItemsGetResponses, IcItemsPatchByUnformattedItemNumberData, IcItemsPatchByUnformattedItemNumberResponses, IcItemsPostData, IcItemsPostResponses, IcItemsPutByUnformattedItemNumberData, IcItemsPutByUnformattedItemNumberResponses, OeInvoicesGetByInvoiceUniquifierData, OeInvoicesGetByInvoiceUniquifierResponses, OeInvoicesGetData, OeInvoicesGetResponses } from "./types.gen"
-import { zArCustomersDeleteByCustomerNumberHeaders, zArCustomersDeleteByCustomerNumberPath, zArCustomersGetByCustomerNumberPath, zArCustomersGetByCustomerNumberQuery, zArCustomersGetPath, zArCustomersGetQuery, zArCustomersPatchByCustomerNumberBody, zArCustomersPatchByCustomerNumberPath, zArCustomersPostBody, zArCustomersPostPath, zArCustomersPutByCustomerNumberBody, zArCustomersPutByCustomerNumberPath, zIcCategoriesDeleteByCategoryCodeHeaders, zIcCategoriesDeleteByCategoryCodePath, zIcCategoriesGetByCategoryCodePath, zIcCategoriesGetByCategoryCodeQuery, zIcCategoriesGetPath, zIcCategoriesGetQuery, zIcCategoriesPatchByCategoryCodeBody, zIcCategoriesPatchByCategoryCodePath, zIcCategoriesPostBody, zIcCategoriesPostPath, zIcCategoriesPutByCategoryCodeBody, zIcCategoriesPutByCategoryCodePath, zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeHeaders, zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeQuery, zIcItemPricingGetPath, zIcItemPricingGetQuery, zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody, zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemPricingPostBody, zIcItemPricingPostPath, zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody, zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemsDeleteByUnformattedItemNumberHeaders, zIcItemsDeleteByUnformattedItemNumberPath, zIcItemsGetByUnformattedItemNumberPath, zIcItemsGetByUnformattedItemNumberQuery, zIcItemsGetPath, zIcItemsGetQuery, zIcItemsPatchByUnformattedItemNumberBody, zIcItemsPatchByUnformattedItemNumberPath, zIcItemsPostBody, zIcItemsPostPath, zIcItemsPutByUnformattedItemNumberBody, zIcItemsPutByUnformattedItemNumberPath, zOeInvoicesGetByInvoiceUniquifierPath, zOeInvoicesGetByInvoiceUniquifierQuery, zOeInvoicesGetPath, zOeInvoicesGetQuery } from "./zod.gen"
+import { arCustomersGetByCustomerNumberResponseTransformer, arCustomersGetResponseTransformer, arShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponseTransformer, arShipToLocationsGetResponseTransformer, icCategoriesGetByCategoryCodeResponseTransformer, icCategoriesGetResponseTransformer, icItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponseTransformer, icItemPricingGetResponseTransformer, icItemsGetByUnformattedItemNumberResponseTransformer, icItemsGetResponseTransformer, oeInvoicesGetByInvoiceUniquifierResponseTransformer, oeInvoicesGetResponseTransformer } from "./transformers.gen"
+import type { ArCustomersDeleteByCustomerNumberData, ArCustomersDeleteByCustomerNumberResponses, ArCustomersGetByCustomerNumberData, ArCustomersGetByCustomerNumberResponses, ArCustomersGetData, ArCustomersGetResponses, ArCustomersPatchByCustomerNumberData, ArCustomersPatchByCustomerNumberResponses, ArCustomersPostData, ArCustomersPostResponses, ArCustomersPutByCustomerNumberData, ArCustomersPutByCustomerNumberResponses, ArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyData, ArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyResponses, ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyData, ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponses, ArShipToLocationsGetData, ArShipToLocationsGetResponses, ArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyData, ArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyResponses, ArShipToLocationsPostData, ArShipToLocationsPostResponses, ArShipToLocationsPutByCustomerNumberAndShipToLocationKeyData, ArShipToLocationsPutByCustomerNumberAndShipToLocationKeyResponses, IcCategoriesDeleteByCategoryCodeData, IcCategoriesDeleteByCategoryCodeResponses, IcCategoriesGetByCategoryCodeData, IcCategoriesGetByCategoryCodeResponses, IcCategoriesGetData, IcCategoriesGetResponses, IcCategoriesPatchByCategoryCodeData, IcCategoriesPatchByCategoryCodeResponses, IcCategoriesPostData, IcCategoriesPostResponses, IcCategoriesPutByCategoryCodeData, IcCategoriesPutByCategoryCodeResponses, IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemPricingGetData, IcItemPricingGetResponses, IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemPricingPostData, IcItemPricingPostResponses, IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeData, IcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeResponses, IcItemsDeleteByUnformattedItemNumberData, IcItemsDeleteByUnformattedItemNumberResponses, IcItemsGetByUnformattedItemNumberData, IcItemsGetByUnformattedItemNumberResponses, IcItemsGetData, IcItemsGetResponses, IcItemsPatchByUnformattedItemNumberData, IcItemsPatchByUnformattedItemNumberResponses, IcItemsPostData, IcItemsPostResponses, IcItemsPutByUnformattedItemNumberData, IcItemsPutByUnformattedItemNumberResponses, OeInvoicesGetByInvoiceUniquifierData, OeInvoicesGetByInvoiceUniquifierResponses, OeInvoicesGetData, OeInvoicesGetResponses } from "./types.gen"
+import { zArCustomersDeleteByCustomerNumberHeaders, zArCustomersDeleteByCustomerNumberPath, zArCustomersGetByCustomerNumberPath, zArCustomersGetByCustomerNumberQuery, zArCustomersGetPath, zArCustomersGetQuery, zArCustomersPatchByCustomerNumberBody, zArCustomersPatchByCustomerNumberPath, zArCustomersPostBody, zArCustomersPostPath, zArCustomersPutByCustomerNumberBody, zArCustomersPutByCustomerNumberPath, zArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyHeaders, zArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyPath, zArShipToLocationsGetByCustomerNumberAndShipToLocationKeyPath, zArShipToLocationsGetByCustomerNumberAndShipToLocationKeyQuery, zArShipToLocationsGetPath, zArShipToLocationsGetQuery, zArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyBody, zArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyPath, zArShipToLocationsPostBody, zArShipToLocationsPostPath, zArShipToLocationsPutByCustomerNumberAndShipToLocationKeyBody, zArShipToLocationsPutByCustomerNumberAndShipToLocationKeyPath, zIcCategoriesDeleteByCategoryCodeHeaders, zIcCategoriesDeleteByCategoryCodePath, zIcCategoriesGetByCategoryCodePath, zIcCategoriesGetByCategoryCodeQuery, zIcCategoriesGetPath, zIcCategoriesGetQuery, zIcCategoriesPatchByCategoryCodeBody, zIcCategoriesPatchByCategoryCodePath, zIcCategoriesPostBody, zIcCategoriesPostPath, zIcCategoriesPutByCategoryCodeBody, zIcCategoriesPutByCategoryCodePath, zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeHeaders, zIcItemPricingDeleteByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeQuery, zIcItemPricingGetPath, zIcItemPricingGetQuery, zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody, zIcItemPricingPatchByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemPricingPostBody, zIcItemPricingPostPath, zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodeBody, zIcItemPricingPutByCurrencyCodeAndUnformattedItemNumberAndPriceListCodePath, zIcItemsDeleteByUnformattedItemNumberHeaders, zIcItemsDeleteByUnformattedItemNumberPath, zIcItemsGetByUnformattedItemNumberPath, zIcItemsGetByUnformattedItemNumberQuery, zIcItemsGetPath, zIcItemsGetQuery, zIcItemsPatchByUnformattedItemNumberBody, zIcItemsPatchByUnformattedItemNumberPath, zIcItemsPostBody, zIcItemsPostPath, zIcItemsPutByUnformattedItemNumberBody, zIcItemsPutByUnformattedItemNumberPath, zOeInvoicesGetByInvoiceUniquifierPath, zOeInvoicesGetByInvoiceUniquifierQuery, zOeInvoicesGetPath, zOeInvoicesGetQuery } from "./zod.gen"
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
 	/**
@@ -113,6 +113,99 @@ export const arCustomersGetByCustomerNumber = <ThrowOnError extends boolean = tr
 	}).parseAsync(data),
 	responseTransformer: arCustomersGetByCustomerNumberResponseTransformer,
 	url: "/V{apiVersion}/{tenant}/{company}/AR/ARCustomers('{CustomerNumber}')",
+	...options,
+})
+
+/**
+ * Returns the EntitySet ARShipToLocations
+ */
+export const arShipToLocationsGet = <ThrowOnError extends boolean = true>(options: Options<ArShipToLocationsGetData, ThrowOnError>): RequestResult<ArShipToLocationsGetResponses, unknown, ThrowOnError> => (options.client ?? client).get<ArShipToLocationsGetResponses, unknown, ThrowOnError>({
+	requestValidator: async data => await z.object({
+		body: z.optional(z.never()),
+		path: zArShipToLocationsGetPath,
+		query: z.optional(zArShipToLocationsGetQuery),
+	}).parseAsync(data),
+	responseTransformer: arShipToLocationsGetResponseTransformer,
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations",
+	...options,
+})
+
+/**
+ * Post a new entity to EntitySet ARShipToLocations
+ */
+export const arShipToLocationsPost = <ThrowOnError extends boolean = true>(options: Options<ArShipToLocationsPostData, ThrowOnError>): RequestResult<ArShipToLocationsPostResponses, unknown, ThrowOnError> => (options.client ?? client).post<ArShipToLocationsPostResponses, unknown, ThrowOnError>({
+	requestValidator: async data => await z.object({
+		body: zArShipToLocationsPostBody,
+		path: zArShipToLocationsPostPath,
+		query: z.optional(z.never()),
+	}).parseAsync(data),
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations",
+	...options,
+	headers: {
+		"Content-Type": "application/json",
+		...options.headers,
+	},
+})
+
+/**
+ * Delete entity in EntitySet ARShipToLocations
+ */
+export const arShipToLocationsDeleteByCustomerNumberAndShipToLocationKey = <ThrowOnError extends boolean = true>(options: Options<ArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyData, ThrowOnError>): RequestResult<ArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyResponses, unknown, ThrowOnError> => (options.client ?? client).delete<ArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyResponses, unknown, ThrowOnError>({
+	requestValidator: async data => await z.object({
+		body: z.optional(z.never()),
+		headers: z.optional(zArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyHeaders),
+		path: zArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyPath,
+		query: z.optional(z.never()),
+	}).parseAsync(data),
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations(CustomerNumber='{CustomerNumber}',ShipToLocationKey='{ShipToLocationKey}')",
+	...options,
+})
+
+/**
+ * Update entity in EntitySet ARShipToLocations
+ */
+export const arShipToLocationsPatchByCustomerNumberAndShipToLocationKey = <ThrowOnError extends boolean = true>(options: Options<ArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyData, ThrowOnError>): RequestResult<ArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyResponses, unknown, ThrowOnError> => (options.client ?? client).patch<ArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyResponses, unknown, ThrowOnError>({
+	requestValidator: async data => await z.object({
+		body: zArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyBody,
+		path: zArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyPath,
+		query: z.optional(z.never()),
+	}).parseAsync(data),
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations(CustomerNumber='{CustomerNumber}',ShipToLocationKey='{ShipToLocationKey}')",
+	...options,
+	headers: {
+		"Content-Type": "application/json",
+		...options.headers,
+	},
+})
+
+/**
+ * Replace entity in EntitySet ARShipToLocations
+ */
+export const arShipToLocationsPutByCustomerNumberAndShipToLocationKey = <ThrowOnError extends boolean = true>(options: Options<ArShipToLocationsPutByCustomerNumberAndShipToLocationKeyData, ThrowOnError>): RequestResult<ArShipToLocationsPutByCustomerNumberAndShipToLocationKeyResponses, unknown, ThrowOnError> => (options.client ?? client).put<ArShipToLocationsPutByCustomerNumberAndShipToLocationKeyResponses, unknown, ThrowOnError>({
+	requestValidator: async data => await z.object({
+		body: zArShipToLocationsPutByCustomerNumberAndShipToLocationKeyBody,
+		path: zArShipToLocationsPutByCustomerNumberAndShipToLocationKeyPath,
+		query: z.optional(z.never()),
+	}).parseAsync(data),
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations(CustomerNumber='{CustomerNumber}',ShipToLocationKey='{ShipToLocationKey}')",
+	...options,
+	headers: {
+		"Content-Type": "application/json",
+		...options.headers,
+	},
+})
+
+/**
+ * Returns the entity with the key from ARShipToLocations
+ */
+export const arShipToLocationsGetByCustomerNumberAndShipToLocationKey = <ThrowOnError extends boolean = true>(options: Options<ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyData, ThrowOnError>): RequestResult<ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponses, unknown, ThrowOnError> => (options.client ?? client).get<ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponses, unknown, ThrowOnError>({
+	requestValidator: async data => await z.object({
+		body: z.optional(z.never()),
+		path: zArShipToLocationsGetByCustomerNumberAndShipToLocationKeyPath,
+		query: z.optional(zArShipToLocationsGetByCustomerNumberAndShipToLocationKeyQuery),
+	}).parseAsync(data),
+	responseTransformer: arShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponseTransformer,
+	url: "/V{apiVersion}/{tenant}/{company}/AR/ARShipToLocations(CustomerNumber='{CustomerNumber}',ShipToLocationKey='{ShipToLocationKey}')",
 	...options,
 })
 

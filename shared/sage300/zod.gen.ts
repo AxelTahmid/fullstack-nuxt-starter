@@ -295,6 +295,129 @@ export const zARCustomerListResponse = z.object({
 	"value": z.optional(z.array(zARCustomer)),
 })
 
+export const zARShipToLocationsOptionalField = z.object({
+	CustomerNumber: z.optional(z.string()),
+	ShipToLocationCode: z.optional(z.string()),
+	OptionalField: z.optional(z.string()),
+	Value: z.optional(z.string()),
+	ShipToLocationsOptionalFieldType: z.optional(z.enum([
+		"Text",
+		"Amount",
+		"Number",
+		"Integer",
+		"YesNo",
+		"Date",
+		"Time",
+	])),
+	Length: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	Decimals: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	AllowBlank: z.optional(z.boolean()),
+	Validate: z.optional(z.boolean()),
+	ValueSet: z.optional(z.enum([
+		"No",
+		"Yes",
+		"NotApplicable",
+	])),
+	TypedValueFieldIndex: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
+	TextValue: z.optional(z.string()),
+	AmountValue: z.optional(z.number()),
+	NumberValue: z.optional(z.number()),
+	IntegerValue: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
+	YesNoValue: z.optional(z.boolean()),
+	DateValue: z.optional(z.iso.datetime()),
+	TimeValue: z.optional(z.iso.datetime()),
+	OptionalFieldDescription: z.optional(z.string()),
+	ValueDescription: z.optional(z.string()),
+	UpdateOperation: z.optional(z.enum([
+		"Unspecified",
+		"Update",
+		"Insert",
+		"Delete",
+	])),
+	Warnings: z.optional(z.array(zCommonEntityError)),
+	ETag: z.optional(z.string()),
+	IsDeleted: z.optional(z.boolean()),
+	IsNewLine: z.optional(z.boolean()),
+	HasChanged: z.optional(z.boolean()),
+	DisplayIndex: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	ChangeSequence: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	PreviousKey: z.optional(z.string()),
+	Licenses: z.optional(z.record(z.string(), z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" })))),
+	IsSelected: z.optional(z.boolean()),
+	Misc: z.optional(z.record(z.string(), zSystemObject)),
+})
+
+export const zARShipToLocation = z.object({
+	CustomerNumber: z.optional(z.string()),
+	ShipToLocationKey: z.optional(z.string()),
+	Status: z.optional(z.enum(["Inactive", "Active"])),
+	InactiveDate: z.optional(z.iso.datetime()),
+	DateLastMaintained: z.optional(z.iso.datetime()),
+	Description: z.optional(z.string()),
+	AddressLine1: z.optional(z.string()),
+	AddressLine2: z.optional(z.string()),
+	AddressLine3: z.optional(z.string()),
+	AddressLine4: z.optional(z.string()),
+	City: z.optional(z.string()),
+	StateProvince: z.optional(z.string()),
+	ZipPostalCode: z.optional(z.string()),
+	Country: z.optional(z.string()),
+	ContactName: z.optional(z.string()),
+	PhoneNumber: z.optional(z.string()),
+	FaxNumber: z.optional(z.string()),
+	TerritoryCode: z.optional(z.string()),
+	TaxGroup: z.optional(z.string()),
+	TaxRegistrationNumber1: z.optional(z.string()),
+	TaxRegistrationNumber2: z.optional(z.string()),
+	TaxRegistrationNumber3: z.optional(z.string()),
+	TaxRegistrationNumber4: z.optional(z.string()),
+	TaxRegistrationNumber5: z.optional(z.string()),
+	TaxClassCode1: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	TaxClassCode2: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	TaxClassCode3: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	TaxClassCode4: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	TaxClassCode5: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	SpecialInstructions: z.optional(z.string()),
+	Salesperson1: z.optional(z.string()),
+	Salesperson2: z.optional(z.string()),
+	Salesperson3: z.optional(z.string()),
+	Salesperson4: z.optional(z.string()),
+	Salesperson5: z.optional(z.string()),
+	SalesSplitPercentage1: z.optional(z.number()),
+	SalesSplitPercentage2: z.optional(z.number()),
+	SalesSplitPercentage3: z.optional(z.number()),
+	SalesSplitPercentage4: z.optional(z.number()),
+	SalesSplitPercentage5: z.optional(z.number()),
+	CustomerPriceList: z.optional(z.string()),
+	FreeOnBoard: z.optional(z.string()),
+	ShipViaCode: z.optional(z.string()),
+	ShipViaDescription: z.optional(z.string()),
+	PrimaryShipToIndicator: z.optional(z.enum(["No", "Yes"])),
+	Email: z.optional(z.string()),
+	ContactsPhone: z.optional(z.string()),
+	ContactsFax: z.optional(z.string()),
+	ContactsEmail: z.optional(z.string()),
+	NumberOfOptionalFields: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
+	ProcessCommandCode: z.optional(z.enum(["InsertOptionalFields"])),
+	InventoryLocation: z.optional(z.string()),
+	SuppressIntegration: z.optional(z.boolean()),
+	ARVersion: z.optional(z.string()),
+	Database: z.optional(z.string()),
+	Mode: z.optional(z.enum(["NormalMode", "UnconditionalInsertsUpdates"])),
+	ShipToLocationsOptionalField: z.optional(z.array(zARShipToLocationsOptionalField)),
+	UpdateOperation: z.optional(z.enum([
+		"Unspecified",
+		"Update",
+		"Insert",
+		"Delete",
+	])),
+})
+
+export const zARShipToLocationListResponse = z.object({
+	"@odata.context": z.optional(z.string()),
+	"value": z.optional(z.array(zARShipToLocation)),
+})
+
 export const zICCategoryTaxAuthority = z.object({
 	Category: z.optional(z.string()),
 	TaxAuthority: z.optional(z.string()),
@@ -2506,6 +2629,129 @@ export const zARCustomerWritable = z.object({
 export const zARCustomerListResponseWritable = z.object({
 	"@odata.context": z.optional(z.string()),
 	"value": z.optional(z.array(zARCustomerWritable)),
+})
+
+export const zARShipToLocationsOptionalFieldWritable = z.object({
+	CustomerNumber: z.optional(z.string()),
+	ShipToLocationCode: z.optional(z.string()),
+	OptionalField: z.optional(z.string()),
+	Value: z.optional(z.string()),
+	ShipToLocationsOptionalFieldType: z.optional(z.enum([
+		"Text",
+		"Amount",
+		"Number",
+		"Integer",
+		"YesNo",
+		"Date",
+		"Time",
+	])),
+	Length: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	Decimals: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	AllowBlank: z.optional(z.boolean()),
+	Validate: z.optional(z.boolean()),
+	ValueSet: z.optional(z.enum([
+		"No",
+		"Yes",
+		"NotApplicable",
+	])),
+	TypedValueFieldIndex: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
+	TextValue: z.optional(z.string()),
+	AmountValue: z.optional(z.number()),
+	NumberValue: z.optional(z.number()),
+	IntegerValue: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
+	YesNoValue: z.optional(z.boolean()),
+	DateValue: z.optional(z.iso.datetime()),
+	TimeValue: z.optional(z.iso.datetime()),
+	OptionalFieldDescription: z.optional(z.string()),
+	ValueDescription: z.optional(z.string()),
+	UpdateOperation: z.optional(z.enum([
+		"Unspecified",
+		"Update",
+		"Insert",
+		"Delete",
+	])),
+	Warnings: z.optional(z.array(zCommonEntityErrorWritable)),
+	ETag: z.optional(z.string()),
+	IsDeleted: z.optional(z.boolean()),
+	IsNewLine: z.optional(z.boolean()),
+	HasChanged: z.optional(z.boolean()),
+	DisplayIndex: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	ChangeSequence: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	PreviousKey: z.optional(z.string()),
+	Licenses: z.optional(z.record(z.string(), z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" })))),
+	IsSelected: z.optional(z.boolean()),
+	Misc: z.optional(z.record(z.string(), zSystemObjectWritable)),
+})
+
+export const zARShipToLocationWritable = z.object({
+	CustomerNumber: z.optional(z.string()),
+	ShipToLocationKey: z.optional(z.string()),
+	Status: z.optional(z.enum(["Inactive", "Active"])),
+	InactiveDate: z.optional(z.iso.datetime()),
+	DateLastMaintained: z.optional(z.iso.datetime()),
+	Description: z.optional(z.string()),
+	AddressLine1: z.optional(z.string()),
+	AddressLine2: z.optional(z.string()),
+	AddressLine3: z.optional(z.string()),
+	AddressLine4: z.optional(z.string()),
+	City: z.optional(z.string()),
+	StateProvince: z.optional(z.string()),
+	ZipPostalCode: z.optional(z.string()),
+	Country: z.optional(z.string()),
+	ContactName: z.optional(z.string()),
+	PhoneNumber: z.optional(z.string()),
+	FaxNumber: z.optional(z.string()),
+	TerritoryCode: z.optional(z.string()),
+	TaxGroup: z.optional(z.string()),
+	TaxRegistrationNumber1: z.optional(z.string()),
+	TaxRegistrationNumber2: z.optional(z.string()),
+	TaxRegistrationNumber3: z.optional(z.string()),
+	TaxRegistrationNumber4: z.optional(z.string()),
+	TaxRegistrationNumber5: z.optional(z.string()),
+	TaxClassCode1: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	TaxClassCode2: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	TaxClassCode3: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	TaxClassCode4: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	TaxClassCode5: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	SpecialInstructions: z.optional(z.string()),
+	Salesperson1: z.optional(z.string()),
+	Salesperson2: z.optional(z.string()),
+	Salesperson3: z.optional(z.string()),
+	Salesperson4: z.optional(z.string()),
+	Salesperson5: z.optional(z.string()),
+	SalesSplitPercentage1: z.optional(z.number()),
+	SalesSplitPercentage2: z.optional(z.number()),
+	SalesSplitPercentage3: z.optional(z.number()),
+	SalesSplitPercentage4: z.optional(z.number()),
+	SalesSplitPercentage5: z.optional(z.number()),
+	CustomerPriceList: z.optional(z.string()),
+	FreeOnBoard: z.optional(z.string()),
+	ShipViaCode: z.optional(z.string()),
+	ShipViaDescription: z.optional(z.string()),
+	PrimaryShipToIndicator: z.optional(z.enum(["No", "Yes"])),
+	Email: z.optional(z.string()),
+	ContactsPhone: z.optional(z.string()),
+	ContactsFax: z.optional(z.string()),
+	ContactsEmail: z.optional(z.string()),
+	NumberOfOptionalFields: z.optional(z.coerce.bigint().check(z.minimum(BigInt("-9223372036854775808"), { error: "Invalid value: Expected int64 to be >= -9223372036854775808" }), z.maximum(BigInt("9223372036854775807"), { error: "Invalid value: Expected int64 to be <= 9223372036854775807" }))),
+	ProcessCommandCode: z.optional(z.enum(["InsertOptionalFields"])),
+	InventoryLocation: z.optional(z.string()),
+	SuppressIntegration: z.optional(z.boolean()),
+	ARVersion: z.optional(z.string()),
+	Database: z.optional(z.string()),
+	Mode: z.optional(z.enum(["NormalMode", "UnconditionalInsertsUpdates"])),
+	ShipToLocationsOptionalField: z.optional(z.array(zARShipToLocationsOptionalFieldWritable)),
+	UpdateOperation: z.optional(z.enum([
+		"Unspecified",
+		"Update",
+		"Insert",
+		"Delete",
+	])),
+})
+
+export const zARShipToLocationListResponseWritable = z.object({
+	"@odata.context": z.optional(z.string()),
+	"value": z.optional(z.array(zARShipToLocationWritable)),
 })
 
 export const zICCategoryTaxAuthorityWritable = z.object({
@@ -4828,6 +5074,209 @@ export const zArCustomersGetByCustomerNumberQuery = z.object({
  * OK
  */
 export const zArCustomersGetByCustomerNumberResponse = zARCustomerListResponse
+
+export const zArShipToLocationsGetPath = z.object({
+	apiVersion: z._default(z.string(), "1.0"),
+	tenant: z._default(z.string(), "-"),
+	company: z._default(z.string(), "SAMLTD"),
+})
+
+export const zArShipToLocationsGetQuery = z.object({
+	$filter: z.optional(z.string()),
+	$select: z.optional(z.enum([
+		"CustomerNumber",
+		"ShipToLocationKey",
+		"Status",
+		"InactiveDate",
+		"DateLastMaintained",
+		"Description",
+		"AddressLine1",
+		"AddressLine2",
+		"AddressLine3",
+		"AddressLine4",
+		"City",
+		"StateProvince",
+		"ZipPostalCode",
+		"Country",
+		"ContactName",
+		"PhoneNumber",
+		"FaxNumber",
+		"TerritoryCode",
+		"TaxGroup",
+		"TaxRegistrationNumber1",
+		"TaxRegistrationNumber2",
+		"TaxRegistrationNumber3",
+		"TaxRegistrationNumber4",
+		"TaxRegistrationNumber5",
+		"TaxClassCode1",
+		"TaxClassCode2",
+		"TaxClassCode3",
+		"TaxClassCode4",
+		"TaxClassCode5",
+		"SpecialInstructions",
+		"Salesperson1",
+		"Salesperson2",
+		"Salesperson3",
+		"Salesperson4",
+		"Salesperson5",
+		"SalesSplitPercentage1",
+		"SalesSplitPercentage2",
+		"SalesSplitPercentage3",
+		"SalesSplitPercentage4",
+		"SalesSplitPercentage5",
+		"CustomerPriceList",
+		"FreeOnBoard",
+		"ShipViaCode",
+		"ShipViaDescription",
+		"PrimaryShipToIndicator",
+		"Email",
+		"ContactsPhone",
+		"ContactsFax",
+		"ContactsEmail",
+		"NumberOfOptionalFields",
+		"ProcessCommandCode",
+		"InventoryLocation",
+		"SuppressIntegration",
+		"ARVersion",
+		"Database",
+		"Mode",
+		"ShipToLocationsOptionalField",
+		"UpdateOperation",
+	])),
+	$top: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	$skip: z.optional(z.int().check(z.minimum(-2147483648, { error: "Invalid value: Expected int32 to be >= -2147483648" }), z.maximum(2147483647, { error: "Invalid value: Expected int32 to be <= 2147483647" }))),
+	$count: z.optional(z.boolean()),
+})
+
+/**
+ * OK
+ */
+export const zArShipToLocationsGetResponse = zARShipToLocationListResponse
+
+/**
+ * The entity to post
+ */
+export const zArShipToLocationsPostBody = zARShipToLocationWritable
+
+export const zArShipToLocationsPostPath = z.object({
+	apiVersion: z._default(z.string(), "1.0"),
+	tenant: z._default(z.string(), "-"),
+	company: z._default(z.string(), "SAMLTD"),
+})
+
+export const zArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyHeaders = z.object({
+	"If-Match": z.optional(z.string()),
+})
+
+export const zArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyPath = z.object({
+	CustomerNumber: z.string(),
+	ShipToLocationKey: z.string(),
+	apiVersion: z._default(z.string(), "1.0"),
+	tenant: z._default(z.string(), "-"),
+	company: z._default(z.string(), "SAMLTD"),
+})
+
+/**
+ * The entity to patch
+ */
+export const zArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyBody = zARShipToLocationWritable
+
+export const zArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyPath = z.object({
+	CustomerNumber: z.string(),
+	ShipToLocationKey: z.string(),
+	apiVersion: z._default(z.string(), "1.0"),
+	tenant: z._default(z.string(), "-"),
+	company: z._default(z.string(), "SAMLTD"),
+})
+
+/**
+ * The entity to put
+ */
+export const zArShipToLocationsPutByCustomerNumberAndShipToLocationKeyBody = zARShipToLocationWritable
+
+export const zArShipToLocationsPutByCustomerNumberAndShipToLocationKeyPath = z.object({
+	CustomerNumber: z.string(),
+	ShipToLocationKey: z.string(),
+	apiVersion: z._default(z.string(), "1.0"),
+	tenant: z._default(z.string(), "-"),
+	company: z._default(z.string(), "SAMLTD"),
+})
+
+export const zArShipToLocationsGetByCustomerNumberAndShipToLocationKeyPath = z.object({
+	CustomerNumber: z.string(),
+	ShipToLocationKey: z.string(),
+	apiVersion: z._default(z.string(), "1.0"),
+	tenant: z._default(z.string(), "-"),
+	company: z._default(z.string(), "SAMLTD"),
+})
+
+export const zArShipToLocationsGetByCustomerNumberAndShipToLocationKeyQuery = z.object({
+	$select: z.optional(z.enum([
+		"CustomerNumber",
+		"ShipToLocationKey",
+		"Status",
+		"InactiveDate",
+		"DateLastMaintained",
+		"Description",
+		"AddressLine1",
+		"AddressLine2",
+		"AddressLine3",
+		"AddressLine4",
+		"City",
+		"StateProvince",
+		"ZipPostalCode",
+		"Country",
+		"ContactName",
+		"PhoneNumber",
+		"FaxNumber",
+		"TerritoryCode",
+		"TaxGroup",
+		"TaxRegistrationNumber1",
+		"TaxRegistrationNumber2",
+		"TaxRegistrationNumber3",
+		"TaxRegistrationNumber4",
+		"TaxRegistrationNumber5",
+		"TaxClassCode1",
+		"TaxClassCode2",
+		"TaxClassCode3",
+		"TaxClassCode4",
+		"TaxClassCode5",
+		"SpecialInstructions",
+		"Salesperson1",
+		"Salesperson2",
+		"Salesperson3",
+		"Salesperson4",
+		"Salesperson5",
+		"SalesSplitPercentage1",
+		"SalesSplitPercentage2",
+		"SalesSplitPercentage3",
+		"SalesSplitPercentage4",
+		"SalesSplitPercentage5",
+		"CustomerPriceList",
+		"FreeOnBoard",
+		"ShipViaCode",
+		"ShipViaDescription",
+		"PrimaryShipToIndicator",
+		"Email",
+		"ContactsPhone",
+		"ContactsFax",
+		"ContactsEmail",
+		"NumberOfOptionalFields",
+		"ProcessCommandCode",
+		"InventoryLocation",
+		"SuppressIntegration",
+		"ARVersion",
+		"Database",
+		"Mode",
+		"ShipToLocationsOptionalField",
+		"UpdateOperation",
+	])),
+})
+
+/**
+ * OK
+ */
+export const zArShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponse = zARShipToLocationListResponse
 
 export const zIcCategoriesGetPath = z.object({
 	apiVersion: z._default(z.string(), "1.0"),

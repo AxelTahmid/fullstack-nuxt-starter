@@ -143,7 +143,7 @@ export default defineConfig([{
 		},
 		filters: {
 			tags: {
-				include: ["ARCustomers", "ICItems", "ICCategories", "ICItemPricing", " OEOrders", "OEInvoices"],
+				include: ["ARCustomers", "ARShipToLocations", "ICItems", "ICCategories", "ICItemPricing", " OEOrders", "OEInvoices"],
 			},
 		},
 	},

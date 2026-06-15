@@ -256,6 +256,111 @@ export type ARCustomerContactSelectionT = {
 	}
 }
 
+export type ARShipToLocationListResponseT = {
+	"@odata.context"?: string
+	"value"?: Array<ARShipToLocationT>
+}
+
+export type ARShipToLocationT = {
+	CustomerNumber?: string
+	ShipToLocationKey?: string
+	Status?: "Inactive" | "Active"
+	InactiveDate?: Date
+	DateLastMaintained?: Date
+	Description?: string
+	AddressLine1?: string
+	AddressLine2?: string
+	AddressLine3?: string
+	AddressLine4?: string
+	City?: string
+	StateProvince?: string
+	ZipPostalCode?: string
+	Country?: string
+	ContactName?: string
+	PhoneNumber?: string
+	FaxNumber?: string
+	TerritoryCode?: string
+	TaxGroup?: string
+	TaxRegistrationNumber1?: string
+	TaxRegistrationNumber2?: string
+	TaxRegistrationNumber3?: string
+	TaxRegistrationNumber4?: string
+	TaxRegistrationNumber5?: string
+	TaxClassCode1?: number
+	TaxClassCode2?: number
+	TaxClassCode3?: number
+	TaxClassCode4?: number
+	TaxClassCode5?: number
+	SpecialInstructions?: string
+	Salesperson1?: string
+	Salesperson2?: string
+	Salesperson3?: string
+	Salesperson4?: string
+	Salesperson5?: string
+	SalesSplitPercentage1?: number
+	SalesSplitPercentage2?: number
+	SalesSplitPercentage3?: number
+	SalesSplitPercentage4?: number
+	SalesSplitPercentage5?: number
+	CustomerPriceList?: string
+	FreeOnBoard?: string
+	ShipViaCode?: string
+	ShipViaDescription?: string
+	PrimaryShipToIndicator?: "No" | "Yes"
+	Email?: string
+	ContactsPhone?: string
+	ContactsFax?: string
+	ContactsEmail?: string
+	NumberOfOptionalFields?: bigint
+	ProcessCommandCode?: "InsertOptionalFields"
+	InventoryLocation?: string
+	SuppressIntegration?: boolean
+	ARVersion?: string
+	Database?: string
+	Mode?: "NormalMode" | "UnconditionalInsertsUpdates"
+	ShipToLocationsOptionalField?: Array<ARShipToLocationsOptionalFieldT>
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+}
+
+export type ARShipToLocationsOptionalFieldT = {
+	CustomerNumber?: string
+	ShipToLocationCode?: string
+	OptionalField?: string
+	Value?: string
+	ShipToLocationsOptionalFieldType?: "Text" | "Amount" | "Number" | "Integer" | "YesNo" | "Date" | "Time"
+	Length?: number
+	Decimals?: number
+	AllowBlank?: boolean
+	Validate?: boolean
+	ValueSet?: "No" | "Yes" | "NotApplicable"
+	TypedValueFieldIndex?: bigint
+	TextValue?: string
+	AmountValue?: number
+	NumberValue?: number
+	IntegerValue?: bigint
+	YesNoValue?: boolean
+	DateValue?: Date
+	TimeValue?: Date
+	OptionalFieldDescription?: string
+	ValueDescription?: string
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
 export type ICCategoryListResponseT = {
 	"@odata.context"?: string
 	"value"?: Array<ICCategoryT>
@@ -2053,6 +2158,111 @@ export type ARCustomerContactSelectionWritableT = {
 	}
 }
 
+export type ARShipToLocationListResponseWritableT = {
+	"@odata.context"?: string
+	"value"?: Array<ARShipToLocationWritableT>
+}
+
+export type ARShipToLocationWritableT = {
+	CustomerNumber?: string
+	ShipToLocationKey?: string
+	Status?: "Inactive" | "Active"
+	InactiveDate?: Date
+	DateLastMaintained?: Date
+	Description?: string
+	AddressLine1?: string
+	AddressLine2?: string
+	AddressLine3?: string
+	AddressLine4?: string
+	City?: string
+	StateProvince?: string
+	ZipPostalCode?: string
+	Country?: string
+	ContactName?: string
+	PhoneNumber?: string
+	FaxNumber?: string
+	TerritoryCode?: string
+	TaxGroup?: string
+	TaxRegistrationNumber1?: string
+	TaxRegistrationNumber2?: string
+	TaxRegistrationNumber3?: string
+	TaxRegistrationNumber4?: string
+	TaxRegistrationNumber5?: string
+	TaxClassCode1?: number
+	TaxClassCode2?: number
+	TaxClassCode3?: number
+	TaxClassCode4?: number
+	TaxClassCode5?: number
+	SpecialInstructions?: string
+	Salesperson1?: string
+	Salesperson2?: string
+	Salesperson3?: string
+	Salesperson4?: string
+	Salesperson5?: string
+	SalesSplitPercentage1?: number
+	SalesSplitPercentage2?: number
+	SalesSplitPercentage3?: number
+	SalesSplitPercentage4?: number
+	SalesSplitPercentage5?: number
+	CustomerPriceList?: string
+	FreeOnBoard?: string
+	ShipViaCode?: string
+	ShipViaDescription?: string
+	PrimaryShipToIndicator?: "No" | "Yes"
+	Email?: string
+	ContactsPhone?: string
+	ContactsFax?: string
+	ContactsEmail?: string
+	NumberOfOptionalFields?: bigint
+	ProcessCommandCode?: "InsertOptionalFields"
+	InventoryLocation?: string
+	SuppressIntegration?: boolean
+	ARVersion?: string
+	Database?: string
+	Mode?: "NormalMode" | "UnconditionalInsertsUpdates"
+	ShipToLocationsOptionalField?: Array<ARShipToLocationsOptionalFieldWritableT>
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+}
+
+export type ARShipToLocationsOptionalFieldWritableT = {
+	CustomerNumber?: string
+	ShipToLocationCode?: string
+	OptionalField?: string
+	Value?: string
+	ShipToLocationsOptionalFieldType?: "Text" | "Amount" | "Number" | "Integer" | "YesNo" | "Date" | "Time"
+	Length?: number
+	Decimals?: number
+	AllowBlank?: boolean
+	Validate?: boolean
+	ValueSet?: "No" | "Yes" | "NotApplicable"
+	TypedValueFieldIndex?: bigint
+	TextValue?: string
+	AmountValue?: number
+	NumberValue?: number
+	IntegerValue?: bigint
+	YesNoValue?: boolean
+	DateValue?: Date
+	TimeValue?: Date
+	OptionalFieldDescription?: string
+	ValueDescription?: string
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
 export type ICCategoryListResponseWritableT = {
 	"@odata.context"?: string
 	"value"?: Array<ICCategoryWritableT>
@@ -3768,6 +3978,191 @@ export type ArCustomersGetByCustomerNumberResponses = {
 }
 
 export type ArCustomersGetByCustomerNumberResponse = ArCustomersGetByCustomerNumberResponses[keyof ArCustomersGetByCustomerNumberResponses]
+
+export type ArShipToLocationsGetData = {
+	body?: never
+	path: {
+		apiVersion: string
+		tenant: string
+		company: string
+	}
+	query?: {
+		/**
+         * Filters the results, based on a Boolean condition.
+         */
+		$filter?: string
+		/**
+         * Selects which properties to include in the response.
+         */
+		$select?: "CustomerNumber" | "ShipToLocationKey" | "Status" | "InactiveDate" | "DateLastMaintained" | "Description" | "AddressLine1" | "AddressLine2" | "AddressLine3" | "AddressLine4" | "City" | "StateProvince" | "ZipPostalCode" | "Country" | "ContactName" | "PhoneNumber" | "FaxNumber" | "TerritoryCode" | "TaxGroup" | "TaxRegistrationNumber1" | "TaxRegistrationNumber2" | "TaxRegistrationNumber3" | "TaxRegistrationNumber4" | "TaxRegistrationNumber5" | "TaxClassCode1" | "TaxClassCode2" | "TaxClassCode3" | "TaxClassCode4" | "TaxClassCode5" | "SpecialInstructions" | "Salesperson1" | "Salesperson2" | "Salesperson3" | "Salesperson4" | "Salesperson5" | "SalesSplitPercentage1" | "SalesSplitPercentage2" | "SalesSplitPercentage3" | "SalesSplitPercentage4" | "SalesSplitPercentage5" | "CustomerPriceList" | "FreeOnBoard" | "ShipViaCode" | "ShipViaDescription" | "PrimaryShipToIndicator" | "Email" | "ContactsPhone" | "ContactsFax" | "ContactsEmail" | "NumberOfOptionalFields" | "ProcessCommandCode" | "InventoryLocation" | "SuppressIntegration" | "ARVersion" | "Database" | "Mode" | "ShipToLocationsOptionalField" | "UpdateOperation"
+		/**
+         * Returns only the first n results.
+         */
+		$top?: number
+		/**
+         * Skips the first n results.
+         */
+		$skip?: number
+		/**
+         * Includes a count of the matching results in the response.
+         */
+		$count?: boolean
+	}
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations"
+}
+
+export type ArShipToLocationsGetResponses = {
+	/**
+     * OK
+     */
+	200: ARShipToLocationListResponseT
+}
+
+export type ArShipToLocationsGetResponse = ArShipToLocationsGetResponses[keyof ArShipToLocationsGetResponses]
+
+export type ArShipToLocationsPostData = {
+	/**
+     * The entity to post
+     */
+	body: ARShipToLocationWritableT
+	path: {
+		apiVersion: string
+		tenant: string
+		company: string
+	}
+	query?: never
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations"
+}
+
+export type ArShipToLocationsPostResponses = {
+	/**
+     * OK
+     */
+	200: unknown
+}
+
+export type ArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyData = {
+	body?: never
+	headers?: {
+		/**
+         * If-Match header
+         */
+		"If-Match"?: string
+	}
+	path: {
+		/**
+         * key: CustomerNumber
+         */
+		CustomerNumber: string
+		/**
+         * key: ShipToLocationKey
+         */
+		ShipToLocationKey: string
+		apiVersion: string
+		tenant: string
+		company: string
+	}
+	query?: never
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations(CustomerNumber='{CustomerNumber}',ShipToLocationKey='{ShipToLocationKey}')"
+}
+
+export type ArShipToLocationsDeleteByCustomerNumberAndShipToLocationKeyResponses = {
+	/**
+     * OK
+     */
+	200: unknown
+}
+
+export type ArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyData = {
+	/**
+     * The entity to patch
+     */
+	body: ARShipToLocationWritableT
+	path: {
+		/**
+         * key: CustomerNumber
+         */
+		CustomerNumber: string
+		/**
+         * key: ShipToLocationKey
+         */
+		ShipToLocationKey: string
+		apiVersion: string
+		tenant: string
+		company: string
+	}
+	query?: never
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations(CustomerNumber='{CustomerNumber}',ShipToLocationKey='{ShipToLocationKey}')"
+}
+
+export type ArShipToLocationsPatchByCustomerNumberAndShipToLocationKeyResponses = {
+	/**
+     * OK
+     */
+	200: unknown
+}
+
+export type ArShipToLocationsPutByCustomerNumberAndShipToLocationKeyData = {
+	/**
+     * The entity to put
+     */
+	body: ARShipToLocationWritableT
+	path: {
+		/**
+         * key: CustomerNumber
+         */
+		CustomerNumber: string
+		/**
+         * key: ShipToLocationKey
+         */
+		ShipToLocationKey: string
+		apiVersion: string
+		tenant: string
+		company: string
+	}
+	query?: never
+	url: "/v{apiVersion}/{tenant}/{company}/AR/ARShipToLocations(CustomerNumber='{CustomerNumber}',ShipToLocationKey='{ShipToLocationKey}')"
+}
+
+export type ArShipToLocationsPutByCustomerNumberAndShipToLocationKeyResponses = {
+	/**
+     * OK
+     */
+	200: unknown
+}
+
+export type ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyData = {
+	body?: never
+	path: {
+		/**
+         * key: CustomerNumber
+         */
+		CustomerNumber: string
+		/**
+         * key: ShipToLocationKey
+         */
+		ShipToLocationKey: string
+		apiVersion: string
+		tenant: string
+		company: string
+	}
+	query?: {
+		/**
+         * Selects which properties to include in the response.
+         */
+		$select?: "CustomerNumber" | "ShipToLocationKey" | "Status" | "InactiveDate" | "DateLastMaintained" | "Description" | "AddressLine1" | "AddressLine2" | "AddressLine3" | "AddressLine4" | "City" | "StateProvince" | "ZipPostalCode" | "Country" | "ContactName" | "PhoneNumber" | "FaxNumber" | "TerritoryCode" | "TaxGroup" | "TaxRegistrationNumber1" | "TaxRegistrationNumber2" | "TaxRegistrationNumber3" | "TaxRegistrationNumber4" | "TaxRegistrationNumber5" | "TaxClassCode1" | "TaxClassCode2" | "TaxClassCode3" | "TaxClassCode4" | "TaxClassCode5" | "SpecialInstructions" | "Salesperson1" | "Salesperson2" | "Salesperson3" | "Salesperson4" | "Salesperson5" | "SalesSplitPercentage1" | "SalesSplitPercentage2" | "SalesSplitPercentage3" | "SalesSplitPercentage4" | "SalesSplitPercentage5" | "CustomerPriceList" | "FreeOnBoard" | "ShipViaCode" | "ShipViaDescription" | "PrimaryShipToIndicator" | "Email" | "ContactsPhone" | "ContactsFax" | "ContactsEmail" | "NumberOfOptionalFields" | "ProcessCommandCode" | "InventoryLocation" | "SuppressIntegration" | "ARVersion" | "Database" | "Mode" | "ShipToLocationsOptionalField" | "UpdateOperation"
+	}
+	url: "/V{apiVersion}/{tenant}/{company}/AR/ARShipToLocations(CustomerNumber='{CustomerNumber}',ShipToLocationKey='{ShipToLocationKey}')"
+}
+
+export type ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponses = {
+	/**
+     * OK
+     */
+	200: ARShipToLocationListResponseT
+}
+
+export type ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponse = ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponses[keyof ArShipToLocationsGetByCustomerNumberAndShipToLocationKeyResponses]
 
 export type IcCategoriesGetData = {
 	body?: never
