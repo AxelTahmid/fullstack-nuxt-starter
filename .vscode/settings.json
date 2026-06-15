@@ -1,25 +1,38 @@
 {
-    // enable auto-linting
-    "eslint.validate": ["typescript", "javascript", "vue"],
-    "eslint.useFlatConfig": true,
-    "prettier.enable": false,
-    "editor.formatOnSave": false,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontSize": 14,
+    "editor.fontLigatures": true,
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit",
-        "source.fixAll.eslint": "explicit"
-    },
-    "files.associations": {
-        "*.css": "tailwindcss"
+        "source.fixAll": "always",
+        "source.fixAll.eslint": "always",
+        "source.organizeImports": "always"
     },
     "editor.quickSuggestions": {
         "strings": "on"
+    },
+    // enable auto-linting
+    "eslint.useFlatConfig": true,
+    "eslint.format.enable": true,
+    "eslint.validate": [
+        "typescript",
+        "javascript",
+        "vue"
+    ],
+    "files.associations": {
+        "*.css": "tailwindcss"
     },
     "tailwindCSS.includeLanguages": {
         "plaintext": "vue"
     },
     "tailwindCSS.validate": true,
-    "editor.fontFamily": "Fira Code",
-    "editor.fontSize": 14,
-    "editor.fontLigatures": true,
+    "tailwindCSS.lint.suggestCanonicalClasses": "warning",
+    "tailwindCSS.experimental.configFile": "app/assets/css/main.css",
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
 }
