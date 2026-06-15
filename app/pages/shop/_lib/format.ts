@@ -4,6 +4,13 @@ export function formatCount(value: number) {
 	return value.toLocaleString("en-US")
 }
 
+export function formatPrice(cents: number, currencyCode: string) {
+	return new Intl.NumberFormat("en-CA", {
+		style: "currency",
+		currency: currencyCode,
+	}).format(cents / 100)
+}
+
 export function stockLabel(status: StockStatus) {
 	const labels: Record<StockStatus, string> = {
 		in_stock: "In stock",

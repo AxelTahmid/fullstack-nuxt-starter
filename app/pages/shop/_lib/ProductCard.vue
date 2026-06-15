@@ -3,7 +3,7 @@ import type { ProductListItem } from "#shared/types/product"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Check, ImageIcon, LoaderCircle, Plus } from "@lucide/vue"
+import { Check, Eye, ImageIcon, LoaderCircle, Plus } from "@lucide/vue"
 import { stockLabel } from "./format"
 
 defineProps<{
@@ -15,6 +15,10 @@ defineProps<{
 const emit = defineEmits<{
 	add: [product: ProductListItem]
 }>()
+
+function productPath(product: ProductListItem) {
+	return `/shop/${encodeURIComponent(product.sourceKey)}`
+}
 </script>
 
 <template>
@@ -60,10 +64,25 @@ const emit = defineEmits<{
 					</p>
 				</div>
 
-				<div class="flex justify-end">
+				<div class="flex justify-end gap-1.5">
+					<Button
+						as-child
+						type="button"
+						variant="outline"
+						size="icon-sm"
+						:title="`View ${product.name}`"
+						:aria-label="`View ${product.name}`"
+					>
+						<NuxtLink :to="productPath(product)">
+							<Eye class="size-4" />
+						</NuxtLink>
+					</Button>
+
 					<Button
 						type="button"
-						size="sm"
+						size="icon-sm"
+						:title="inCart ? `${product.name} is in cart` : `Add ${product.name}`"
+						:aria-label="inCart ? `${product.name} is in cart` : `Add ${product.name}`"
 						:disabled="adding"
 						@click="emit('add', product)"
 					>
@@ -81,7 +100,6 @@ const emit = defineEmits<{
 							v-else
 							class="size-4"
 						/>
-						Add
 					</Button>
 				</div>
 			</div>
