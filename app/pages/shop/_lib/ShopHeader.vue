@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { PackageSearch, RefreshCw, ShoppingCart } from "@lucide/vue"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
+import { PackageSearch, RefreshCw, ShoppingCart } from "@lucide/vue"
 
 defineProps<{
 	pending: boolean
@@ -23,7 +23,7 @@ const emit = defineEmits<{
 			</div>
 
 			<h1 class="text-3xl font-semibold">
-				Shop products
+				Shop
 			</h1>
 
 			<p class="max-w-2xl text-sm leading-6 text-muted-foreground">

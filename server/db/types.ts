@@ -65,6 +65,32 @@ export interface EmailAuthTokens {
 	user_id: number
 }
 
+export interface Enquiries {
+	created_at: Generated<Timestamp>
+	enquiry_number: string
+	id: Generated<number>
+	priority: Generated<string>
+	product_sku: string | null
+	source_reference: string | null
+	source_type: Generated<string>
+	status: Generated<string>
+	subject: string
+	supplier_name: Generated<string>
+	updated_at: Timestamp | null
+	user_id: number
+}
+
+export interface EnquiryMessages {
+	attachment_name: string | null
+	author_name: string
+	author_role: string
+	author_user_id: number | null
+	body: string
+	created_at: Generated<Timestamp>
+	enquiry_id: number
+	id: Generated<number>
+}
+
 export interface QueueBam {
 	command: string
 	completed_on: Timestamp | null
@@ -194,6 +220,8 @@ export interface DB {
 	"brand_settings": BrandSettings
 	"cart_items": CartItems
 	"email_auth_tokens": EmailAuthTokens
+	"enquiries": Enquiries
+	"enquiry_messages": EnquiryMessages
 	"queue.bam": QueueBam
 	"queue.job": QueueJob
 	"queue.job_dependency": QueueJobDependency

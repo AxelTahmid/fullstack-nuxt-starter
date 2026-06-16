@@ -80,7 +80,7 @@ const supplyHealthLabel = computed(() => `${(data.value?.kpis.supplyChainHealthP
 
 const quickLaunch = [
 	{ label: "Order Hub", href: "/shop", icon: Store },
-	{ label: "Request Estimate", href: "/estimate", icon: ShoppingBasket },
+	{ label: "Request Estimate", href: "/estimate/new", icon: ShoppingBasket },
 	{ label: "Contract Pricing", href: "/rfp", icon: FileText },
 	{ label: "Enquiries", href: "/enquiries", icon: MessagesSquare },
 ]

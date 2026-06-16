@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { FileStack, Inbox, LayoutDashboard, MessagesSquare, Palette, ShoppingBasket, ShoppingCart, Store } from "@lucide/vue"
 import {
 	Sidebar,
 	SidebarContent,
@@ -12,8 +11,9 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { useBrand } from "~/composables/useBrand"
+import { FileStack, Inbox, LayoutDashboard, MessagesSquare, Palette, Receipt, ShoppingBasket, ShoppingCart, Store } from "@lucide/vue"
 import type { AppNavItem } from "~/components/app-shell"
+import { useBrand } from "~/composables/useBrand"
 
 const route = useRoute()
 const { brand } = useBrand()
@@ -33,7 +33,7 @@ const menuGroups = computed(() => [
 				icon: LayoutDashboard,
 			},
 			{
-				label: "Shop Products",
+				label: "Shop",
 				description: "Industrial catalog",
 				href: "/shop",
 				icon: Store,
@@ -44,14 +44,20 @@ const menuGroups = computed(() => [
 				href: "/cart",
 				icon: ShoppingCart,
 			},
+			{
+				label: "Orders",
+				description: "Submitted orders",
+				href: "/orders",
+				icon: Receipt,
+			},
 		] satisfies AppNavItem[],
 	},
 	{
 		title: "Procurement",
 		items: [
 			{
-				label: "Request Estimate",
-				description: "Custom quote workflow",
+				label: "Estimates",
+				description: "Quote requests and history",
 				href: "/estimate",
 				icon: ShoppingBasket,
 			},

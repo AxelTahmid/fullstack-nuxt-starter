@@ -16,7 +16,7 @@ definePageMeta({
 })
 
 useHead({
-	title: "Shop products",
+	title: "Shop",
 })
 
 const route = useRoute()
