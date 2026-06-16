@@ -26,7 +26,7 @@ Non-negotiable architecture:
 | Product pricing | Deferred | `ProductListItem.priceCents` is nullable. No list-page pricing call. |
 | Local product repository | Deprecated | Product-related UI should not depend on local DB products. |
 | Users/auth schema | In place | Current core tables: `users`, `email_auth_tokens`, `brand_settings`, plus pg-boss tables. |
-| Cart | Stubbed | `GET /api/cart` returns empty; `POST /api/cart/items` returns `501`. |
+| Cart | In place | `cart_items` migration, Kysely type, repository, and cart endpoints are implemented. Prices resolve server-side when available and fall back to `0`. |
 | Checkout/order submit | Stubbed | `POST /api/orders` returns `501`. |
 | Enquiries | Stubbed | Shared schemas/types and pages exist, but API routes return `501` because schema was removed. |
 | Request estimate | Static UI | `/estimate` is not yet backed by API/schema. |
@@ -400,14 +400,14 @@ Recommended v1: add no image schema yet. Keep `imageUrl: null` until a confirmed
 Current:
 
 - `GET /api/products`
-
-Next:
-
 - `GET /api/products/[sourceKey]`
 - `GET /api/cart`
 - `POST /api/cart/items`
 - `PATCH /api/cart/items/[id]`
 - `DELETE /api/cart/items/[id]`
+
+Next:
+
 - `POST /api/orders`
 - `GET /api/orders`
 - `GET /api/orders/[number]`
@@ -432,12 +432,12 @@ Next:
 
 ### Phase 1 - Cart
 
-- Add `cart_items` migration.
-- Update `server/db/types.ts`.
-- Add cart repository.
-- Implement cart item add/update/delete endpoints.
-- Implement `GET /api/cart` with Sage item resolution.
-- Update shared cart types if price fields need to be nullable.
+- [x] Add `cart_items` migration.
+- [x] Update `server/db/types.ts`.
+- [x] Add cart repository.
+- [x] Implement cart item add/update/delete endpoints.
+- [x] Implement `GET /api/cart` with Sage item resolution.
+- [x] Keep shared cart price fields numeric for v1; unresolved prices return `0`.
 
 This unlocks shop add-to-cart and cart page quantity controls.
 
@@ -472,8 +472,8 @@ This unlocks RFQ-style workflows without creating Sage orders prematurely.
 
 ### Phase 5 - Pricing And Contract Detail
 
-- Add product detail route/page.
-- Verify `ICItemPricing` availability in the actual Sage install.
+- [x] Add product detail route/page.
+- [ ] Verify `ICItemPricing` availability in the actual Sage install.
 - If contract pricing duration is required, confirm whether a custom Sage endpoint or read-only Sage SQL access will provide it.
 - Keep list pages fast; fetch detailed pricing only on detail/cart/checkout/estimate review.
 

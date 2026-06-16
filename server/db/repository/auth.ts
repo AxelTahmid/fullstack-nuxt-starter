@@ -1,6 +1,6 @@
 import { sql } from "kysely"
+import type { UserRole } from "#shared/types/user"
 import { Database } from "../base"
-import type { UserRole } from "../types"
 
 class AuthRepository extends Database {
 	private static authInstance: AuthRepository | null = null

@@ -44,6 +44,15 @@ export interface BrandSettings {
 	updated_at: Timestamp | null
 }
 
+export interface CartItems {
+	created_at: Generated<Timestamp>
+	id: Generated<number>
+	quantity: number
+	source_key: string
+	updated_at: Timestamp | null
+	user_id: number
+}
+
 export interface EmailAuthTokens {
 	created_at: Generated<Timestamp>
 	expires_at: Timestamp
@@ -71,6 +80,8 @@ export interface QueueBam {
 }
 
 export interface QueueJob {
+	blocked: Generated<boolean>
+	blocking: Generated<boolean>
 	completed_on: Timestamp | null
 	created_on: Generated<Timestamp>
 	data: Json | null
@@ -85,6 +96,7 @@ export interface QueueJob {
 	keep_until: Generated<Timestamp>
 	name: string
 	output: Json | null
+	pending_dependencies: Generated<number>
 	policy: string | null
 	priority: Generated<number>
 	retry_backoff: Generated<boolean>
@@ -97,6 +109,13 @@ export interface QueueJob {
 	start_after: Generated<Timestamp>
 	started_on: Timestamp | null
 	state: Generated<QueueJobState>
+}
+
+export interface QueueJobDependency {
+	child_id: string
+	child_name: string
+	parent_id: string
+	parent_name: string
 }
 
 export interface QueueQueue {
@@ -173,9 +192,11 @@ export interface Users {
 
 export interface DB {
 	"brand_settings": BrandSettings
+	"cart_items": CartItems
 	"email_auth_tokens": EmailAuthTokens
 	"queue.bam": QueueBam
 	"queue.job": QueueJob
+	"queue.job_dependency": QueueJobDependency
 	"queue.queue": QueueQueue
 	"queue.schedule": QueueSchedule
 	"queue.subscription": QueueSubscription

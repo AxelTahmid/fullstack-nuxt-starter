@@ -10,7 +10,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import type { UserRole } from "~~/server/db/types"
+import type { UserRole } from "#shared/types/user"
 
 const { user, clear } = useUserSession()
 const isLoading = ref(false)

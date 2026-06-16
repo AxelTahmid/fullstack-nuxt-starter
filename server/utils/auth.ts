@@ -1,5 +1,6 @@
 import type { H3Event } from "h3"
-import type { UserRole } from "../db/types"
+import type { UserRole } from "#shared/types/user"
+import { authRepo } from "~~/server/utils/db"
 
 export interface SessionUser {
 	id: number
@@ -9,6 +10,26 @@ export interface SessionUser {
 	email_verified: boolean
 	last_active_at: Date | null
 	created_at: Date
+}
+
+function isUserRole(role: string): role is UserRole {
+	return role === "admin" || role === "customer"
+}
+
+function toSessionUser(user: Awaited<ReturnType<typeof authRepo.findUserById>>): SessionUser {
+	if (!user) {
+		throw new Error("Cannot build session from missing user")
+	}
+
+	return {
+		id: user.id,
+		email: user.email,
+		name: user.name,
+		role: isUserRole(user.role) ? user.role : "customer",
+		email_verified: user.email_verified,
+		last_active_at: user.last_active_at,
+		created_at: user.created_at,
+	}
 }
 
 export async function requireSessionUser(event: H3Event) {
@@ -21,5 +42,31 @@ export async function requireSessionUser(event: H3Event) {
 		})
 	}
 
-	return session.user
+	let user = await authRepo.findUserById(session.user.id)
+	if (!user && session.user.email) {
+		user = await authRepo.findUserByEmail(session.user.email)
+	}
+
+	if (!user) {
+		await clearUserSession(event)
+		throw createError({
+			statusCode: 401,
+			statusMessage: "Session user no longer exists",
+		})
+	}
+
+	if (user.deactivated) {
+		await clearUserSession(event)
+		throw createError({
+			statusCode: 403,
+			statusMessage: "Account is deactivated",
+		})
+	}
+
+	const sessionUser = toSessionUser(user)
+	if (sessionUser.id !== session.user.id || sessionUser.email !== session.user.email || sessionUser.role !== session.user.role) {
+		await setUserSession(event, { user: sessionUser })
+	}
+
+	return sessionUser
 }

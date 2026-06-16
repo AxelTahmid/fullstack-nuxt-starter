@@ -1,6 +1,6 @@
 import { updateBrandSchema } from "#shared/schemas/brand"
 import type { BrandSettings } from "#shared/types/brand"
-import type { BrandSettingsUpdateRecord } from "~~/server/db/types"
+import type { BrandSettingsUpdateRecord } from "~~/server/db/repository/brand"
 import { brandRepo } from "~~/server/utils/db"
 import { requireSessionUser } from "~~/server/utils/auth"
 

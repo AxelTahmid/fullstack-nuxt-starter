@@ -1,5 +1,9 @@
+import type { Selectable, Updateable } from "kysely"
 import { Database } from "../base"
-import type { BrandSettingsRecord, BrandSettingsUpdateRecord } from "../types"
+import type { BrandSettings } from "../types"
+
+export type BrandSettingsRecord = Selectable<BrandSettings>
+export type BrandSettingsUpdateRecord = Updateable<BrandSettings>
 
 class BrandRepository extends Database {
 	private static brandInstance: BrandRepository | null = null
