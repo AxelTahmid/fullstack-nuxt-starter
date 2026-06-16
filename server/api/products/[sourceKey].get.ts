@@ -85,7 +85,7 @@ async function loadPricing(item: ICItemT, sourceKey: string) {
 	catch {
 		return {
 			pricing: null,
-			pricingUnavailableReason: "Unable to load Sage pricing for this item.",
+			pricingUnavailableReason: "Unable to load pricing for this item.",
 		}
 	}
 }

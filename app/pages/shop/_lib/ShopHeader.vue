@@ -19,7 +19,7 @@ const emit = defineEmits<{
 			<div class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
 				<PackageSearch class="size-4" />
 
-				<span>Sage catalog</span>
+				<span>Product catalog</span>
 			</div>
 
 			<h1 class="text-3xl font-semibold">
@@ -27,7 +27,7 @@ const emit = defineEmits<{
 			</h1>
 
 			<p class="max-w-2xl text-sm leading-6 text-muted-foreground">
-				Browse Sage 300 inventory, filter by catalog attributes, and add items without exposing Sage calls to the frontend.
+				Browse inventory, filter by catalog attributes, and add items to your cart.
 			</p>
 		</div>
 

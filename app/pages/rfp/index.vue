@@ -245,7 +245,7 @@ async function buyNow(product: ProductListItem) {
 
 						<td class="px-4 py-5">
 							<p class="text-foreground text-sm font-semibold">
-								Current Sage price
+								Current price
 							</p>
 
 							<p class="text-muted-foreground mt-0.5 text-[0.62rem] font-semibold tracking-wide uppercase">

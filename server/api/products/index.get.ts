@@ -9,7 +9,7 @@ import type { ProductListItem, ProductListResponse } from "#shared/types/product
 import { requireSessionUser } from "~~/server/utils/auth"
 
 const DEFAULT_PAGE_SIZE = 24
-const DEFAULT_MANUFACTURER = "Sage 300"
+const DEFAULT_MANUFACTURER = "Manufacturer unavailable"
 
 function sagePath() {
 	const { sage300 } = useRuntimeConfig()
@@ -54,7 +54,7 @@ function itemKey(item: ICItemT) {
 }
 
 function itemName(item: ICItemT) {
-	return item.Description?.trim() || item.ItemNumber?.trim() || item.UnformattedItemNumber?.trim() || "Unnamed Sage item"
+	return item.Description?.trim() || item.ItemNumber?.trim() || item.UnformattedItemNumber?.trim() || "Unnamed item"
 }
 
 function itemDescription(item: ICItemT) {
@@ -62,7 +62,7 @@ function itemDescription(item: ICItemT) {
 		.map(comment => comment?.trim())
 		.filter((comment): comment is string => Boolean(comment))
 
-	return comments.join(" ") || item.Description?.trim() || "Sage 300 inventory item"
+	return comments.join(" ") || item.Description?.trim() || "Catalog item"
 }
 
 function stockStatus(item: ICItemT): ProductListItem["stockStatus"] {

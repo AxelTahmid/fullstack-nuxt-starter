@@ -38,10 +38,10 @@ const itemSourceKey = computed(() => item.value?.UnformattedItemNumber || item.v
 const comments = computed(() => [item.value?.Comment1, item.value?.Comment2, item.value?.Comment3, item.value?.Comment4]
 	.map(comment => comment?.trim())
 	.filter((comment): comment is string => Boolean(comment)))
-const itemName = computed(() => item.value?.Description?.trim() || item.value?.ItemNumber?.trim() || itemSourceKey.value || "Unnamed Sage item")
-const itemDescription = computed(() => comments.value.join(" ") || item.value?.Description?.trim() || "No product description was returned by Sage.")
+const itemName = computed(() => item.value?.Description?.trim() || item.value?.ItemNumber?.trim() || itemSourceKey.value || "Unnamed item")
+const itemDescription = computed(() => comments.value.join(" ") || item.value?.Description?.trim() || "No product description is available.")
 const itemCategory = computed(() => item.value?.Category?.trim() || "Uncategorized")
-const itemManufacturer = computed(() => item.value?.PreferredVendor?.trim() || "Sage 300")
+const itemManufacturer = computed(() => item.value?.PreferredVendor?.trim() || "Manufacturer unavailable")
 const itemStockStatus = computed<StockStatus>(() => {
 	const sageItem = item.value
 	if (!sageItem || sageItem.Sellable === false || sageItem.Status === false) {
@@ -69,7 +69,7 @@ const unitOfMeasure = computed(() => pricing.value?.SaleUnitOfMeasure
 	|| item.value?.StockingUnitOfMeasure
 	|| "unit")
 const pricingUnavailableReason = computed(() => data.value?.pricingUnavailableReason
-	|| (pricing.value && unitPrice.value === null ? "Sage pricing exists, but no unit price was returned." : null))
+	|| (pricing.value && unitPrice.value === null ? "Pricing exists, but no unit price was returned." : null))
 const isInCart = computed(() => cart.summary.value.lines.some(line => line.sku === itemSourceKey.value))
 
 useHead({
@@ -107,7 +107,7 @@ function formatDate(value: Date | string | null | undefined) {
 	}).format(date)
 }
 
-function formatSagePrice(value: number | null | undefined) {
+function formatCatalogPrice(value: number | null | undefined) {
 	if (typeof value !== "number") {
 		return "-"
 	}
@@ -126,9 +126,9 @@ const inventoryRows = computed(() => [
 	{ label: "Weight UOM", value: valueOrDash(item.value?.WeightUnitOfMeasure) },
 ])
 
-const sageRows = computed(() => [
+const detailRows = computed(() => [
 	{ label: "Item number", value: valueOrDash(item.value?.ItemNumber || itemSourceKey.value) },
-	{ label: "Sage key", value: valueOrDash(itemSourceKey.value) },
+	{ label: "Product key", value: valueOrDash(itemSourceKey.value) },
 	{ label: "Account set", value: valueOrDash(item.value?.AccountSetCode) },
 	{ label: "Default price list", value: valueOrDash(item.value?.DefaultPriceListCode) },
 	{ label: "Vendor item", value: valueOrDash(item.value?.PreferredVendorItem) },
@@ -244,7 +244,7 @@ async function addToCart() {
 			<AlertTitle>Unable to load product</AlertTitle>
 
 			<AlertDescription>
-				Sage did not return the requested product detail.
+				We could not load the requested product detail.
 			</AlertDescription>
 		</Alert>
 
@@ -277,7 +277,7 @@ async function addToCart() {
 								class="space-y-2"
 							>
 								<p class="text-sm font-medium">
-									Sage comments
+									Product notes
 								</p>
 
 								<ul class="space-y-1 text-sm text-muted-foreground">
@@ -318,13 +318,13 @@ async function addToCart() {
 
 					<Card>
 						<CardHeader>
-							<CardTitle>Sage details</CardTitle>
+							<CardTitle>Product details</CardTitle>
 						</CardHeader>
 
 						<CardContent>
 							<dl class="grid gap-3 sm:grid-cols-2">
 								<div
-									v-for="row in sageRows"
+									v-for="row in detailRows"
 									:key="row.label"
 									class="rounded-md border p-3"
 								>
@@ -349,14 +349,14 @@ async function addToCart() {
 					<CardContent class="space-y-5">
 						<div>
 							<p class="text-sm text-muted-foreground">
-								Current Sage price
+								Current price
 							</p>
 
 							<p
 								v-if="unitPrice !== null"
 								class="mt-1 text-3xl font-semibold tracking-tight"
 							>
-								{{ formatSagePrice(unitPrice) }}
+								{{ formatCatalogPrice(unitPrice) }}
 							</p>
 
 							<p
@@ -408,7 +408,7 @@ async function addToCart() {
 								</dt>
 
 								<dd class="font-medium">
-									{{ formatSagePrice(pricing?.BasePrice) }}
+									{{ formatCatalogPrice(pricing?.BasePrice) }}
 								</dd>
 							</div>
 
@@ -418,7 +418,7 @@ async function addToCart() {
 								</dt>
 
 								<dd class="font-medium">
-									{{ formatSagePrice(pricing?.SalePrice) }}
+									{{ formatCatalogPrice(pricing?.SalePrice) }}
 								</dd>
 							</div>
 
