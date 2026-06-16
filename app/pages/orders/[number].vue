@@ -56,11 +56,11 @@ const carrierLabels: Record<string, string> = {
 <template>
 	<div class="space-y-8">
 		<NuxtLink
-			to="/dashboard"
+			to="/orders"
 			class="text-muted-foreground hover:text-primary inline-flex items-center gap-2 text-[0.68rem] font-bold tracking-[0.16em] uppercase transition-colors"
 		>
 			<ArrowLeft class="size-3.5" />
-			Back to Dashboard
+			Back to orders
 		</NuxtLink>
 
 		<div
