@@ -1908,6 +1908,1062 @@ export type OEInvoiceKittingDetailLotNumberT = {
 	}
 }
 
+export type OEOrderListResponseT = {
+	"@odata.context"?: string
+	"value"?: Array<OEOrderT>
+}
+
+export type OEOrderT = {
+	OrderUniquifier?: number
+	OrderNumber?: string
+	CustomerNumber?: string
+	CustomerGroupCode?: string
+	BillToName?: string
+	BillToAddressLine1?: string
+	BillToAddressLine2?: string
+	BillToAddressLine3?: string
+	BillToAddressLine4?: string
+	BillToCity?: string
+	BillToStateProvince?: string
+	BillToZipPostalCode?: string
+	BillToCountry?: string
+	BillToPhoneNumber?: string
+	BillToFaxNumber?: string
+	BillToContact?: string
+	ShipToLocationCode?: string
+	ShipToName?: string
+	ShipToAddressLine1?: string
+	ShipToAddressLine2?: string
+	ShipToAddressLine3?: string
+	ShipToAddressLine4?: string
+	ShipToCity?: string
+	ShipToStateProvince?: string
+	ShipToZipPostalCode?: string
+	ShipToCountry?: string
+	ShipToPhoneNumber?: string
+	ShipToFaxNumber?: string
+	ShipToContact?: string
+	CustomerDiscountLevel?: "Base" | "A" | "B" | "C" | "D" | "E"
+	DefaultPriceListCode?: string
+	PurchaseOrderNumber?: string
+	Territory?: string
+	TermsCode?: string
+	TotalTermsAmountDue?: number
+	DiscountAvailable?: number
+	TermsRateOverride?: boolean
+	OrderReference?: string
+	OrderType?: "Active" | "Future" | "Standing" | "Quote"
+	OrderDate?: Date
+	ExpectedShipDate?: Date
+	QuoteExpirationDate?: Date
+	OrderFiscalYear?: string
+	OrderFiscalPeriod?: "Num1" | "Num2" | "Num3" | "Num4" | "Num5" | "Num6" | "Num7" | "Num8" | "Num9" | "Num10" | "Num11" | "Num12"
+	ShipViaCode?: string
+	ShipViaCodeDescription?: string
+	LastInvoiceNumber?: string
+	NumberOfInvoices?: number
+	FreeOnBoardPoint?: string
+	TemplateCode?: string
+	DefaultLocationCode?: string
+	OnHold?: boolean
+	OrderDescription?: string
+	OrderComment?: string
+	OrderPrintStatus?: "None" | "Quoteprinted" | "Pickingslipprinted" | "Internet" | "ElectronicCommerce"
+	LastPostingDate?: Date
+	OrderNumberOfPrepayments?: number
+	OverCreditLimit?: boolean
+	ApprovedLimit?: number
+	AuthorizingUserID?: string
+	RequiresShippingLabels?: boolean
+	ShippingLabelsPrinted?: boolean
+	OrderHomeCurrency?: string
+	OrderRateType?: string
+	OrderSourceCurrency?: string
+	OrderRateDate?: Date
+	OrderRate?: number
+	OrderSpread?: number
+	OrderRateDateMatching?: number
+	OrderRateOperator?: number
+	OrderRateOverrideFlag?: boolean
+	TotalAmountItems?: number
+	TotalAmountMiscellaneousCharges?: number
+	NumberOfLinesOnOrder?: number
+	NumberOfLabels?: number
+	PrevPaymentsTotal?: number
+	PrevPaymentDiscTotal?: number
+	Salesperson1?: string
+	Salesperson2?: string
+	Salesperson3?: string
+	Salesperson4?: string
+	Salesperson5?: string
+	SalesPercentage1?: number
+	SalesPercentage2?: number
+	SalesPercentage3?: number
+	SalesPercentage4?: number
+	SalesPercentage5?: number
+	RecalculateTax?: boolean
+	TaxOverridden?: boolean
+	TaxGroup?: string
+	TaxAuthority1?: string
+	TaxAuthority2?: string
+	TaxAuthority3?: string
+	TaxAuthority4?: string
+	TaxAuthority5?: string
+	TaxClass1?: number
+	TaxClass2?: number
+	TaxClass3?: number
+	TaxClass4?: number
+	TaxClass5?: number
+	TaxBase1?: number
+	TaxBase2?: number
+	TaxBase3?: number
+	TaxBase4?: number
+	TaxBase5?: number
+	ExcludedTaxAmount1?: number
+	ExcludedTaxAmount2?: number
+	ExcludedTaxAmount3?: number
+	ExcludedTaxAmount4?: number
+	ExcludedTaxAmount5?: number
+	IncludedTaxAmount1?: number
+	IncludedTaxAmount2?: number
+	IncludedTaxAmount3?: number
+	IncludedTaxAmount4?: number
+	IncludedTaxAmount5?: number
+	Registration1?: string
+	Registration2?: string
+	Registration3?: string
+	Registration4?: string
+	Registration5?: string
+	OrderCompleted?: "IncompleteNotIncluded" | "IncompleteIncluded" | "CompleteNotIncluded" | "CompleteIncluded" | "CompleteDayEnd"
+	OrderCompletionDate?: Date
+	InvoiceNumber?: string
+	ShipmentDate?: Date
+	InvoiceDate?: Date
+	InvoiceFiscalYear?: string
+	InvoiceFiscalPeriod?: "Num1" | "Num2" | "Num3" | "Num4" | "Num5" | "Num6" | "Num7" | "Num8" | "Num9" | "Num10" | "Num11" | "Num12"
+	NumberOfTermsPayments?: number
+	TermsPaymentsAsOfDate?: Date
+	OrderTotalEstWeight?: number
+	NextDetailNumber?: number
+	PostInvoice?: boolean
+	InvoiceDiscMiscellaneousCharges?: boolean
+	InvoiceNumberOfPrepayments?: number
+	NumberLinesQuantityShipped?: number
+	NumberMiscellaneousChargesLines?: number
+	OrderTotalBeforeTax?: number
+	OrderInclTaxTotal?: number
+	OrderItemTotalAmount?: number
+	OrderDiscountBase?: number
+	OrderDiscountPercentage?: number
+	OrderDiscountAmount?: number
+	OrderTotalMiscellaneousCharges?: number
+	OrderSubtotalAmount?: number
+	OrderTotalWithInvoiceDisc?: number
+	OrderExclTaxTotal?: number
+	OrderTotal?: number
+	OrderAmountDue?: number
+	INHOMECURR?: string
+	INRATETYPE?: string
+	INSOURCURR?: string
+	INRATEDATE?: Date
+	INRATE?: number
+	INSPREAD?: number
+	INDATEMTCH?: number
+	INRATEREP?: number
+	INRATEOVER?: boolean
+	ReceiptBatchNumber?: number
+	BankCode?: string
+	ReceiptType?: string
+	CheckDate?: Date
+	CheckFiscalYear?: string
+	CheckFiscalPeriod?: "Num1" | "Num2" | "Num3" | "Num4" | "Num5" | "Num6" | "Num7" | "Num8" | "Num9" | "Num10" | "Num11" | "Num12"
+	CheckNumber?: string
+	PaymentAppliedTo?: "InvoiceNumber" | "OrderNumber" | "ShipmentNumber"
+	PaymentInCustomerCurrency?: number
+	InvoiceTotalTermsDisc?: number
+	PaymentInBankCurrency?: number
+	PaymentHomeCurrency?: string
+	PaymentRateType?: string
+	PaymentSourceCurrency?: string
+	PaymentRateDate?: Date
+	PaymentRate?: number
+	PaymentSpread?: number
+	PaymentRateDateMatching?: number
+	PaymentRateOperator?: number
+	PriceListCodeDescription?: string
+	TermsCodeDescription?: string
+	TaxGroupCodeDescription?: string
+	LocationCodeDescription?: string
+	SalespersonName1?: string
+	SalespersonName2?: string
+	SalespersonName3?: string
+	SalespersonName4?: string
+	SalespersonName5?: string
+	TaxAuthority1Description?: string
+	TaxAuthority2Description?: string
+	TaxAuthority3Description?: string
+	TaxAuthority4Description?: string
+	TaxAuthority5Description?: string
+	TaxClass1Description?: string
+	TaxClass2Description?: string
+	TaxClass3Description?: string
+	TaxClass4Description?: string
+	TaxClass5Description?: string
+	OrderSourceCurrencyDescription?: string
+	OrderHomeCurrencyDescription?: string
+	OrderRateTypeDescription?: string
+	InvoiceSourceCurrencyDescription?: string
+	InvoiceHomeCurrencyDescription?: string
+	InvoiceRateTypeDescription?: string
+	PaymentSourceCurrencyDescription?: string
+	PaymentHomeCurrencyDescription?: string
+	PaymentRateTypeDescription?: string
+	TotalTaxAmount1?: number
+	TotalTaxAmount2?: number
+	TotalTaxAmount3?: number
+	TotalTaxAmount4?: number
+	TotalTaxAmount5?: number
+	TotalTaxAmount?: number
+	AuthorizingUserPassword?: string
+	OrderRunningTotal?: number
+	OrderTotalPayment?: number
+	OrderTotalPaymentDisc?: number
+	AmountDueLessCurrencyPrepayment?: number
+	PerformTaxCalculation?: boolean
+	PerformCreditLimitCheck?: boolean
+	OrderSource?: "Entered" | "Internet" | "ElectronicCommerce" | "ePOS"
+	PerformShipAll?: boolean
+	DOSConversionInProgress?: boolean
+	PerformForcedTaxCalculation?: boolean
+	PerformManualTaxDistribution?: boolean
+	TaxCalculationInProgress?: boolean
+	AutoTaxCalculationStatus?: boolean
+	OriginatingQuoteNumber?: string
+	DisplayRateWarning?: boolean
+	CustomerExists?: boolean
+	InvoiceWillBeProduced?: boolean
+	SecurityEnabled?: boolean
+	UserCanApproveCreditLift?: boolean
+	RecalcMultiPaymentDates?: boolean
+	BillToEmail?: string
+	BillToContactPhone?: string
+	BillToContactFax?: string
+	BillToContactEmail?: string
+	ShipToEmail?: string
+	ShipToContactPhone?: string
+	ShipToContactFax?: string
+	ShipToContactEmail?: string
+	Allowpartialshipments?: "No" | "Yes"
+	MultipleQuotes?: boolean
+	NumberOfQuotes?: number
+	PerformMultipleQuotesToOrder?: boolean
+	LastShipmentNumber?: string
+	NumberOfShipments?: number
+	ShipmentTrackingNumber?: string
+	PostSequenceNumber?: bigint
+	ShipmentUniquifier?: number
+	ShipmentNumber?: string
+	SHIDATE?: Date
+	ShipmentHomeCurrency?: string
+	ShipmentRateType?: string
+	ShipmentSourceCurrency?: string
+	ShipmentRateDate?: Date
+	ShipmentRate?: number
+	ShipmentSpread?: number
+	ShipmentDateMatch?: number
+	ShipmentRateOperator?: number
+	ShipmentRateOverrideFlag?: boolean
+	ShipmentSourceCurrencyDescription?: string
+	ShipmentHomeCurrencyDescription?: string
+	ShipmentRateTypeDescription?: string
+	OrderPartiallyShipped?: boolean
+	ShipmentTotal?: number
+	NumberOfOptionalFields?: bigint
+	PredecessorUniquifier?: number
+	PredecessorNumber?: string
+	ProcessOIPCommand?: "NothingToProcess" | "InsertOptionalFields" | "DefaultAndTranferOptionalFields" | "DefaultOptionalFieldsDuringRecordGeneration" | "RemoveOptionalFields" | "TransferOptionalFieldsFromStandingDocument" | "AutogenerateSerials" | "AutogenerateLots" | "AutoallocateSerials" | "AutoallocateLots" | "ClearSerials" | "ClearLots" | "AutoassignSerials" | "AutoassignLots" | "CreateListOfExistingSerialsLots" | "PostSerialsLotsToICInventory" | "VerifySerialsLots"
+	ProcessOECommand?: "NoAction" | "CalculateTax" | "ForceCalculateTax" | "DistributeManualTax" | "CheckCustomerCreditLimit" | "PreCheckCustomerCreditLimit" | "ValidateCreditCheckApprovalAuthority" | "ValidateCreditPreCheckApprovalAuthority" | "ShipAll" | "RecalculatePaymentScheduleDates" | "CheckPartialShipment" | "CreateOrderFromQuotes" | "DeriveTaxReportingRate" | "CalculateShipmentAmountDue" | "CheckJobRelatedQuoteDetails" | "ValidateJobRelatedPrepayment" | "DistributePrepaymentToJobDetails" | "CreateSageCRMAddress" | "SetlockForCreditCardTransaction" | "FindIncompleteShipmentForaGivenOrder" | "SetlockForeditingadocumentthathasbeenpreauthorized" | "ConfirmWebCreditApproval" | "ConfirmWebCreditPreCheckApproval" | "Preauthorize" | "PreAuthorizeCNA2Part1" | "PreAuthorizeCNA2Part2"
+	UserEnteredApprovalAmount?: number
+	CheckingCustomerCreditLimit?: boolean
+	CheckingCustomerAgingLimit?: boolean
+	CheckingNatAccountCreditLimit?: boolean
+	CheckingNatAccountAgingLimit?: boolean
+	CustomerIsOverCreditLimit?: boolean
+	CustomerIsOverAgingLimit?: boolean
+	NatAccountIsOverCreditLimit?: boolean
+	NatAccountIsOverAgingLimit?: boolean
+	CustomerCreditLimit?: number
+	CustomerBalancePosted?: number
+	CustomerDaysOverdue?: number
+	CustomerOverdueLimit?: number
+	CustomerBalanceOverdue?: number
+	NatAccountCreditLimit?: number
+	NatAccountBalance?: number
+	NatAccountDaysOverdue?: number
+	NatAccountOverdueLimit?: number
+	NatAccountBalanceOverdue?: number
+	ARPendingTransactionIncluded?: boolean
+	OEPendingTransactionIncluded?: boolean
+	OtherPendingTransactionIncluded?: boolean
+	ARPendingBalance?: number
+	OEPendingBalance?: number
+	OtherPendingBalance?: number
+	CustomerTotalOutstanding?: number
+	NatAccountTotalOutstanding?: number
+	CustomerLimitLeft?: number
+	NatAccountLimitLeft?: number
+	CustomerLimitExceeded?: number
+	NatAccountLimitExceeded?: number
+	LastInvoiceAmount?: number
+	LastInvoiceDate?: Date
+	LastPaymentAmount?: number
+	LastPaymentDate?: Date
+	DrivenbyUI?: boolean
+	ItemDetailDiscountTotal?: number
+	MiscellaneousChargeDetailDiscountTot?: number
+	DetailDiscountTotal?: number
+	DetailDiscountPercentage?: number
+	DocumentNetOfDetailDisc?: number
+	AutoCalculationTaxReportingAmounts?: number
+	TaxReportingTRCurrency?: string
+	TRRateType?: string
+	TRRateDate?: Date
+	TRRate?: number
+	TRSpread?: number
+	TRRateDateMatching?: number
+	TRRateOperator?: number
+	TRRateOverrideFlag?: boolean
+	TRExcludedTaxAmount1?: number
+	TRExcludedTaxAmount2?: number
+	TRExcludedTaxAmount3?: number
+	TRExcludedTaxAmount4?: number
+	TRExcludedTaxAmount5?: number
+	TRIncludedTaxAmount1?: number
+	TRIncludedTaxAmount2?: number
+	TRIncludedTaxAmount3?: number
+	TRIncludedTaxAmount4?: number
+	TRIncludedTaxAmount5?: number
+	TRTaxAmount1?: number
+	TRTaxAmount2?: number
+	TRTaxAmount3?: number
+	TRTaxAmount4?: number
+	TRTaxAmount5?: number
+	TRExcludedTaxTotal?: number
+	TRIncludedTaxTotal?: number
+	TRTaxTotal?: number
+	TaxReportingShipmentTRCurr?: string
+	TRShipmentRateType?: string
+	TRShipmentRateDate?: Date
+	TRShipmentRate?: number
+	TRShipmentSpread?: number
+	TRShipmentRateDateMatching?: number
+	TRShipmentRateOperator?: number
+	TRShipmentRateOverrideFlag?: boolean
+	TaxReportingInvoiceTRCurre?: string
+	TRInvoiceRateType?: string
+	TRInvoiceRateDate?: Date
+	TRInvoiceRate?: number
+	TRInvoiceSpread?: number
+	TRInvoiceRateDateMatching?: number
+	TRInvoiceRateOperator?: number
+	TRInvoiceRateOverrideFlag?: boolean
+	TRCurrencyDescription?: string
+	TRShipmentCurrencyDescription?: string
+	TRInvoiceCurrencyDescription?: string
+	TRRateTypeDescription?: string
+	TRShipmentRateTypeDescriptio?: string
+	TRInvoiceRateTypeDescription?: string
+	PaymentType?: "None" | "Cash" | "Check" | "CreditCard" | "Other" | "SPSCreditCard"
+	PendingPrepaymentAmount?: number
+	OrderDiscountAmountOverride?: boolean
+	JobRelated?: boolean
+	JobRelatedDetailLines?: bigint
+	ProjectInvoicing?: boolean
+	InvoiceableDetailLines?: bigint
+	HasRetainage?: boolean
+	RetainageTerms?: string
+	RetainageExchangeRate?: "UseOriginalDocumentExchangeRate" | "UseCurrentExchangeRate"
+	RetainageTermsDescription?: string
+	CustomerAccountSet?: string
+	CustomerAccountSetDescription?: string
+	EnteredBy?: string
+	ePOSSegmentLength?: number
+	ShipmentPostingDate?: Date
+	InvoicePostingDate?: Date
+	PrepaymentDistributedAmount?: number
+	PrepaymentUnappliedAmount?: number
+	SageCRMCompanyID?: bigint
+	SageCRMOpportunityID?: bigint
+	SageCRMPersonID?: bigint
+	IncludeInCRMOpportunityTotal?: boolean
+	QuoteExpired?: boolean
+	OrderUniqActivatedFromQuote?: number
+	OrderNumberActivatedFromQuot?: string
+	PromotedCustomerNumber?: string
+	PaymentTypeOnOrder?: "None" | "Cash" | "Check" | "CreditCard" | "Other" | "SPSCreditCard"
+	PaymentCodeOnOrder?: string
+	PaymentCardID?: string
+	OrderHasPreAuthorization?: boolean
+	OnholdReason?: string
+	IncompleteShipExistForOrder?: boolean
+	DateRequested?: Date
+	TransactionID?: string
+	XMLString?: string
+	ResponseIndicator?: string
+	ResponseCode?: string
+	ResponseMessage?: string
+	AuthorizationCode?: string
+	AVSResult?: string
+	CVVResult?: string
+	TransactionDate?: string
+	VANReference?: string
+	Last4?: string
+	PaymentDescription?: string
+	PaymentTypeID?: string
+	OrderDetails?: Array<OEOrderDetailT>
+	OrderCommentsInstructions?: Array<OEOrderCommentsInstructionT>
+	OrderPaymentSchedules?: Array<OEOrderPaymentScheduleT>
+	OrderFromQuotes?: Array<OEOrderFromQuoteT>
+	OrderOptionalFields?: Array<OEOrderOptionalFieldT>
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+}
+
+export type OEOrderDetailT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	LineType?: "Item" | "Miscellaneous"
+	Item?: string
+	MiscellaneousChargesCode?: string
+	Description?: string
+	ItemAccountSet?: string
+	UserSpecifiedCostingMethod?: boolean
+	PriceList?: string
+	Category?: string
+	Location?: string
+	PickingSequence?: string
+	ExpectedShipmentDate?: Date
+	StockItem?: boolean
+	QuantityOrdered?: number
+	QuantityShipped?: number
+	QuantityBackordered?: number
+	QuantityShippedtodate?: number
+	OriginalQuantityOrdered?: number
+	POQuantityOrdered?: number
+	OrderUnitOfMeasure?: string
+	OrderUnitConversion?: number
+	OrderUnitPrice?: number
+	PriceOverride?: boolean
+	OrderUnitCost?: number
+	MostRecentUnitCost?: number
+	StandardUnitCost?: number
+	AlternateUnitCost1?: number
+	AlternateUnitCost2?: number
+	UnitPriceNumberOfDecimals?: number
+	PricingUnitOfMeasure?: string
+	PricingUnitPrice?: number
+	PricingUnitConversion?: number
+	PriceDiscountPercentage?: number
+	PriceDiscountAmount?: number
+	PricingBaseUnit?: string
+	PricingBaseUnitPrice?: number
+	PricingBaseUnitConversion?: number
+	CostingUnitOfMeasure?: string
+	CostingUnitCost?: number
+	CostingUnitConversion?: number
+	ExtendedOrderAmount?: number
+	ExtendedOrderCost?: number
+	ExtendedAmount?: number
+	OrderDiscountAmount?: number
+	ExtendedDetailCost?: number
+	ExtendedShippedAmountOverride?: boolean
+	UnitWeight?: number
+	ExtendedWeight?: number
+	DetailCompleted?: "Notcompleted" | "CompletedNotInDatabase" | "Completed" | "Processedbydayend"
+	RecognizedInItemLocation?: boolean
+	LostSalesAmount?: number
+	TaxAuthority1?: string
+	TaxAuthority2?: string
+	TaxAuthority3?: string
+	TaxAuthority4?: string
+	TaxAuthority5?: string
+	TaxClass1?: number
+	TaxClass2?: number
+	TaxClass3?: number
+	TaxClass4?: number
+	TaxClass5?: number
+	TaxIncluded1?: boolean
+	TaxIncluded2?: boolean
+	TaxIncluded3?: boolean
+	TaxIncluded4?: boolean
+	TaxIncluded5?: boolean
+	TaxBase1?: number
+	TaxBase2?: number
+	TaxBase3?: number
+	TaxBase4?: number
+	TaxBase5?: number
+	TaxAmount1?: number
+	TaxAmount2?: number
+	TaxAmount3?: number
+	TaxAmount4?: number
+	TaxAmount5?: number
+	TaxRate1?: number
+	TaxRate2?: number
+	TaxRate3?: number
+	TaxRate4?: number
+	TaxRate5?: number
+	DetailNumber?: number
+	UseCommentsInstructions?: boolean
+	TotalOrderMostRecentCost?: number
+	TotalOrderStandardCost?: number
+	TotalOrderCost1?: number
+	TotalOrderCost2?: number
+	TotalInvoiceMostRecentCost?: number
+	TotalInvoiceStandardCost?: number
+	TotalInvoiceCost1?: number
+	TotalInvoiceCost2?: number
+	PriceListDescription?: string
+	CategoryDescription?: string
+	LocationDescription?: string
+	TaxAuthority1Description?: string
+	TaxAuthority2Description?: string
+	TaxAuthority3Description?: string
+	TaxAuthority4Description?: string
+	TaxAuthority5Description?: string
+	TaxClass1Description?: string
+	TaxClass2Description?: string
+	TaxClass3Description?: string
+	TaxClass4Description?: string
+	TaxClass5Description?: string
+	DrivenbyUI?: boolean
+	FoundNegativeInventory?: boolean
+	NonstockClearingAccount?: string
+	NonstockClearingAccountDescription?: string
+	InterprocessCommID?: bigint
+	ForcePopupSNOnQuantityOrdered?: boolean
+	ForcePopupSNOnQuantityShipped?: boolean
+	PopupSN?: "No" | "Yes"
+	CloseSN?: boolean
+	LTSetID?: bigint
+	ForcePopupLTOnQuantityOrdered?: boolean
+	ForcePopupLTOnQuantityShipped?: boolean
+	PopupLT?: "No" | "Yes"
+	CloseLT?: boolean
+	AverageUnitCost?: number
+	LastUnitCost?: number
+	TotalOrderAverageCost?: number
+	TotalOrderLastCost?: number
+	TotalInvoiceAverageCost?: number
+	TotalInvoiceLastCost?: number
+	CopyThisDetailLine?: boolean
+	QuoteNumber?: string
+	QuoteDetailLineNumber?: number
+	ShipmentTrackingNumber?: string
+	ShipViaCode?: string
+	ShipViaCodeDescription?: string
+	DiscountPercent?: number
+	ExtendedDiscountedPrice?: number
+	QuantityCommitted?: number
+	ManufacturersItemNumber?: string
+	CustomerItemNumber?: string
+	TrueQuantityCommitted?: number
+	ItemSerialized?: boolean
+	UnformattedItemNumber?: string
+	NumberOfOptionalFields?: bigint
+	KittingBOM?: "None" | "Kitting" | "BOM"
+	KitBOMNumber?: string
+	BOMBuildQuantity?: number
+	BOMBuildUnit?: string
+	BOMBuildUnitConversion?: number
+	PredecessorNumber?: string
+	PredecessorUniquifier?: number
+	PredecessorLineNumber?: number
+	ProcessCommand?: "NothingToProcess" | "InsertOptionalFields" | "DefaultAndTranferOptionalFields" | "DefaultOptionalFieldsDuringRecordGeneration" | "RemoveOptionalFields" | "TransferOptionalFieldsFromStandingDocument" | "AutogenerateSerials" | "AutogenerateLots" | "AutoallocateSerials" | "AutoallocateLots" | "ClearSerials" | "ClearLots" | "AutoassignSerials" | "AutoassignLots" | "CreateListOfExistingSerialsLots" | "PostSerialsLotsToICInventory" | "VerifySerialsLots"
+	NextComponentNumber?: bigint
+	ePOSPromotionID?: number
+	ShipmentUniquifier?: number
+	PricingBaseWeightUnit?: string
+	OrderWeightUOM?: string
+	OrderWeightConversionFactor?: number
+	PricingWeightUOM?: string
+	PricingWeightConversionFactor?: number
+	PricingBaseWeightConvFactor?: number
+	DefWeightUOMUnitWeight?: number
+	DefWeightUOMExtUnitWeight?: number
+	PriceBy?: "Quantity" | "Weight"
+	PriceCheckPending?: boolean
+	PriceApprovedBy?: string
+	ApprovingUsersPassword?: string
+	PriceApprovalNeeded?: boolean
+	WeightUOMDescription?: string
+	HeaderDiscount?: number
+	TRTaxAmount1?: number
+	TRTaxAmount2?: number
+	TRTaxAmount3?: number
+	TRTaxAmount4?: number
+	TRTaxAmount5?: number
+	ExtendedAmountNetOfTax?: number
+	DiscountedExtendedAmount?: number
+	TaxTotal?: number
+	TRTaxTotal?: number
+	PickingSlipPrinted?: boolean
+	JobRelated?: boolean
+	ContractCode?: string
+	ProjectCode?: string
+	CategoryCode?: string
+	CostClass?: "None" | "Labor" | "Material" | "Equipment" | "Subcontractor" | "Overhead" | "Miscellaneous"
+	ProjectStyle?: "None" | "Standard" | "Basic"
+	ProjectType?: "None" | "TimeAndMaterials" | "FixedPrice" | "CostPlus"
+	AccountingMethod?: "None" | "CompletedProject" | "TotalCostPercentageComplete" | "LaborHoursPercentageComplete" | "BillingsAndCosts" | "ProjectPercentageComplete" | "CategoryPercentageComplete" | "CompletedContract" | "AccrualBasis"
+	BillingType?: "None" | "Nonbillable" | "Billable" | "NoCharge"
+	RevenueBillingAccount?: string
+	COGSWIPAccount?: string
+	RetainagePercent?: number
+	RetainageDays?: number
+	DefaultOEPrice?: "None" | "BillingRate" | "UseCustomerPriceList" | "UseSpecifiedPriceList"
+	ARItemNumber?: string
+	ARItemUnit?: string
+	Level1Name?: string
+	Level2Name?: string
+	Level3Name?: string
+	UnformattedContractCode?: string
+	PrepaymentDistributed?: number
+	ExtPriceNetOfDiscIncludeTax?: number
+	SerialQuantity?: bigint
+	LotQuantity?: number
+	SerialQuantityShipped?: bigint
+	LotQuantityShipped?: number
+	SerialLotQuantityToProcess?: number
+	NumberOfLotsToGenerate?: number
+	QuantityperLot?: number
+	AllocateFromSerial?: string
+	AllocateFromLot?: string
+	ItemSerializedLotted?: "None" | "Serialized" | "Lotted" | "Both"
+	SerialLotWindowHandle?: bigint
+	UseSimplePriceChecking?: number
+	DateRequested?: Date
+	NoninteractivePriceApproval?: boolean
+	OrderDetailOptionalFields?: Array<OEOrderDetailOptionalFieldT>
+	OrderBOMDetails?: Array<OEOrderBOMDetailT>
+	OrderKittingDetails?: Array<OEOrderKittingDetailT>
+	OrderDetailSerialNumbers?: Array<OEOrderDetailSerialNumberT>
+	OrderDetailLotNumbers?: Array<OEOrderDetailLotNumberT>
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderCommentsInstructionT = {
+	OrderUniquifier?: number
+	Uniquifier?: number
+	DetailNumber?: number
+	CommentsInstructionsType?: "Comment" | "Instruction"
+	CommentsInstructions?: string
+	Invoiced?: boolean
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderPaymentScheduleT = {
+	OrderUniquifier?: number
+	PaymentNumber?: number
+	DiscountBase?: number
+	DiscountDate?: Date
+	DiscountPercentage?: number
+	DiscountAmount?: number
+	AmountDueBase?: number
+	DueDate?: Date
+	PercentageDue?: number
+	AmountDue?: number
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderFromQuoteT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	QuoteUniquifier?: number
+	QuoteNumber?: string
+	DocumentDate?: Date
+	Description?: string
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderOptionalFieldT = {
+	OrderUniquifier?: number
+	OptionalField?: string
+	Value?: string
+	OrderOptionalFieldType?: "Text" | "Amount" | "Number" | "Integer" | "YesNo" | "Date" | "Time"
+	Length?: number
+	Decimals?: number
+	AllowBlank?: boolean
+	Validate?: boolean
+	ValueSet?: "No" | "Yes" | "NotApplicable"
+	TypedValueFieldIndex?: bigint
+	TextValue?: string
+	AmountValue?: number
+	NumberValue?: number
+	IntegerValue?: bigint
+	YesNoValue?: boolean
+	DateValue?: Date
+	TimeValue?: Date
+	OptionalFieldDescription?: string
+	ValueDescription?: string
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderDetailOptionalFieldT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	OptionalField?: string
+	Value?: string
+	OrderDetailOptionalFieldType?: "Text" | "Amount" | "Number" | "Integer" | "YesNo" | "Date" | "Time"
+	Length?: number
+	Decimals?: number
+	AllowBlank?: boolean
+	Validate?: boolean
+	ValueSet?: "No" | "Yes" | "NotApplicable"
+	TypedValueFieldIndex?: bigint
+	TextValue?: string
+	AmountValue?: number
+	NumberValue?: number
+	IntegerValue?: bigint
+	YesNoValue?: boolean
+	DateValue?: Date
+	TimeValue?: Date
+	OptionalFieldDescription?: string
+	ValueDescription?: string
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderBOMDetailT = {
+	OrderUniquifier?: number
+	DetailLineNumber?: number
+	ParentComponentNumber?: bigint
+	ComponentNumber?: bigint
+	ComponentItemNumber?: string
+	Description?: string
+	ComponentQuantity?: number
+	UnitOfMeasure?: string
+	QuantityOrdered?: number
+	QuantityShipped?: number
+	ComponentsBOMNumber?: string
+	ComponentsBOMBuildQuantity?: number
+	ComponentsBOMBuildUnit?: string
+	ComponentsBOMBuildUnitConv?: number
+	UnitConversion?: number
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderKittingDetailT = {
+	OrderUniquifier?: number
+	DetailLineNumber?: number
+	ParentComponentNumber?: bigint
+	ComponentNumber?: bigint
+	DetailNumber?: number
+	ComponentItem?: string
+	Description?: string
+	ItemAccountSet?: string
+	UserSpecifiedCostingMethod?: boolean
+	Location?: string
+	PickingSequence?: string
+	StockItem?: boolean
+	KittingQuantity?: number
+	ParentQuantityOrdered?: number
+	ParentQuantityShipped?: number
+	ParentUnitOfMeasure?: string
+	ParentUnitConversion?: number
+	QuantityOrdered?: number
+	QuantityShipped?: number
+	POQuantityOrdered?: number
+	OrderUnitOfMeasure?: string
+	OrderUnitConversion?: number
+	OrderUnitCost?: number
+	MostRecentUnitCost?: number
+	StandardUnitCost?: number
+	AlternateUnitCost1?: number
+	AlternateUnitCost2?: number
+	AverageUnitCost?: number
+	LastUnitCost?: number
+	CostingUnitOfMeasure?: string
+	CostingUnitCost?: number
+	CostingUnitConversion?: number
+	ExtendedOrderCost?: number
+	UnitWeight?: number
+	ExtendedWeight?: number
+	NonstockClearingAccount?: string
+	WeightUnitOfMeasure?: string
+	WeightConversionFactor?: number
+	ParentWeightConversionFactor?: number
+	ParentWeightUOMUnitWeight?: number
+	ParentWUOMExtendedUnitWeight?: number
+	KitNumber?: string
+	SerialQuantity?: bigint
+	LotQuantity?: number
+	SerialQuantityShipped?: bigint
+	LotQuantityShipped?: number
+	ItemSerializedLotted?: "None" | "Serialized" | "Lotted" | "Both"
+	ComponentUnitCost?: number
+	MostRecentComponentCost?: number
+	StandardComponentCost?: number
+	AlternateComponentCost1?: number
+	AlternateComponentCost2?: number
+	AverageComponentCost?: number
+	LastComponentCost?: number
+	NonstockClearingAccountDescription?: string
+	InterprocessCommID?: bigint
+	ForcePopupSNOnQuantityOrdered?: boolean
+	ForcePopupSNOnQuantityShipped?: boolean
+	PopupSN?: "No" | "Yes"
+	CloseSN?: boolean
+	LTSetID?: bigint
+	ForcePopupLTOnQuantityOrdered?: boolean
+	ForcePopupLTOnQuantityShipped?: boolean
+	PopupLT?: "No" | "Yes"
+	CloseLT?: boolean
+	ComponentSerialized?: boolean
+	UnformattedItemNumber?: string
+	ComponentLotted?: boolean
+	WeightUOMDescription?: string
+	ProcessCommand?: "NothingToProcess" | "InsertOptionalFields" | "DefaultAndTranferOptionalFields" | "DefaultOptionalFieldsDuringRecordGeneration" | "RemoveOptionalFields" | "TransferOptionalFieldsFromStandingDocument" | "AutogenerateSerials" | "AutogenerateLots" | "AutoallocateSerials" | "AutoallocateLots" | "ClearSerials" | "ClearLots" | "AutoassignSerials" | "AutoassignLots" | "CreateListOfExistingSerialsLots" | "PostSerialsLotsToICInventory" | "VerifySerialsLots"
+	SerialLotQuantityToProcess?: number
+	NumberOfLotsToGenerate?: number
+	QuantityperLot?: number
+	AllocateFromSerial?: string
+	AllocateFromLot?: string
+	SerialLotWindowHandle?: bigint
+	OrderKittingSerialNumbers?: Array<OEOrderKittingSerialNumberT>
+	OrderKittingDetailLotNumbers?: Array<OEOrderKittingDetailLotNumberT>
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderDetailSerialNumberT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	SerialNumber?: string
+	DetailNumber?: number
+	Shipped?: boolean
+	TransactionQuantity?: bigint
+	QuantityShipped?: bigint
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderDetailLotNumberT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	LotNumber?: string
+	DetailNumber?: number
+	ExpirationDate?: Date
+	QuantityInStockingUOM?: number
+	TransactionQuantity?: number
+	QtyShippedInStockingUOM?: number
+	QuantityShipped?: number
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderKittingSerialNumberT = {
+	OrderUniquifier?: number
+	DetailLineNumber?: number
+	ParentComponentNumber?: bigint
+	ComponentNumber?: bigint
+	SerialNumber?: string
+	DetailNumber?: number
+	Shipped?: boolean
+	TransactionQuantity?: bigint
+	QuantityShipped?: bigint
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
+export type OEOrderKittingDetailLotNumberT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	ParentComponentNumber?: bigint
+	ComponentNumber?: bigint
+	LotNumber?: string
+	DetailNumber?: number
+	ExpirationDate?: Date
+	QuantityInStockingUOM?: number
+	TransactionQuantity?: number
+	QtyShippedInStockingUOM?: number
+	QuantityShipped?: number
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectT
+	}
+}
+
 export type SystemWebODataQueryODataQueryOptionsWritableT = {
 	[key: string]: unknown
 }
@@ -3810,6 +4866,1062 @@ export type OEInvoiceKittingDetailLotNumberWritableT = {
 	}
 }
 
+export type OEOrderListResponseWritableT = {
+	"@odata.context"?: string
+	"value"?: Array<OEOrderWritableT>
+}
+
+export type OEOrderWritableT = {
+	OrderUniquifier?: number
+	OrderNumber?: string
+	CustomerNumber?: string
+	CustomerGroupCode?: string
+	BillToName?: string
+	BillToAddressLine1?: string
+	BillToAddressLine2?: string
+	BillToAddressLine3?: string
+	BillToAddressLine4?: string
+	BillToCity?: string
+	BillToStateProvince?: string
+	BillToZipPostalCode?: string
+	BillToCountry?: string
+	BillToPhoneNumber?: string
+	BillToFaxNumber?: string
+	BillToContact?: string
+	ShipToLocationCode?: string
+	ShipToName?: string
+	ShipToAddressLine1?: string
+	ShipToAddressLine2?: string
+	ShipToAddressLine3?: string
+	ShipToAddressLine4?: string
+	ShipToCity?: string
+	ShipToStateProvince?: string
+	ShipToZipPostalCode?: string
+	ShipToCountry?: string
+	ShipToPhoneNumber?: string
+	ShipToFaxNumber?: string
+	ShipToContact?: string
+	CustomerDiscountLevel?: "Base" | "A" | "B" | "C" | "D" | "E"
+	DefaultPriceListCode?: string
+	PurchaseOrderNumber?: string
+	Territory?: string
+	TermsCode?: string
+	TotalTermsAmountDue?: number
+	DiscountAvailable?: number
+	TermsRateOverride?: boolean
+	OrderReference?: string
+	OrderType?: "Active" | "Future" | "Standing" | "Quote"
+	OrderDate?: Date
+	ExpectedShipDate?: Date
+	QuoteExpirationDate?: Date
+	OrderFiscalYear?: string
+	OrderFiscalPeriod?: "Num1" | "Num2" | "Num3" | "Num4" | "Num5" | "Num6" | "Num7" | "Num8" | "Num9" | "Num10" | "Num11" | "Num12"
+	ShipViaCode?: string
+	ShipViaCodeDescription?: string
+	LastInvoiceNumber?: string
+	NumberOfInvoices?: number
+	FreeOnBoardPoint?: string
+	TemplateCode?: string
+	DefaultLocationCode?: string
+	OnHold?: boolean
+	OrderDescription?: string
+	OrderComment?: string
+	OrderPrintStatus?: "None" | "Quoteprinted" | "Pickingslipprinted" | "Internet" | "ElectronicCommerce"
+	LastPostingDate?: Date
+	OrderNumberOfPrepayments?: number
+	OverCreditLimit?: boolean
+	ApprovedLimit?: number
+	AuthorizingUserID?: string
+	RequiresShippingLabels?: boolean
+	ShippingLabelsPrinted?: boolean
+	OrderHomeCurrency?: string
+	OrderRateType?: string
+	OrderSourceCurrency?: string
+	OrderRateDate?: Date
+	OrderRate?: number
+	OrderSpread?: number
+	OrderRateDateMatching?: number
+	OrderRateOperator?: number
+	OrderRateOverrideFlag?: boolean
+	TotalAmountItems?: number
+	TotalAmountMiscellaneousCharges?: number
+	NumberOfLinesOnOrder?: number
+	NumberOfLabels?: number
+	PrevPaymentsTotal?: number
+	PrevPaymentDiscTotal?: number
+	Salesperson1?: string
+	Salesperson2?: string
+	Salesperson3?: string
+	Salesperson4?: string
+	Salesperson5?: string
+	SalesPercentage1?: number
+	SalesPercentage2?: number
+	SalesPercentage3?: number
+	SalesPercentage4?: number
+	SalesPercentage5?: number
+	RecalculateTax?: boolean
+	TaxOverridden?: boolean
+	TaxGroup?: string
+	TaxAuthority1?: string
+	TaxAuthority2?: string
+	TaxAuthority3?: string
+	TaxAuthority4?: string
+	TaxAuthority5?: string
+	TaxClass1?: number
+	TaxClass2?: number
+	TaxClass3?: number
+	TaxClass4?: number
+	TaxClass5?: number
+	TaxBase1?: number
+	TaxBase2?: number
+	TaxBase3?: number
+	TaxBase4?: number
+	TaxBase5?: number
+	ExcludedTaxAmount1?: number
+	ExcludedTaxAmount2?: number
+	ExcludedTaxAmount3?: number
+	ExcludedTaxAmount4?: number
+	ExcludedTaxAmount5?: number
+	IncludedTaxAmount1?: number
+	IncludedTaxAmount2?: number
+	IncludedTaxAmount3?: number
+	IncludedTaxAmount4?: number
+	IncludedTaxAmount5?: number
+	Registration1?: string
+	Registration2?: string
+	Registration3?: string
+	Registration4?: string
+	Registration5?: string
+	OrderCompleted?: "IncompleteNotIncluded" | "IncompleteIncluded" | "CompleteNotIncluded" | "CompleteIncluded" | "CompleteDayEnd"
+	OrderCompletionDate?: Date
+	InvoiceNumber?: string
+	ShipmentDate?: Date
+	InvoiceDate?: Date
+	InvoiceFiscalYear?: string
+	InvoiceFiscalPeriod?: "Num1" | "Num2" | "Num3" | "Num4" | "Num5" | "Num6" | "Num7" | "Num8" | "Num9" | "Num10" | "Num11" | "Num12"
+	NumberOfTermsPayments?: number
+	TermsPaymentsAsOfDate?: Date
+	OrderTotalEstWeight?: number
+	NextDetailNumber?: number
+	PostInvoice?: boolean
+	InvoiceDiscMiscellaneousCharges?: boolean
+	InvoiceNumberOfPrepayments?: number
+	NumberLinesQuantityShipped?: number
+	NumberMiscellaneousChargesLines?: number
+	OrderTotalBeforeTax?: number
+	OrderInclTaxTotal?: number
+	OrderItemTotalAmount?: number
+	OrderDiscountBase?: number
+	OrderDiscountPercentage?: number
+	OrderDiscountAmount?: number
+	OrderTotalMiscellaneousCharges?: number
+	OrderSubtotalAmount?: number
+	OrderTotalWithInvoiceDisc?: number
+	OrderExclTaxTotal?: number
+	OrderTotal?: number
+	OrderAmountDue?: number
+	INHOMECURR?: string
+	INRATETYPE?: string
+	INSOURCURR?: string
+	INRATEDATE?: Date
+	INRATE?: number
+	INSPREAD?: number
+	INDATEMTCH?: number
+	INRATEREP?: number
+	INRATEOVER?: boolean
+	ReceiptBatchNumber?: number
+	BankCode?: string
+	ReceiptType?: string
+	CheckDate?: Date
+	CheckFiscalYear?: string
+	CheckFiscalPeriod?: "Num1" | "Num2" | "Num3" | "Num4" | "Num5" | "Num6" | "Num7" | "Num8" | "Num9" | "Num10" | "Num11" | "Num12"
+	CheckNumber?: string
+	PaymentAppliedTo?: "InvoiceNumber" | "OrderNumber" | "ShipmentNumber"
+	PaymentInCustomerCurrency?: number
+	InvoiceTotalTermsDisc?: number
+	PaymentInBankCurrency?: number
+	PaymentHomeCurrency?: string
+	PaymentRateType?: string
+	PaymentSourceCurrency?: string
+	PaymentRateDate?: Date
+	PaymentRate?: number
+	PaymentSpread?: number
+	PaymentRateDateMatching?: number
+	PaymentRateOperator?: number
+	PriceListCodeDescription?: string
+	TermsCodeDescription?: string
+	TaxGroupCodeDescription?: string
+	LocationCodeDescription?: string
+	SalespersonName1?: string
+	SalespersonName2?: string
+	SalespersonName3?: string
+	SalespersonName4?: string
+	SalespersonName5?: string
+	TaxAuthority1Description?: string
+	TaxAuthority2Description?: string
+	TaxAuthority3Description?: string
+	TaxAuthority4Description?: string
+	TaxAuthority5Description?: string
+	TaxClass1Description?: string
+	TaxClass2Description?: string
+	TaxClass3Description?: string
+	TaxClass4Description?: string
+	TaxClass5Description?: string
+	OrderSourceCurrencyDescription?: string
+	OrderHomeCurrencyDescription?: string
+	OrderRateTypeDescription?: string
+	InvoiceSourceCurrencyDescription?: string
+	InvoiceHomeCurrencyDescription?: string
+	InvoiceRateTypeDescription?: string
+	PaymentSourceCurrencyDescription?: string
+	PaymentHomeCurrencyDescription?: string
+	PaymentRateTypeDescription?: string
+	TotalTaxAmount1?: number
+	TotalTaxAmount2?: number
+	TotalTaxAmount3?: number
+	TotalTaxAmount4?: number
+	TotalTaxAmount5?: number
+	TotalTaxAmount?: number
+	AuthorizingUserPassword?: string
+	OrderRunningTotal?: number
+	OrderTotalPayment?: number
+	OrderTotalPaymentDisc?: number
+	AmountDueLessCurrencyPrepayment?: number
+	PerformTaxCalculation?: boolean
+	PerformCreditLimitCheck?: boolean
+	OrderSource?: "Entered" | "Internet" | "ElectronicCommerce" | "ePOS"
+	PerformShipAll?: boolean
+	DOSConversionInProgress?: boolean
+	PerformForcedTaxCalculation?: boolean
+	PerformManualTaxDistribution?: boolean
+	TaxCalculationInProgress?: boolean
+	AutoTaxCalculationStatus?: boolean
+	OriginatingQuoteNumber?: string
+	DisplayRateWarning?: boolean
+	CustomerExists?: boolean
+	InvoiceWillBeProduced?: boolean
+	SecurityEnabled?: boolean
+	UserCanApproveCreditLift?: boolean
+	RecalcMultiPaymentDates?: boolean
+	BillToEmail?: string
+	BillToContactPhone?: string
+	BillToContactFax?: string
+	BillToContactEmail?: string
+	ShipToEmail?: string
+	ShipToContactPhone?: string
+	ShipToContactFax?: string
+	ShipToContactEmail?: string
+	Allowpartialshipments?: "No" | "Yes"
+	MultipleQuotes?: boolean
+	NumberOfQuotes?: number
+	PerformMultipleQuotesToOrder?: boolean
+	LastShipmentNumber?: string
+	NumberOfShipments?: number
+	ShipmentTrackingNumber?: string
+	PostSequenceNumber?: bigint
+	ShipmentUniquifier?: number
+	ShipmentNumber?: string
+	SHIDATE?: Date
+	ShipmentHomeCurrency?: string
+	ShipmentRateType?: string
+	ShipmentSourceCurrency?: string
+	ShipmentRateDate?: Date
+	ShipmentRate?: number
+	ShipmentSpread?: number
+	ShipmentDateMatch?: number
+	ShipmentRateOperator?: number
+	ShipmentRateOverrideFlag?: boolean
+	ShipmentSourceCurrencyDescription?: string
+	ShipmentHomeCurrencyDescription?: string
+	ShipmentRateTypeDescription?: string
+	OrderPartiallyShipped?: boolean
+	ShipmentTotal?: number
+	NumberOfOptionalFields?: bigint
+	PredecessorUniquifier?: number
+	PredecessorNumber?: string
+	ProcessOIPCommand?: "NothingToProcess" | "InsertOptionalFields" | "DefaultAndTranferOptionalFields" | "DefaultOptionalFieldsDuringRecordGeneration" | "RemoveOptionalFields" | "TransferOptionalFieldsFromStandingDocument" | "AutogenerateSerials" | "AutogenerateLots" | "AutoallocateSerials" | "AutoallocateLots" | "ClearSerials" | "ClearLots" | "AutoassignSerials" | "AutoassignLots" | "CreateListOfExistingSerialsLots" | "PostSerialsLotsToICInventory" | "VerifySerialsLots"
+	ProcessOECommand?: "NoAction" | "CalculateTax" | "ForceCalculateTax" | "DistributeManualTax" | "CheckCustomerCreditLimit" | "PreCheckCustomerCreditLimit" | "ValidateCreditCheckApprovalAuthority" | "ValidateCreditPreCheckApprovalAuthority" | "ShipAll" | "RecalculatePaymentScheduleDates" | "CheckPartialShipment" | "CreateOrderFromQuotes" | "DeriveTaxReportingRate" | "CalculateShipmentAmountDue" | "CheckJobRelatedQuoteDetails" | "ValidateJobRelatedPrepayment" | "DistributePrepaymentToJobDetails" | "CreateSageCRMAddress" | "SetlockForCreditCardTransaction" | "FindIncompleteShipmentForaGivenOrder" | "SetlockForeditingadocumentthathasbeenpreauthorized" | "ConfirmWebCreditApproval" | "ConfirmWebCreditPreCheckApproval" | "Preauthorize" | "PreAuthorizeCNA2Part1" | "PreAuthorizeCNA2Part2"
+	UserEnteredApprovalAmount?: number
+	CheckingCustomerCreditLimit?: boolean
+	CheckingCustomerAgingLimit?: boolean
+	CheckingNatAccountCreditLimit?: boolean
+	CheckingNatAccountAgingLimit?: boolean
+	CustomerIsOverCreditLimit?: boolean
+	CustomerIsOverAgingLimit?: boolean
+	NatAccountIsOverCreditLimit?: boolean
+	NatAccountIsOverAgingLimit?: boolean
+	CustomerCreditLimit?: number
+	CustomerBalancePosted?: number
+	CustomerDaysOverdue?: number
+	CustomerOverdueLimit?: number
+	CustomerBalanceOverdue?: number
+	NatAccountCreditLimit?: number
+	NatAccountBalance?: number
+	NatAccountDaysOverdue?: number
+	NatAccountOverdueLimit?: number
+	NatAccountBalanceOverdue?: number
+	ARPendingTransactionIncluded?: boolean
+	OEPendingTransactionIncluded?: boolean
+	OtherPendingTransactionIncluded?: boolean
+	ARPendingBalance?: number
+	OEPendingBalance?: number
+	OtherPendingBalance?: number
+	CustomerTotalOutstanding?: number
+	NatAccountTotalOutstanding?: number
+	CustomerLimitLeft?: number
+	NatAccountLimitLeft?: number
+	CustomerLimitExceeded?: number
+	NatAccountLimitExceeded?: number
+	LastInvoiceAmount?: number
+	LastInvoiceDate?: Date
+	LastPaymentAmount?: number
+	LastPaymentDate?: Date
+	DrivenbyUI?: boolean
+	ItemDetailDiscountTotal?: number
+	MiscellaneousChargeDetailDiscountTot?: number
+	DetailDiscountTotal?: number
+	DetailDiscountPercentage?: number
+	DocumentNetOfDetailDisc?: number
+	AutoCalculationTaxReportingAmounts?: number
+	TaxReportingTRCurrency?: string
+	TRRateType?: string
+	TRRateDate?: Date
+	TRRate?: number
+	TRSpread?: number
+	TRRateDateMatching?: number
+	TRRateOperator?: number
+	TRRateOverrideFlag?: boolean
+	TRExcludedTaxAmount1?: number
+	TRExcludedTaxAmount2?: number
+	TRExcludedTaxAmount3?: number
+	TRExcludedTaxAmount4?: number
+	TRExcludedTaxAmount5?: number
+	TRIncludedTaxAmount1?: number
+	TRIncludedTaxAmount2?: number
+	TRIncludedTaxAmount3?: number
+	TRIncludedTaxAmount4?: number
+	TRIncludedTaxAmount5?: number
+	TRTaxAmount1?: number
+	TRTaxAmount2?: number
+	TRTaxAmount3?: number
+	TRTaxAmount4?: number
+	TRTaxAmount5?: number
+	TRExcludedTaxTotal?: number
+	TRIncludedTaxTotal?: number
+	TRTaxTotal?: number
+	TaxReportingShipmentTRCurr?: string
+	TRShipmentRateType?: string
+	TRShipmentRateDate?: Date
+	TRShipmentRate?: number
+	TRShipmentSpread?: number
+	TRShipmentRateDateMatching?: number
+	TRShipmentRateOperator?: number
+	TRShipmentRateOverrideFlag?: boolean
+	TaxReportingInvoiceTRCurre?: string
+	TRInvoiceRateType?: string
+	TRInvoiceRateDate?: Date
+	TRInvoiceRate?: number
+	TRInvoiceSpread?: number
+	TRInvoiceRateDateMatching?: number
+	TRInvoiceRateOperator?: number
+	TRInvoiceRateOverrideFlag?: boolean
+	TRCurrencyDescription?: string
+	TRShipmentCurrencyDescription?: string
+	TRInvoiceCurrencyDescription?: string
+	TRRateTypeDescription?: string
+	TRShipmentRateTypeDescriptio?: string
+	TRInvoiceRateTypeDescription?: string
+	PaymentType?: "None" | "Cash" | "Check" | "CreditCard" | "Other" | "SPSCreditCard"
+	PendingPrepaymentAmount?: number
+	OrderDiscountAmountOverride?: boolean
+	JobRelated?: boolean
+	JobRelatedDetailLines?: bigint
+	ProjectInvoicing?: boolean
+	InvoiceableDetailLines?: bigint
+	HasRetainage?: boolean
+	RetainageTerms?: string
+	RetainageExchangeRate?: "UseOriginalDocumentExchangeRate" | "UseCurrentExchangeRate"
+	RetainageTermsDescription?: string
+	CustomerAccountSet?: string
+	CustomerAccountSetDescription?: string
+	EnteredBy?: string
+	ePOSSegmentLength?: number
+	ShipmentPostingDate?: Date
+	InvoicePostingDate?: Date
+	PrepaymentDistributedAmount?: number
+	PrepaymentUnappliedAmount?: number
+	SageCRMCompanyID?: bigint
+	SageCRMOpportunityID?: bigint
+	SageCRMPersonID?: bigint
+	IncludeInCRMOpportunityTotal?: boolean
+	QuoteExpired?: boolean
+	OrderUniqActivatedFromQuote?: number
+	OrderNumberActivatedFromQuot?: string
+	PromotedCustomerNumber?: string
+	PaymentTypeOnOrder?: "None" | "Cash" | "Check" | "CreditCard" | "Other" | "SPSCreditCard"
+	PaymentCodeOnOrder?: string
+	PaymentCardID?: string
+	OrderHasPreAuthorization?: boolean
+	OnholdReason?: string
+	IncompleteShipExistForOrder?: boolean
+	DateRequested?: Date
+	TransactionID?: string
+	XMLString?: string
+	ResponseIndicator?: string
+	ResponseCode?: string
+	ResponseMessage?: string
+	AuthorizationCode?: string
+	AVSResult?: string
+	CVVResult?: string
+	TransactionDate?: string
+	VANReference?: string
+	Last4?: string
+	PaymentDescription?: string
+	PaymentTypeID?: string
+	OrderDetails?: Array<OEOrderDetailWritableT>
+	OrderCommentsInstructions?: Array<OEOrderCommentsInstructionWritableT>
+	OrderPaymentSchedules?: Array<OEOrderPaymentScheduleWritableT>
+	OrderFromQuotes?: Array<OEOrderFromQuoteWritableT>
+	OrderOptionalFields?: Array<OEOrderOptionalFieldWritableT>
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+}
+
+export type OEOrderDetailWritableT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	LineType?: "Item" | "Miscellaneous"
+	Item?: string
+	MiscellaneousChargesCode?: string
+	Description?: string
+	ItemAccountSet?: string
+	UserSpecifiedCostingMethod?: boolean
+	PriceList?: string
+	Category?: string
+	Location?: string
+	PickingSequence?: string
+	ExpectedShipmentDate?: Date
+	StockItem?: boolean
+	QuantityOrdered?: number
+	QuantityShipped?: number
+	QuantityBackordered?: number
+	QuantityShippedtodate?: number
+	OriginalQuantityOrdered?: number
+	POQuantityOrdered?: number
+	OrderUnitOfMeasure?: string
+	OrderUnitConversion?: number
+	OrderUnitPrice?: number
+	PriceOverride?: boolean
+	OrderUnitCost?: number
+	MostRecentUnitCost?: number
+	StandardUnitCost?: number
+	AlternateUnitCost1?: number
+	AlternateUnitCost2?: number
+	UnitPriceNumberOfDecimals?: number
+	PricingUnitOfMeasure?: string
+	PricingUnitPrice?: number
+	PricingUnitConversion?: number
+	PriceDiscountPercentage?: number
+	PriceDiscountAmount?: number
+	PricingBaseUnit?: string
+	PricingBaseUnitPrice?: number
+	PricingBaseUnitConversion?: number
+	CostingUnitOfMeasure?: string
+	CostingUnitCost?: number
+	CostingUnitConversion?: number
+	ExtendedOrderAmount?: number
+	ExtendedOrderCost?: number
+	ExtendedAmount?: number
+	OrderDiscountAmount?: number
+	ExtendedDetailCost?: number
+	ExtendedShippedAmountOverride?: boolean
+	UnitWeight?: number
+	ExtendedWeight?: number
+	DetailCompleted?: "Notcompleted" | "CompletedNotInDatabase" | "Completed" | "Processedbydayend"
+	RecognizedInItemLocation?: boolean
+	LostSalesAmount?: number
+	TaxAuthority1?: string
+	TaxAuthority2?: string
+	TaxAuthority3?: string
+	TaxAuthority4?: string
+	TaxAuthority5?: string
+	TaxClass1?: number
+	TaxClass2?: number
+	TaxClass3?: number
+	TaxClass4?: number
+	TaxClass5?: number
+	TaxIncluded1?: boolean
+	TaxIncluded2?: boolean
+	TaxIncluded3?: boolean
+	TaxIncluded4?: boolean
+	TaxIncluded5?: boolean
+	TaxBase1?: number
+	TaxBase2?: number
+	TaxBase3?: number
+	TaxBase4?: number
+	TaxBase5?: number
+	TaxAmount1?: number
+	TaxAmount2?: number
+	TaxAmount3?: number
+	TaxAmount4?: number
+	TaxAmount5?: number
+	TaxRate1?: number
+	TaxRate2?: number
+	TaxRate3?: number
+	TaxRate4?: number
+	TaxRate5?: number
+	DetailNumber?: number
+	UseCommentsInstructions?: boolean
+	TotalOrderMostRecentCost?: number
+	TotalOrderStandardCost?: number
+	TotalOrderCost1?: number
+	TotalOrderCost2?: number
+	TotalInvoiceMostRecentCost?: number
+	TotalInvoiceStandardCost?: number
+	TotalInvoiceCost1?: number
+	TotalInvoiceCost2?: number
+	PriceListDescription?: string
+	CategoryDescription?: string
+	LocationDescription?: string
+	TaxAuthority1Description?: string
+	TaxAuthority2Description?: string
+	TaxAuthority3Description?: string
+	TaxAuthority4Description?: string
+	TaxAuthority5Description?: string
+	TaxClass1Description?: string
+	TaxClass2Description?: string
+	TaxClass3Description?: string
+	TaxClass4Description?: string
+	TaxClass5Description?: string
+	DrivenbyUI?: boolean
+	FoundNegativeInventory?: boolean
+	NonstockClearingAccount?: string
+	NonstockClearingAccountDescription?: string
+	InterprocessCommID?: bigint
+	ForcePopupSNOnQuantityOrdered?: boolean
+	ForcePopupSNOnQuantityShipped?: boolean
+	PopupSN?: "No" | "Yes"
+	CloseSN?: boolean
+	LTSetID?: bigint
+	ForcePopupLTOnQuantityOrdered?: boolean
+	ForcePopupLTOnQuantityShipped?: boolean
+	PopupLT?: "No" | "Yes"
+	CloseLT?: boolean
+	AverageUnitCost?: number
+	LastUnitCost?: number
+	TotalOrderAverageCost?: number
+	TotalOrderLastCost?: number
+	TotalInvoiceAverageCost?: number
+	TotalInvoiceLastCost?: number
+	CopyThisDetailLine?: boolean
+	QuoteNumber?: string
+	QuoteDetailLineNumber?: number
+	ShipmentTrackingNumber?: string
+	ShipViaCode?: string
+	ShipViaCodeDescription?: string
+	DiscountPercent?: number
+	ExtendedDiscountedPrice?: number
+	QuantityCommitted?: number
+	ManufacturersItemNumber?: string
+	CustomerItemNumber?: string
+	TrueQuantityCommitted?: number
+	ItemSerialized?: boolean
+	UnformattedItemNumber?: string
+	NumberOfOptionalFields?: bigint
+	KittingBOM?: "None" | "Kitting" | "BOM"
+	KitBOMNumber?: string
+	BOMBuildQuantity?: number
+	BOMBuildUnit?: string
+	BOMBuildUnitConversion?: number
+	PredecessorNumber?: string
+	PredecessorUniquifier?: number
+	PredecessorLineNumber?: number
+	ProcessCommand?: "NothingToProcess" | "InsertOptionalFields" | "DefaultAndTranferOptionalFields" | "DefaultOptionalFieldsDuringRecordGeneration" | "RemoveOptionalFields" | "TransferOptionalFieldsFromStandingDocument" | "AutogenerateSerials" | "AutogenerateLots" | "AutoallocateSerials" | "AutoallocateLots" | "ClearSerials" | "ClearLots" | "AutoassignSerials" | "AutoassignLots" | "CreateListOfExistingSerialsLots" | "PostSerialsLotsToICInventory" | "VerifySerialsLots"
+	NextComponentNumber?: bigint
+	ePOSPromotionID?: number
+	ShipmentUniquifier?: number
+	PricingBaseWeightUnit?: string
+	OrderWeightUOM?: string
+	OrderWeightConversionFactor?: number
+	PricingWeightUOM?: string
+	PricingWeightConversionFactor?: number
+	PricingBaseWeightConvFactor?: number
+	DefWeightUOMUnitWeight?: number
+	DefWeightUOMExtUnitWeight?: number
+	PriceBy?: "Quantity" | "Weight"
+	PriceCheckPending?: boolean
+	PriceApprovedBy?: string
+	ApprovingUsersPassword?: string
+	PriceApprovalNeeded?: boolean
+	WeightUOMDescription?: string
+	HeaderDiscount?: number
+	TRTaxAmount1?: number
+	TRTaxAmount2?: number
+	TRTaxAmount3?: number
+	TRTaxAmount4?: number
+	TRTaxAmount5?: number
+	ExtendedAmountNetOfTax?: number
+	DiscountedExtendedAmount?: number
+	TaxTotal?: number
+	TRTaxTotal?: number
+	PickingSlipPrinted?: boolean
+	JobRelated?: boolean
+	ContractCode?: string
+	ProjectCode?: string
+	CategoryCode?: string
+	CostClass?: "None" | "Labor" | "Material" | "Equipment" | "Subcontractor" | "Overhead" | "Miscellaneous"
+	ProjectStyle?: "None" | "Standard" | "Basic"
+	ProjectType?: "None" | "TimeAndMaterials" | "FixedPrice" | "CostPlus"
+	AccountingMethod?: "None" | "CompletedProject" | "TotalCostPercentageComplete" | "LaborHoursPercentageComplete" | "BillingsAndCosts" | "ProjectPercentageComplete" | "CategoryPercentageComplete" | "CompletedContract" | "AccrualBasis"
+	BillingType?: "None" | "Nonbillable" | "Billable" | "NoCharge"
+	RevenueBillingAccount?: string
+	COGSWIPAccount?: string
+	RetainagePercent?: number
+	RetainageDays?: number
+	DefaultOEPrice?: "None" | "BillingRate" | "UseCustomerPriceList" | "UseSpecifiedPriceList"
+	ARItemNumber?: string
+	ARItemUnit?: string
+	Level1Name?: string
+	Level2Name?: string
+	Level3Name?: string
+	UnformattedContractCode?: string
+	PrepaymentDistributed?: number
+	ExtPriceNetOfDiscIncludeTax?: number
+	SerialQuantity?: bigint
+	LotQuantity?: number
+	SerialQuantityShipped?: bigint
+	LotQuantityShipped?: number
+	SerialLotQuantityToProcess?: number
+	NumberOfLotsToGenerate?: number
+	QuantityperLot?: number
+	AllocateFromSerial?: string
+	AllocateFromLot?: string
+	ItemSerializedLotted?: "None" | "Serialized" | "Lotted" | "Both"
+	SerialLotWindowHandle?: bigint
+	UseSimplePriceChecking?: number
+	DateRequested?: Date
+	NoninteractivePriceApproval?: boolean
+	OrderDetailOptionalFields?: Array<OEOrderDetailOptionalFieldWritableT>
+	OrderBOMDetails?: Array<OEOrderBOMDetailWritableT>
+	OrderKittingDetails?: Array<OEOrderKittingDetailWritableT>
+	OrderDetailSerialNumbers?: Array<OEOrderDetailSerialNumberWritableT>
+	OrderDetailLotNumbers?: Array<OEOrderDetailLotNumberWritableT>
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderCommentsInstructionWritableT = {
+	OrderUniquifier?: number
+	Uniquifier?: number
+	DetailNumber?: number
+	CommentsInstructionsType?: "Comment" | "Instruction"
+	CommentsInstructions?: string
+	Invoiced?: boolean
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderPaymentScheduleWritableT = {
+	OrderUniquifier?: number
+	PaymentNumber?: number
+	DiscountBase?: number
+	DiscountDate?: Date
+	DiscountPercentage?: number
+	DiscountAmount?: number
+	AmountDueBase?: number
+	DueDate?: Date
+	PercentageDue?: number
+	AmountDue?: number
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderFromQuoteWritableT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	QuoteUniquifier?: number
+	QuoteNumber?: string
+	DocumentDate?: Date
+	Description?: string
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderOptionalFieldWritableT = {
+	OrderUniquifier?: number
+	OptionalField?: string
+	Value?: string
+	OrderOptionalFieldType?: "Text" | "Amount" | "Number" | "Integer" | "YesNo" | "Date" | "Time"
+	Length?: number
+	Decimals?: number
+	AllowBlank?: boolean
+	Validate?: boolean
+	ValueSet?: "No" | "Yes" | "NotApplicable"
+	TypedValueFieldIndex?: bigint
+	TextValue?: string
+	AmountValue?: number
+	NumberValue?: number
+	IntegerValue?: bigint
+	YesNoValue?: boolean
+	DateValue?: Date
+	TimeValue?: Date
+	OptionalFieldDescription?: string
+	ValueDescription?: string
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderDetailOptionalFieldWritableT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	OptionalField?: string
+	Value?: string
+	OrderDetailOptionalFieldType?: "Text" | "Amount" | "Number" | "Integer" | "YesNo" | "Date" | "Time"
+	Length?: number
+	Decimals?: number
+	AllowBlank?: boolean
+	Validate?: boolean
+	ValueSet?: "No" | "Yes" | "NotApplicable"
+	TypedValueFieldIndex?: bigint
+	TextValue?: string
+	AmountValue?: number
+	NumberValue?: number
+	IntegerValue?: bigint
+	YesNoValue?: boolean
+	DateValue?: Date
+	TimeValue?: Date
+	OptionalFieldDescription?: string
+	ValueDescription?: string
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderBOMDetailWritableT = {
+	OrderUniquifier?: number
+	DetailLineNumber?: number
+	ParentComponentNumber?: bigint
+	ComponentNumber?: bigint
+	ComponentItemNumber?: string
+	Description?: string
+	ComponentQuantity?: number
+	UnitOfMeasure?: string
+	QuantityOrdered?: number
+	QuantityShipped?: number
+	ComponentsBOMNumber?: string
+	ComponentsBOMBuildQuantity?: number
+	ComponentsBOMBuildUnit?: string
+	ComponentsBOMBuildUnitConv?: number
+	UnitConversion?: number
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderKittingDetailWritableT = {
+	OrderUniquifier?: number
+	DetailLineNumber?: number
+	ParentComponentNumber?: bigint
+	ComponentNumber?: bigint
+	DetailNumber?: number
+	ComponentItem?: string
+	Description?: string
+	ItemAccountSet?: string
+	UserSpecifiedCostingMethod?: boolean
+	Location?: string
+	PickingSequence?: string
+	StockItem?: boolean
+	KittingQuantity?: number
+	ParentQuantityOrdered?: number
+	ParentQuantityShipped?: number
+	ParentUnitOfMeasure?: string
+	ParentUnitConversion?: number
+	QuantityOrdered?: number
+	QuantityShipped?: number
+	POQuantityOrdered?: number
+	OrderUnitOfMeasure?: string
+	OrderUnitConversion?: number
+	OrderUnitCost?: number
+	MostRecentUnitCost?: number
+	StandardUnitCost?: number
+	AlternateUnitCost1?: number
+	AlternateUnitCost2?: number
+	AverageUnitCost?: number
+	LastUnitCost?: number
+	CostingUnitOfMeasure?: string
+	CostingUnitCost?: number
+	CostingUnitConversion?: number
+	ExtendedOrderCost?: number
+	UnitWeight?: number
+	ExtendedWeight?: number
+	NonstockClearingAccount?: string
+	WeightUnitOfMeasure?: string
+	WeightConversionFactor?: number
+	ParentWeightConversionFactor?: number
+	ParentWeightUOMUnitWeight?: number
+	ParentWUOMExtendedUnitWeight?: number
+	KitNumber?: string
+	SerialQuantity?: bigint
+	LotQuantity?: number
+	SerialQuantityShipped?: bigint
+	LotQuantityShipped?: number
+	ItemSerializedLotted?: "None" | "Serialized" | "Lotted" | "Both"
+	ComponentUnitCost?: number
+	MostRecentComponentCost?: number
+	StandardComponentCost?: number
+	AlternateComponentCost1?: number
+	AlternateComponentCost2?: number
+	AverageComponentCost?: number
+	LastComponentCost?: number
+	NonstockClearingAccountDescription?: string
+	InterprocessCommID?: bigint
+	ForcePopupSNOnQuantityOrdered?: boolean
+	ForcePopupSNOnQuantityShipped?: boolean
+	PopupSN?: "No" | "Yes"
+	CloseSN?: boolean
+	LTSetID?: bigint
+	ForcePopupLTOnQuantityOrdered?: boolean
+	ForcePopupLTOnQuantityShipped?: boolean
+	PopupLT?: "No" | "Yes"
+	CloseLT?: boolean
+	ComponentSerialized?: boolean
+	UnformattedItemNumber?: string
+	ComponentLotted?: boolean
+	WeightUOMDescription?: string
+	ProcessCommand?: "NothingToProcess" | "InsertOptionalFields" | "DefaultAndTranferOptionalFields" | "DefaultOptionalFieldsDuringRecordGeneration" | "RemoveOptionalFields" | "TransferOptionalFieldsFromStandingDocument" | "AutogenerateSerials" | "AutogenerateLots" | "AutoallocateSerials" | "AutoallocateLots" | "ClearSerials" | "ClearLots" | "AutoassignSerials" | "AutoassignLots" | "CreateListOfExistingSerialsLots" | "PostSerialsLotsToICInventory" | "VerifySerialsLots"
+	SerialLotQuantityToProcess?: number
+	NumberOfLotsToGenerate?: number
+	QuantityperLot?: number
+	AllocateFromSerial?: string
+	AllocateFromLot?: string
+	SerialLotWindowHandle?: bigint
+	OrderKittingSerialNumbers?: Array<OEOrderKittingSerialNumberWritableT>
+	OrderKittingDetailLotNumbers?: Array<OEOrderKittingDetailLotNumberWritableT>
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderDetailSerialNumberWritableT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	SerialNumber?: string
+	DetailNumber?: number
+	Shipped?: boolean
+	TransactionQuantity?: bigint
+	QuantityShipped?: bigint
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderDetailLotNumberWritableT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	LotNumber?: string
+	DetailNumber?: number
+	ExpirationDate?: Date
+	QuantityInStockingUOM?: number
+	TransactionQuantity?: number
+	QtyShippedInStockingUOM?: number
+	QuantityShipped?: number
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderKittingSerialNumberWritableT = {
+	OrderUniquifier?: number
+	DetailLineNumber?: number
+	ParentComponentNumber?: bigint
+	ComponentNumber?: bigint
+	SerialNumber?: string
+	DetailNumber?: number
+	Shipped?: boolean
+	TransactionQuantity?: bigint
+	QuantityShipped?: bigint
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
+export type OEOrderKittingDetailLotNumberWritableT = {
+	OrderUniquifier?: number
+	LineNumber?: number
+	ParentComponentNumber?: bigint
+	ComponentNumber?: bigint
+	LotNumber?: string
+	DetailNumber?: number
+	ExpirationDate?: Date
+	QuantityInStockingUOM?: number
+	TransactionQuantity?: number
+	QtyShippedInStockingUOM?: number
+	QuantityShipped?: number
+	UpdateOperation?: "Unspecified" | "Update" | "Insert" | "Delete"
+	Warnings?: Array<CommonEntityErrorWritableT>
+	ETag?: string
+	IsDeleted?: boolean
+	IsNewLine?: boolean
+	HasChanged?: boolean
+	DisplayIndex?: number
+	ChangeSequence?: number
+	PreviousKey?: string
+	Licenses?: {
+		[key: string]: number
+	}
+	IsSelected?: boolean
+	Misc?: {
+		[key: string]: SystemObjectWritableT
+	}
+}
+
 export type ArCustomersGetData = {
 	body?: never
 	path: {
@@ -4772,3 +6884,94 @@ export type OeInvoicesGetByInvoiceUniquifierResponses = {
 }
 
 export type OeInvoicesGetByInvoiceUniquifierResponse = OeInvoicesGetByInvoiceUniquifierResponses[keyof OeInvoicesGetByInvoiceUniquifierResponses]
+
+export type OeOrdersGetData = {
+	body?: never
+	path: {
+		apiVersion: string
+		tenant: string
+		company: string
+	}
+	query?: {
+		/**
+         * Filters the results, based on a Boolean condition.
+         */
+		$filter?: string
+		/**
+         * Selects which properties to include in the response.
+         */
+		$select?: "OrderUniquifier" | "OrderNumber" | "CustomerNumber" | "CustomerGroupCode" | "BillToName" | "BillToAddressLine1" | "BillToAddressLine2" | "BillToAddressLine3" | "BillToAddressLine4" | "BillToCity" | "BillToStateProvince" | "BillToZipPostalCode" | "BillToCountry" | "BillToPhoneNumber" | "BillToFaxNumber" | "BillToContact" | "ShipToLocationCode" | "ShipToName" | "ShipToAddressLine1" | "ShipToAddressLine2" | "ShipToAddressLine3" | "ShipToAddressLine4" | "ShipToCity" | "ShipToStateProvince" | "ShipToZipPostalCode" | "ShipToCountry" | "ShipToPhoneNumber" | "ShipToFaxNumber" | "ShipToContact" | "CustomerDiscountLevel" | "DefaultPriceListCode" | "PurchaseOrderNumber" | "Territory" | "TermsCode" | "TotalTermsAmountDue" | "DiscountAvailable" | "TermsRateOverride" | "OrderReference" | "OrderType" | "OrderDate" | "ExpectedShipDate" | "QuoteExpirationDate" | "OrderFiscalYear" | "OrderFiscalPeriod" | "ShipViaCode" | "ShipViaCodeDescription" | "LastInvoiceNumber" | "NumberOfInvoices" | "FreeOnBoardPoint" | "TemplateCode" | "DefaultLocationCode" | "OnHold" | "OrderDescription" | "OrderComment" | "OrderPrintStatus" | "LastPostingDate" | "OrderNumberOfPrepayments" | "OverCreditLimit" | "ApprovedLimit" | "AuthorizingUserID" | "RequiresShippingLabels" | "ShippingLabelsPrinted" | "OrderHomeCurrency" | "OrderRateType" | "OrderSourceCurrency" | "OrderRateDate" | "OrderRate" | "OrderSpread" | "OrderRateDateMatching" | "OrderRateOperator" | "OrderRateOverrideFlag" | "TotalAmountItems" | "TotalAmountMiscellaneousCharges" | "NumberOfLinesOnOrder" | "NumberOfLabels" | "PrevPaymentsTotal" | "PrevPaymentDiscTotal" | "Salesperson1" | "Salesperson2" | "Salesperson3" | "Salesperson4" | "Salesperson5" | "SalesPercentage1" | "SalesPercentage2" | "SalesPercentage3" | "SalesPercentage4" | "SalesPercentage5" | "RecalculateTax" | "TaxOverridden" | "TaxGroup" | "TaxAuthority1" | "TaxAuthority2" | "TaxAuthority3" | "TaxAuthority4" | "TaxAuthority5" | "TaxClass1" | "TaxClass2" | "TaxClass3" | "TaxClass4" | "TaxClass5" | "TaxBase1" | "TaxBase2" | "TaxBase3" | "TaxBase4" | "TaxBase5" | "ExcludedTaxAmount1" | "ExcludedTaxAmount2" | "ExcludedTaxAmount3" | "ExcludedTaxAmount4" | "ExcludedTaxAmount5" | "IncludedTaxAmount1" | "IncludedTaxAmount2" | "IncludedTaxAmount3" | "IncludedTaxAmount4" | "IncludedTaxAmount5" | "Registration1" | "Registration2" | "Registration3" | "Registration4" | "Registration5" | "OrderCompleted" | "OrderCompletionDate" | "InvoiceNumber" | "ShipmentDate" | "InvoiceDate" | "InvoiceFiscalYear" | "InvoiceFiscalPeriod" | "NumberOfTermsPayments" | "TermsPaymentsAsOfDate" | "OrderTotalEstWeight" | "NextDetailNumber" | "PostInvoice" | "InvoiceDiscMiscellaneousCharges" | "InvoiceNumberOfPrepayments" | "NumberLinesQuantityShipped" | "NumberMiscellaneousChargesLines" | "OrderTotalBeforeTax" | "OrderInclTaxTotal" | "OrderItemTotalAmount" | "OrderDiscountBase" | "OrderDiscountPercentage" | "OrderDiscountAmount" | "OrderTotalMiscellaneousCharges" | "OrderSubtotalAmount" | "OrderTotalWithInvoiceDisc" | "OrderExclTaxTotal" | "OrderTotal" | "OrderAmountDue" | "INHOMECURR" | "INRATETYPE" | "INSOURCURR" | "INRATEDATE" | "INRATE" | "INSPREAD" | "INDATEMTCH" | "INRATEREP" | "INRATEOVER" | "ReceiptBatchNumber" | "BankCode" | "ReceiptType" | "CheckDate" | "CheckFiscalYear" | "CheckFiscalPeriod" | "CheckNumber" | "PaymentAppliedTo" | "PaymentInCustomerCurrency" | "InvoiceTotalTermsDisc" | "PaymentInBankCurrency" | "PaymentHomeCurrency" | "PaymentRateType" | "PaymentSourceCurrency" | "PaymentRateDate" | "PaymentRate" | "PaymentSpread" | "PaymentRateDateMatching" | "PaymentRateOperator" | "PriceListCodeDescription" | "TermsCodeDescription" | "TaxGroupCodeDescription" | "LocationCodeDescription" | "SalespersonName1" | "SalespersonName2" | "SalespersonName3" | "SalespersonName4" | "SalespersonName5" | "TaxAuthority1Description" | "TaxAuthority2Description" | "TaxAuthority3Description" | "TaxAuthority4Description" | "TaxAuthority5Description" | "TaxClass1Description" | "TaxClass2Description" | "TaxClass3Description" | "TaxClass4Description" | "TaxClass5Description" | "OrderSourceCurrencyDescription" | "OrderHomeCurrencyDescription" | "OrderRateTypeDescription" | "InvoiceSourceCurrencyDescription" | "InvoiceHomeCurrencyDescription" | "InvoiceRateTypeDescription" | "PaymentSourceCurrencyDescription" | "PaymentHomeCurrencyDescription" | "PaymentRateTypeDescription" | "TotalTaxAmount1" | "TotalTaxAmount2" | "TotalTaxAmount3" | "TotalTaxAmount4" | "TotalTaxAmount5" | "TotalTaxAmount" | "AuthorizingUserPassword" | "OrderRunningTotal" | "OrderTotalPayment" | "OrderTotalPaymentDisc" | "AmountDueLessCurrencyPrepayment" | "PerformTaxCalculation" | "PerformCreditLimitCheck" | "OrderSource" | "PerformShipAll" | "DOSConversionInProgress" | "PerformForcedTaxCalculation" | "PerformManualTaxDistribution" | "TaxCalculationInProgress" | "AutoTaxCalculationStatus" | "OriginatingQuoteNumber" | "DisplayRateWarning" | "CustomerExists" | "InvoiceWillBeProduced" | "SecurityEnabled" | "UserCanApproveCreditLift" | "RecalcMultiPaymentDates" | "BillToEmail" | "BillToContactPhone" | "BillToContactFax" | "BillToContactEmail" | "ShipToEmail" | "ShipToContactPhone" | "ShipToContactFax" | "ShipToContactEmail" | "Allowpartialshipments" | "MultipleQuotes" | "NumberOfQuotes" | "PerformMultipleQuotesToOrder" | "LastShipmentNumber" | "NumberOfShipments" | "ShipmentTrackingNumber" | "PostSequenceNumber" | "ShipmentUniquifier" | "ShipmentNumber" | "SHIDATE" | "ShipmentHomeCurrency" | "ShipmentRateType" | "ShipmentSourceCurrency" | "ShipmentRateDate" | "ShipmentRate" | "ShipmentSpread" | "ShipmentDateMatch" | "ShipmentRateOperator" | "ShipmentRateOverrideFlag" | "ShipmentSourceCurrencyDescription" | "ShipmentHomeCurrencyDescription" | "ShipmentRateTypeDescription" | "OrderPartiallyShipped" | "ShipmentTotal" | "NumberOfOptionalFields" | "PredecessorUniquifier" | "PredecessorNumber" | "ProcessOIPCommand" | "ProcessOECommand" | "UserEnteredApprovalAmount" | "CheckingCustomerCreditLimit" | "CheckingCustomerAgingLimit" | "CheckingNatAccountCreditLimit" | "CheckingNatAccountAgingLimit" | "CustomerIsOverCreditLimit" | "CustomerIsOverAgingLimit" | "NatAccountIsOverCreditLimit" | "NatAccountIsOverAgingLimit" | "CustomerCreditLimit" | "CustomerBalancePosted" | "CustomerDaysOverdue" | "CustomerOverdueLimit" | "CustomerBalanceOverdue" | "NatAccountCreditLimit" | "NatAccountBalance" | "NatAccountDaysOverdue" | "NatAccountOverdueLimit" | "NatAccountBalanceOverdue" | "ARPendingTransactionIncluded" | "OEPendingTransactionIncluded" | "OtherPendingTransactionIncluded" | "ARPendingBalance" | "OEPendingBalance" | "OtherPendingBalance" | "CustomerTotalOutstanding" | "NatAccountTotalOutstanding" | "CustomerLimitLeft" | "NatAccountLimitLeft" | "CustomerLimitExceeded" | "NatAccountLimitExceeded" | "LastInvoiceAmount" | "LastInvoiceDate" | "LastPaymentAmount" | "LastPaymentDate" | "DrivenbyUI" | "ItemDetailDiscountTotal" | "MiscellaneousChargeDetailDiscountTot" | "DetailDiscountTotal" | "DetailDiscountPercentage" | "DocumentNetOfDetailDisc" | "AutoCalculationTaxReportingAmounts" | "TaxReportingTRCurrency" | "TRRateType" | "TRRateDate" | "TRRate" | "TRSpread" | "TRRateDateMatching" | "TRRateOperator" | "TRRateOverrideFlag" | "TRExcludedTaxAmount1" | "TRExcludedTaxAmount2" | "TRExcludedTaxAmount3" | "TRExcludedTaxAmount4" | "TRExcludedTaxAmount5" | "TRIncludedTaxAmount1" | "TRIncludedTaxAmount2" | "TRIncludedTaxAmount3" | "TRIncludedTaxAmount4" | "TRIncludedTaxAmount5" | "TRTaxAmount1" | "TRTaxAmount2" | "TRTaxAmount3" | "TRTaxAmount4" | "TRTaxAmount5" | "TRExcludedTaxTotal" | "TRIncludedTaxTotal" | "TRTaxTotal" | "TaxReportingShipmentTRCurr" | "TRShipmentRateType" | "TRShipmentRateDate" | "TRShipmentRate" | "TRShipmentSpread" | "TRShipmentRateDateMatching" | "TRShipmentRateOperator" | "TRShipmentRateOverrideFlag" | "TaxReportingInvoiceTRCurre" | "TRInvoiceRateType" | "TRInvoiceRateDate" | "TRInvoiceRate" | "TRInvoiceSpread" | "TRInvoiceRateDateMatching" | "TRInvoiceRateOperator" | "TRInvoiceRateOverrideFlag" | "TRCurrencyDescription" | "TRShipmentCurrencyDescription" | "TRInvoiceCurrencyDescription" | "TRRateTypeDescription" | "TRShipmentRateTypeDescriptio" | "TRInvoiceRateTypeDescription" | "PaymentType" | "PendingPrepaymentAmount" | "OrderDiscountAmountOverride" | "JobRelated" | "JobRelatedDetailLines" | "ProjectInvoicing" | "InvoiceableDetailLines" | "HasRetainage" | "RetainageTerms" | "RetainageExchangeRate" | "RetainageTermsDescription" | "CustomerAccountSet" | "CustomerAccountSetDescription" | "EnteredBy" | "ePOSSegmentLength" | "ShipmentPostingDate" | "InvoicePostingDate" | "PrepaymentDistributedAmount" | "PrepaymentUnappliedAmount" | "SageCRMCompanyID" | "SageCRMOpportunityID" | "SageCRMPersonID" | "IncludeInCRMOpportunityTotal" | "QuoteExpired" | "OrderUniqActivatedFromQuote" | "OrderNumberActivatedFromQuot" | "PromotedCustomerNumber" | "PaymentTypeOnOrder" | "PaymentCodeOnOrder" | "PaymentCardID" | "OrderHasPreAuthorization" | "OnholdReason" | "IncompleteShipExistForOrder" | "DateRequested" | "TransactionID" | "XMLString" | "ResponseIndicator" | "ResponseCode" | "ResponseMessage" | "AuthorizationCode" | "AVSResult" | "CVVResult" | "TransactionDate" | "VANReference" | "Last4" | "PaymentDescription" | "PaymentTypeID" | "OrderDetails" | "OrderCommentsInstructions" | "OrderPaymentSchedules" | "OrderFromQuotes" | "OrderOptionalFields" | "UpdateOperation"
+		/**
+         * Returns only the first n results.
+         */
+		$top?: number
+		/**
+         * Skips the first n results.
+         */
+		$skip?: number
+		/**
+         * Includes a count of the matching results in the response.
+         */
+		$count?: boolean
+	}
+	url: "/v{apiVersion}/{tenant}/{company}/OE/OEOrders"
+}
+
+export type OeOrdersGetResponses = {
+	/**
+     * OK
+     */
+	200: OEOrderListResponseT
+}
+
+export type OeOrdersGetResponse = OeOrdersGetResponses[keyof OeOrdersGetResponses]
+
+export type OeOrdersPostData = {
+	/**
+     * The entity to post
+     */
+	body: OEOrderWritableT
+	path: {
+		apiVersion: string
+		tenant: string
+		company: string
+	}
+	query?: never
+	url: "/v{apiVersion}/{tenant}/{company}/OE/OEOrders"
+}
+
+export type OeOrdersPostResponses = {
+	/**
+     * OK
+     */
+	200: unknown
+}
+
+export type OeOrdersGetByOrderUniquifierData = {
+	body?: never
+	path: {
+		/**
+         * key: OrderUniquifier
+         */
+		OrderUniquifier: number
+		apiVersion: string
+		tenant: string
+		company: string
+	}
+	query?: {
+		/**
+         * Selects which properties to include in the response.
+         */
+		$select?: "OrderUniquifier" | "OrderNumber" | "CustomerNumber" | "CustomerGroupCode" | "BillToName" | "BillToAddressLine1" | "BillToAddressLine2" | "BillToAddressLine3" | "BillToAddressLine4" | "BillToCity" | "BillToStateProvince" | "BillToZipPostalCode" | "BillToCountry" | "BillToPhoneNumber" | "BillToFaxNumber" | "BillToContact" | "ShipToLocationCode" | "ShipToName" | "ShipToAddressLine1" | "ShipToAddressLine2" | "ShipToAddressLine3" | "ShipToAddressLine4" | "ShipToCity" | "ShipToStateProvince" | "ShipToZipPostalCode" | "ShipToCountry" | "ShipToPhoneNumber" | "ShipToFaxNumber" | "ShipToContact" | "CustomerDiscountLevel" | "DefaultPriceListCode" | "PurchaseOrderNumber" | "Territory" | "TermsCode" | "TotalTermsAmountDue" | "DiscountAvailable" | "TermsRateOverride" | "OrderReference" | "OrderType" | "OrderDate" | "ExpectedShipDate" | "QuoteExpirationDate" | "OrderFiscalYear" | "OrderFiscalPeriod" | "ShipViaCode" | "ShipViaCodeDescription" | "LastInvoiceNumber" | "NumberOfInvoices" | "FreeOnBoardPoint" | "TemplateCode" | "DefaultLocationCode" | "OnHold" | "OrderDescription" | "OrderComment" | "OrderPrintStatus" | "LastPostingDate" | "OrderNumberOfPrepayments" | "OverCreditLimit" | "ApprovedLimit" | "AuthorizingUserID" | "RequiresShippingLabels" | "ShippingLabelsPrinted" | "OrderHomeCurrency" | "OrderRateType" | "OrderSourceCurrency" | "OrderRateDate" | "OrderRate" | "OrderSpread" | "OrderRateDateMatching" | "OrderRateOperator" | "OrderRateOverrideFlag" | "TotalAmountItems" | "TotalAmountMiscellaneousCharges" | "NumberOfLinesOnOrder" | "NumberOfLabels" | "PrevPaymentsTotal" | "PrevPaymentDiscTotal" | "Salesperson1" | "Salesperson2" | "Salesperson3" | "Salesperson4" | "Salesperson5" | "SalesPercentage1" | "SalesPercentage2" | "SalesPercentage3" | "SalesPercentage4" | "SalesPercentage5" | "RecalculateTax" | "TaxOverridden" | "TaxGroup" | "TaxAuthority1" | "TaxAuthority2" | "TaxAuthority3" | "TaxAuthority4" | "TaxAuthority5" | "TaxClass1" | "TaxClass2" | "TaxClass3" | "TaxClass4" | "TaxClass5" | "TaxBase1" | "TaxBase2" | "TaxBase3" | "TaxBase4" | "TaxBase5" | "ExcludedTaxAmount1" | "ExcludedTaxAmount2" | "ExcludedTaxAmount3" | "ExcludedTaxAmount4" | "ExcludedTaxAmount5" | "IncludedTaxAmount1" | "IncludedTaxAmount2" | "IncludedTaxAmount3" | "IncludedTaxAmount4" | "IncludedTaxAmount5" | "Registration1" | "Registration2" | "Registration3" | "Registration4" | "Registration5" | "OrderCompleted" | "OrderCompletionDate" | "InvoiceNumber" | "ShipmentDate" | "InvoiceDate" | "InvoiceFiscalYear" | "InvoiceFiscalPeriod" | "NumberOfTermsPayments" | "TermsPaymentsAsOfDate" | "OrderTotalEstWeight" | "NextDetailNumber" | "PostInvoice" | "InvoiceDiscMiscellaneousCharges" | "InvoiceNumberOfPrepayments" | "NumberLinesQuantityShipped" | "NumberMiscellaneousChargesLines" | "OrderTotalBeforeTax" | "OrderInclTaxTotal" | "OrderItemTotalAmount" | "OrderDiscountBase" | "OrderDiscountPercentage" | "OrderDiscountAmount" | "OrderTotalMiscellaneousCharges" | "OrderSubtotalAmount" | "OrderTotalWithInvoiceDisc" | "OrderExclTaxTotal" | "OrderTotal" | "OrderAmountDue" | "INHOMECURR" | "INRATETYPE" | "INSOURCURR" | "INRATEDATE" | "INRATE" | "INSPREAD" | "INDATEMTCH" | "INRATEREP" | "INRATEOVER" | "ReceiptBatchNumber" | "BankCode" | "ReceiptType" | "CheckDate" | "CheckFiscalYear" | "CheckFiscalPeriod" | "CheckNumber" | "PaymentAppliedTo" | "PaymentInCustomerCurrency" | "InvoiceTotalTermsDisc" | "PaymentInBankCurrency" | "PaymentHomeCurrency" | "PaymentRateType" | "PaymentSourceCurrency" | "PaymentRateDate" | "PaymentRate" | "PaymentSpread" | "PaymentRateDateMatching" | "PaymentRateOperator" | "PriceListCodeDescription" | "TermsCodeDescription" | "TaxGroupCodeDescription" | "LocationCodeDescription" | "SalespersonName1" | "SalespersonName2" | "SalespersonName3" | "SalespersonName4" | "SalespersonName5" | "TaxAuthority1Description" | "TaxAuthority2Description" | "TaxAuthority3Description" | "TaxAuthority4Description" | "TaxAuthority5Description" | "TaxClass1Description" | "TaxClass2Description" | "TaxClass3Description" | "TaxClass4Description" | "TaxClass5Description" | "OrderSourceCurrencyDescription" | "OrderHomeCurrencyDescription" | "OrderRateTypeDescription" | "InvoiceSourceCurrencyDescription" | "InvoiceHomeCurrencyDescription" | "InvoiceRateTypeDescription" | "PaymentSourceCurrencyDescription" | "PaymentHomeCurrencyDescription" | "PaymentRateTypeDescription" | "TotalTaxAmount1" | "TotalTaxAmount2" | "TotalTaxAmount3" | "TotalTaxAmount4" | "TotalTaxAmount5" | "TotalTaxAmount" | "AuthorizingUserPassword" | "OrderRunningTotal" | "OrderTotalPayment" | "OrderTotalPaymentDisc" | "AmountDueLessCurrencyPrepayment" | "PerformTaxCalculation" | "PerformCreditLimitCheck" | "OrderSource" | "PerformShipAll" | "DOSConversionInProgress" | "PerformForcedTaxCalculation" | "PerformManualTaxDistribution" | "TaxCalculationInProgress" | "AutoTaxCalculationStatus" | "OriginatingQuoteNumber" | "DisplayRateWarning" | "CustomerExists" | "InvoiceWillBeProduced" | "SecurityEnabled" | "UserCanApproveCreditLift" | "RecalcMultiPaymentDates" | "BillToEmail" | "BillToContactPhone" | "BillToContactFax" | "BillToContactEmail" | "ShipToEmail" | "ShipToContactPhone" | "ShipToContactFax" | "ShipToContactEmail" | "Allowpartialshipments" | "MultipleQuotes" | "NumberOfQuotes" | "PerformMultipleQuotesToOrder" | "LastShipmentNumber" | "NumberOfShipments" | "ShipmentTrackingNumber" | "PostSequenceNumber" | "ShipmentUniquifier" | "ShipmentNumber" | "SHIDATE" | "ShipmentHomeCurrency" | "ShipmentRateType" | "ShipmentSourceCurrency" | "ShipmentRateDate" | "ShipmentRate" | "ShipmentSpread" | "ShipmentDateMatch" | "ShipmentRateOperator" | "ShipmentRateOverrideFlag" | "ShipmentSourceCurrencyDescription" | "ShipmentHomeCurrencyDescription" | "ShipmentRateTypeDescription" | "OrderPartiallyShipped" | "ShipmentTotal" | "NumberOfOptionalFields" | "PredecessorUniquifier" | "PredecessorNumber" | "ProcessOIPCommand" | "ProcessOECommand" | "UserEnteredApprovalAmount" | "CheckingCustomerCreditLimit" | "CheckingCustomerAgingLimit" | "CheckingNatAccountCreditLimit" | "CheckingNatAccountAgingLimit" | "CustomerIsOverCreditLimit" | "CustomerIsOverAgingLimit" | "NatAccountIsOverCreditLimit" | "NatAccountIsOverAgingLimit" | "CustomerCreditLimit" | "CustomerBalancePosted" | "CustomerDaysOverdue" | "CustomerOverdueLimit" | "CustomerBalanceOverdue" | "NatAccountCreditLimit" | "NatAccountBalance" | "NatAccountDaysOverdue" | "NatAccountOverdueLimit" | "NatAccountBalanceOverdue" | "ARPendingTransactionIncluded" | "OEPendingTransactionIncluded" | "OtherPendingTransactionIncluded" | "ARPendingBalance" | "OEPendingBalance" | "OtherPendingBalance" | "CustomerTotalOutstanding" | "NatAccountTotalOutstanding" | "CustomerLimitLeft" | "NatAccountLimitLeft" | "CustomerLimitExceeded" | "NatAccountLimitExceeded" | "LastInvoiceAmount" | "LastInvoiceDate" | "LastPaymentAmount" | "LastPaymentDate" | "DrivenbyUI" | "ItemDetailDiscountTotal" | "MiscellaneousChargeDetailDiscountTot" | "DetailDiscountTotal" | "DetailDiscountPercentage" | "DocumentNetOfDetailDisc" | "AutoCalculationTaxReportingAmounts" | "TaxReportingTRCurrency" | "TRRateType" | "TRRateDate" | "TRRate" | "TRSpread" | "TRRateDateMatching" | "TRRateOperator" | "TRRateOverrideFlag" | "TRExcludedTaxAmount1" | "TRExcludedTaxAmount2" | "TRExcludedTaxAmount3" | "TRExcludedTaxAmount4" | "TRExcludedTaxAmount5" | "TRIncludedTaxAmount1" | "TRIncludedTaxAmount2" | "TRIncludedTaxAmount3" | "TRIncludedTaxAmount4" | "TRIncludedTaxAmount5" | "TRTaxAmount1" | "TRTaxAmount2" | "TRTaxAmount3" | "TRTaxAmount4" | "TRTaxAmount5" | "TRExcludedTaxTotal" | "TRIncludedTaxTotal" | "TRTaxTotal" | "TaxReportingShipmentTRCurr" | "TRShipmentRateType" | "TRShipmentRateDate" | "TRShipmentRate" | "TRShipmentSpread" | "TRShipmentRateDateMatching" | "TRShipmentRateOperator" | "TRShipmentRateOverrideFlag" | "TaxReportingInvoiceTRCurre" | "TRInvoiceRateType" | "TRInvoiceRateDate" | "TRInvoiceRate" | "TRInvoiceSpread" | "TRInvoiceRateDateMatching" | "TRInvoiceRateOperator" | "TRInvoiceRateOverrideFlag" | "TRCurrencyDescription" | "TRShipmentCurrencyDescription" | "TRInvoiceCurrencyDescription" | "TRRateTypeDescription" | "TRShipmentRateTypeDescriptio" | "TRInvoiceRateTypeDescription" | "PaymentType" | "PendingPrepaymentAmount" | "OrderDiscountAmountOverride" | "JobRelated" | "JobRelatedDetailLines" | "ProjectInvoicing" | "InvoiceableDetailLines" | "HasRetainage" | "RetainageTerms" | "RetainageExchangeRate" | "RetainageTermsDescription" | "CustomerAccountSet" | "CustomerAccountSetDescription" | "EnteredBy" | "ePOSSegmentLength" | "ShipmentPostingDate" | "InvoicePostingDate" | "PrepaymentDistributedAmount" | "PrepaymentUnappliedAmount" | "SageCRMCompanyID" | "SageCRMOpportunityID" | "SageCRMPersonID" | "IncludeInCRMOpportunityTotal" | "QuoteExpired" | "OrderUniqActivatedFromQuote" | "OrderNumberActivatedFromQuot" | "PromotedCustomerNumber" | "PaymentTypeOnOrder" | "PaymentCodeOnOrder" | "PaymentCardID" | "OrderHasPreAuthorization" | "OnholdReason" | "IncompleteShipExistForOrder" | "DateRequested" | "TransactionID" | "XMLString" | "ResponseIndicator" | "ResponseCode" | "ResponseMessage" | "AuthorizationCode" | "AVSResult" | "CVVResult" | "TransactionDate" | "VANReference" | "Last4" | "PaymentDescription" | "PaymentTypeID" | "OrderDetails" | "OrderCommentsInstructions" | "OrderPaymentSchedules" | "OrderFromQuotes" | "OrderOptionalFields" | "UpdateOperation"
+	}
+	url: "/v{apiVersion}/{tenant}/{company}/OE/OEOrders({OrderUniquifier})"
+}
+
+export type OeOrdersGetByOrderUniquifierResponses = {
+	/**
+     * OK
+     */
+	200: OEOrderListResponseT
+}
+
+export type OeOrdersGetByOrderUniquifierResponse = OeOrdersGetByOrderUniquifierResponses[keyof OeOrdersGetByOrderUniquifierResponses]
