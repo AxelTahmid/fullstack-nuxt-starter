@@ -64,6 +64,13 @@ class CartRepository extends Database {
 			.returningAll()
 			.executeTakeFirst()
 	}
+
+	async clearItems(userId: number) {
+		return this.db
+			.deleteFrom("cart_items")
+			.where("user_id", "=", userId)
+			.execute()
+	}
 }
 
 export const cartRepo = CartRepository.getInstance()

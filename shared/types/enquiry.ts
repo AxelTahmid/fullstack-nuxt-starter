@@ -33,3 +33,7 @@ export interface EnquiryThread {
 	createdAt: string
 	messages: EnquiryMessage[]
 }
+
+export interface EnquiryCreateResponse {
+	enquiryNumber: string
+}
