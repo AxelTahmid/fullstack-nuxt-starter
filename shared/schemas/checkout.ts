@@ -3,6 +3,9 @@ import { z } from "zod"
 export const checkoutSchema = z.object({
 	deliverySite: z.string().min(1, "Delivery site is required"),
 	carrier: z.string().min(1, "Carrier is required"),
+	deliveryContact: z.string().optional(),
+	requestedShipDate: z.string().optional(),
+	shippingInstructions: z.string().optional(),
 	paymentMethod: z.string().min(1, "Payment method is required"),
 	poNumber: z.string().optional(),
 })

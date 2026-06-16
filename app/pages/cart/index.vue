@@ -17,25 +17,21 @@ useHead({
 const cart = useCart()
 await cart.refresh()
 
-const deliverySite = ref("Terminal Alpha-7 Central")
-const carrier = ref<"heavy_freight" | "express_courier" | "standard_logistics">("heavy_freight")
+const deliverySite = ref("")
+const deliveryContact = ref("")
+const requestedShipDate = ref("")
+const shippingInstructions = ref("")
+const carrier = ref<"arrange_best" | "customer_carrier" | "customer_pickup">("arrange_best")
 const paymentMethod = ref<"invoice_net30" | "purchase_order" | "corporate_account">("invoice_net30")
 const poNumber = ref("")
 const isSubmitting = ref(false)
 const updatingId = ref<number | null>(null)
 
 const carriers = [
-	{ value: "heavy_freight", label: "Heavy Freight LTL", detail: "5–7 day transit · tarped trailer", priceCents: 18500 },
-	{ value: "express_courier", label: "Express Courier", detail: "Next-day · hazmat certified", priceCents: 45000 },
-	{ value: "standard_logistics", label: "Standard Logistics", detail: "7–10 day transit · standard freight", priceCents: 9500 },
+	{ value: "arrange_best", label: "Arrange best available", detail: "Confirm carrier, route, and freight cost before release." },
+	{ value: "customer_carrier", label: "Use our carrier", detail: "Provide carrier account and pickup instructions below." },
+	{ value: "customer_pickup", label: "Customer pickup", detail: "Hold for pickup after availability is confirmed." },
 ] as const
-
-const deliverySites = [
-	"Terminal Alpha-7 Central",
-	"North Basin Muster Point",
-	"Pit C Service Road",
-	"Fremantle Port Receiving",
-]
 
 const paymentOptions = [
 	{ value: "invoice_net30", label: "Invoice · Net 30", detail: "Company account on file" },
@@ -43,15 +39,11 @@ const paymentOptions = [
 	{ value: "corporate_account", label: "Corporate Account", detail: "Direct debit authorization" },
 ] as const
 
-const selectedCarrier = computed(() => carriers.find(c => c.value === carrier.value))
-const displayedShippingCents = computed(() => {
-	if (!cart.summary.value.lines.length)
-		return 0
-	return selectedCarrier.value?.priceCents ?? cart.summary.value.shippingCents
-})
+const displayedShippingCents = computed(() => cart.summary.value.shippingCents)
 const displayedSubtotalCents = computed(() => cart.summary.value.subtotalCents)
 const displayedTaxCents = computed(() => Math.round(displayedSubtotalCents.value * 0.015))
 const displayedTotalCents = computed(() => displayedSubtotalCents.value + displayedShippingCents.value + displayedTaxCents.value)
+const shippingCostLabel = computed(() => displayedShippingCents.value > 0 ? formatPrice(displayedShippingCents.value) : "To be confirmed")
 
 function formatPrice(cents: number) {
 	return `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -94,6 +86,10 @@ async function placeOrder() {
 		toast.error("Cart is empty.")
 		return
 	}
+	if (!deliverySite.value.trim()) {
+		toast.error("Delivery site is required.")
+		return
+	}
 	if (paymentMethod.value === "purchase_order" && !poNumber.value.trim()) {
 		toast.error("PO number is required for Purchase Order payment.")
 		return
@@ -104,8 +100,11 @@ async function placeOrder() {
 		const response = await $fetch<CheckoutResponse>("/api/orders", {
 			method: "POST",
 			body: {
-				deliverySite: deliverySite.value,
+				deliverySite: deliverySite.value.trim(),
 				carrier: carrier.value,
+				deliveryContact: deliveryContact.value.trim() || undefined,
+				requestedShipDate: requestedShipDate.value || undefined,
+				shippingInstructions: shippingInstructions.value.trim() || undefined,
 				paymentMethod: paymentMethod.value,
 				poNumber: poNumber.value.trim() || undefined,
 			},
@@ -127,7 +126,7 @@ async function placeOrder() {
 	<div class="space-y-8">
 		<section class="space-y-2">
 			<p class="text-muted-foreground text-[0.68rem] font-bold tracking-[0.24em] uppercase">
-				Checkout Pipeline
+				Checkout
 			</p>
 
 			<h1
@@ -138,7 +137,7 @@ async function placeOrder() {
 			</h1>
 
 			<p class="text-muted-foreground max-w-2xl text-sm leading-7">
-				Review line items, select logistics, and authorize payment terms. Submitting the manifest creates a new order under the active operator.
+				Review line items, add shipping details, and choose payment terms.
 			</p>
 		</section>
 
@@ -258,32 +257,53 @@ async function placeOrder() {
 						class="text-foreground mb-5 text-lg font-extrabold tracking-[-0.015em]"
 						style="font-family: var(--font-display);"
 					>
-						Logistics Routing
+						Shipping
 					</h2>
 
 					<div class="space-y-5">
+						<div class="grid gap-4 md:grid-cols-2">
+							<div>
+								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
+									Delivery site
+								</Label>
+
+								<Input
+									v-model="deliverySite"
+									type="text"
+									placeholder="Receiving address, yard, or site"
+									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/50 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
+								/>
+							</div>
+
+							<div>
+								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
+									Delivery contact
+								</Label>
+
+								<Input
+									v-model="deliveryContact"
+									type="text"
+									placeholder="Name, phone, or receiving desk"
+									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/50 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
+								/>
+							</div>
+						</div>
+
 						<div>
 							<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-								Delivery Site
+								Requested ship date
 							</Label>
 
-							<NativeSelect
-								v-model="deliverySite"
-								class="bg-muted text-foreground focus:ring-primary/50 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
-							>
-								<option
-									v-for="site in deliverySites"
-									:key="site"
-									:value="site"
-								>
-									{{ site }}
-								</option>
-							</NativeSelect>
+							<Input
+								v-model="requestedShipDate"
+								type="date"
+								class="bg-muted text-foreground focus:ring-primary/50 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none md:max-w-xs"
+							/>
 						</div>
 
 						<div>
 							<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-								Carrier Service
+								Carrier preference
 							</p>
 
 							<div class="mt-3 space-y-2">
@@ -306,15 +326,20 @@ async function placeOrder() {
 											{{ option.detail }}
 										</p>
 									</div>
-
-									<span
-										class="metric-value text-foreground text-sm font-extrabold"
-										style="font-family: var(--font-display);"
-									>
-										{{ formatPrice(option.priceCents) }}
-									</span>
 								</Button>
 							</div>
+						</div>
+
+						<div>
+							<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
+								Shipping instructions
+							</Label>
+
+							<Textarea
+								v-model="shippingInstructions"
+								placeholder="Dock hours, carrier account, liftgate needs, site access, or handling notes"
+								class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/50 mt-2 min-h-24 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
+							/>
 						</div>
 					</div>
 				</div>
@@ -388,17 +413,17 @@ async function placeOrder() {
 
 						<div class="flex items-center justify-between">
 							<dt class="text-primary-foreground/70">
-								Logistics
+								Shipping
 							</dt>
 
 							<dd class="font-semibold tabular-nums">
-								{{ formatPrice(displayedShippingCents) }}
+								{{ shippingCostLabel }}
 							</dd>
 						</div>
 
 						<div class="flex items-center justify-between">
 							<dt class="text-primary-foreground/70">
-								Environmental Tax
+								Estimated tax
 							</dt>
 
 							<dd class="font-semibold tabular-nums">
@@ -409,7 +434,7 @@ async function placeOrder() {
 
 					<div class="border-primary-foreground/20 mt-5 border-t pt-5">
 						<p class="text-primary-foreground/70 text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-							Grand Total
+							Estimated total
 						</p>
 
 						<p

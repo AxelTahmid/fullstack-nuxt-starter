@@ -44,6 +44,9 @@ const paymentLabels: Record<string, string> = {
 }
 
 const carrierLabels: Record<string, string> = {
+	arrange_best: "Arrange best available",
+	customer_carrier: "Use our carrier",
+	customer_pickup: "Customer pickup",
 	heavy_freight: "Heavy Freight LTL",
 	express_courier: "Express Courier",
 	standard_logistics: "Standard Logistics",
@@ -108,7 +111,7 @@ const carrierLabels: Record<string, string> = {
 					</div>
 
 					<p class="text-muted-foreground max-w-xl text-sm leading-7">
-						Manifest has been dispatched to logistics routing. Vendors will confirm acknowledgment within 4 operational hours.
+						Order details have been received. Shipping and availability will be confirmed before release.
 					</p>
 				</div>
 
@@ -140,7 +143,7 @@ const carrierLabels: Record<string, string> = {
 						<Truck class="size-4" />
 
 						<p class="text-[0.62rem] font-bold tracking-[0.18em] uppercase">
-							Carrier
+							Carrier preference
 						</p>
 					</div>
 

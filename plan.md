@@ -27,7 +27,7 @@ Non-negotiable architecture:
 | Local product repository | Deprecated | Product-related UI should not depend on local DB products. |
 | Users/auth schema | In place | Current core tables: `users`, `email_auth_tokens`, `brand_settings`, plus pg-boss tables. |
 | Cart | In place | `cart_items` migration, Kysely type, repository, and cart endpoints are implemented. Prices resolve server-side when available and fall back to `0`. |
-| Checkout/order submit | Stubbed | `POST /api/orders` returns `501`. |
+| Checkout/order submit | Stubbed | Cart page captures shipping/payment inputs; `POST /api/orders` still returns `501`. |
 | Enquiries | Stubbed | Shared schemas/types and pages exist, but API routes return `501` because schema was removed. |
 | Request estimate | Static UI | `/estimate` is not yet backed by API/schema. |
 
@@ -441,6 +441,12 @@ Next:
 
 This unlocks shop add-to-cart and cart page quantity controls.
 
+Cart page shipping state:
+
+- Captures delivery site, delivery contact, requested ship date, carrier preference, and shipping instructions.
+- Does not calculate live freight rates yet.
+- Shows shipping as `To be confirmed` unless the backend summary returns a non-zero shipping amount.
+
 ### Phase 2 - Enquiries
 
 - Add `enquiries` migration.
@@ -466,6 +472,7 @@ This unlocks RFQ-style workflows without creating Sage orders prematurely.
 - Confirm the target Sage OE order payload from generated SDK and the installation's Swagger.
 - Add `orders` and `order_items` migrations.
 - Implement `POST /api/orders`.
+- Persist cart-page shipping fields: delivery site, delivery contact, requested ship date, carrier preference, and shipping instructions.
 - Decide direct Sage POST vs outbox before production.
 - Write Sage-calculated totals back to local order receipt.
 - Clear cart after successful order creation.

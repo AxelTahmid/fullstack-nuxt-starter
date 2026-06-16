@@ -38,6 +38,9 @@ export interface OrderSummary {
 export interface CheckoutPayload {
 	deliverySite: string
 	carrier: string
+	deliveryContact?: string
+	requestedShipDate?: string
+	shippingInstructions?: string
 	paymentMethod: string
 	poNumber?: string
 }
