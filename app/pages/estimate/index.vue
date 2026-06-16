@@ -62,63 +62,77 @@ const serverPagination = computed(() => ({
 	mode: total.value === null ? ("cursor" as const) : ("page" as const),
 }))
 
+const { user } = useUserSession()
+const isAdmin = computed(() => (user.value as { role?: string } | null)?.role === "admin")
+
 const RouterLink = resolveComponent("NuxtLink")
 
-const columns: ColumnDef<EstimateSummary>[] = [
-	{
-		accessorKey: "quoteNumber",
-		header: "Estimate",
-		cell: ({ row }) => h(
-			RouterLink,
-			{ to: `/estimate/${row.original.quoteNumber}`, class: "text-primary font-medium hover:underline" },
-			() => row.original.quoteNumber,
-		),
-	},
-	{
-		accessorKey: "status",
-		header: "Status",
-		cell: ({ row }) => h(EstimateStatusBadge, { status: row.original.status }),
-	},
-	{
-		accessorKey: "itemCount",
-		header: "Items",
-		cell: ({ row }) => h("span", { class: "text-muted-foreground text-sm tabular-nums" }, `${row.original.itemCount}`),
-	},
-	{
-		accessorKey: "totalCents",
-		header: "Total",
-		cell: ({ row }) => h("span", { class: "font-medium tabular-nums" }, formatPrice(row.original.totalCents)),
-	},
-	{
-		accessorKey: "createdAt",
-		header: "Requested",
-		cell: ({ row }) => h("span", { class: "text-muted-foreground text-sm" }, formatDate(row.original.createdAt)),
-	},
-	{
-		accessorKey: "expiresAt",
-		header: "Valid until",
-		cell: ({ row }) => h(
-			"span",
-			{ class: "text-muted-foreground text-sm" },
-			row.original.expiresAt ? formatDate(row.original.expiresAt) : "—",
-		),
-	},
-	{
-		id: "actions",
-		header: () => h("span", { class: "sr-only" }, "Actions"),
-		cell: ({ row }) => h(
-			RouterLink,
-			{
-				"to": `/estimate/${row.original.quoteNumber}`,
-				"class": "text-muted-foreground hover:text-primary flex justify-end",
-				"aria-label": `View estimate ${row.original.quoteNumber}`,
-			},
-			() => h(ChevronRight, { class: "size-4" }),
-		),
-		enableSorting: false,
-		enableHiding: false,
-	},
-]
+const columns = computed<ColumnDef<EstimateSummary>[]>(() => {
+	const list: ColumnDef<EstimateSummary>[] = [
+		{
+			accessorKey: "quoteNumber",
+			header: "Estimate",
+			cell: ({ row }) => h(
+				RouterLink,
+				{ to: `/estimate/${row.original.quoteNumber}`, class: "text-primary font-medium hover:underline" },
+				() => row.original.quoteNumber,
+			),
+		},
+	]
+
+	// Admins see every customer's quotes, so identify whose quote each row is.
+	if (isAdmin.value) {
+		list.push({
+			accessorKey: "customerName",
+			header: "Customer",
+			cell: ({ row }) => h("span", { class: "block max-w-56 truncate text-sm", title: row.original.customerName }, row.original.customerName),
+		})
+	}
+
+	list.push(
+		{
+			accessorKey: "status",
+			header: "Status",
+			cell: ({ row }) => h(EstimateStatusBadge, { status: row.original.status }),
+		},
+		{
+			accessorKey: "createdAt",
+			header: "Requested",
+			cell: ({ row }) => h("span", { class: "text-muted-foreground text-sm" }, formatDate(row.original.createdAt)),
+		},
+		{
+			accessorKey: "expiresAt",
+			header: "Valid until",
+			cell: ({ row }) => h(
+				"span",
+				{ class: "text-muted-foreground text-sm" },
+				row.original.expiresAt ? formatDate(row.original.expiresAt) : "—",
+			),
+		},
+		{
+			accessorKey: "totalCents",
+			header: "Total",
+			cell: ({ row }) => h("span", { class: "font-medium tabular-nums" }, formatPrice(row.original.totalCents)),
+		},
+		{
+			id: "actions",
+			header: () => h("span", { class: "sr-only" }, "Actions"),
+			cell: ({ row }) => h(
+				RouterLink,
+				{
+					"to": `/estimate/${row.original.quoteNumber}`,
+					"class": "text-muted-foreground hover:text-primary flex justify-end",
+					"aria-label": `View estimate ${row.original.quoteNumber}`,
+				},
+				() => h(ChevronRight, { class: "size-4" }),
+			),
+			enableSorting: false,
+			enableHiding: false,
+		},
+	)
+
+	return list
+})
 </script>
 
 <template>
@@ -173,7 +187,7 @@ const columns: ColumnDef<EstimateSummary>[] = [
 					:table="table"
 					:custom-is-filtered="Boolean(search)"
 					:on-reset="() => patchQuery({ page: undefined, search: undefined })"
-					:column-labels="{ quoteNumber: 'Estimate', status: 'Status', itemCount: 'Items', totalCents: 'Total', createdAt: 'Requested', expiresAt: 'Valid until' }"
+					:column-labels="{ quoteNumber: 'Estimate', customerName: 'Customer', status: 'Status', createdAt: 'Requested', expiresAt: 'Valid until', totalCents: 'Total' }"
 				>
 					<template #filters>
 						<DataTableSearch

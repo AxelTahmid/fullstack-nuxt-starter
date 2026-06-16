@@ -150,6 +150,10 @@ function lineCount(order: OEOrderT) {
 	return order.NumberOfLinesOnOrder ?? order.OrderDetails?.length ?? 0
 }
 
+function customerLabel(order: OEOrderT) {
+	return order.BillToName?.trim() || order.ShipToName?.trim() || order.CustomerNumber?.trim() || "—"
+}
+
 export function orderStatus(order: OEOrderT): OrderStatus {
 	if (
 		order.OrderCompleted === "CompleteIncluded"
@@ -194,6 +198,8 @@ export function toOrderSummary(order: OEOrderT): OrderSummary {
 	return {
 		id: order.OrderUniquifier ?? 0,
 		orderNumber: documentNumber(order),
+		poNumber: order.PurchaseOrderNumber?.trim() || null,
+		customerName: customerLabel(order),
 		status: orderStatus(order),
 		totalCents,
 		placedAt: toIsoDate(order.OrderDate),
@@ -240,6 +246,7 @@ export function toEstimateSummary(order: OEOrderT): EstimateSummary {
 	return {
 		id: order.OrderUniquifier ?? 0,
 		quoteNumber: documentNumber(order),
+		customerName: customerLabel(order),
 		status: estimateStatus(order),
 		totalCents,
 		itemCount: lineCount(order),

@@ -62,54 +62,73 @@ const serverPagination = computed(() => ({
 	mode: total.value === null ? ("cursor" as const) : ("page" as const),
 }))
 
+const { user } = useUserSession()
+const isAdmin = computed(() => (user.value as { role?: string } | null)?.role === "admin")
+
 const RouterLink = resolveComponent("NuxtLink")
 
-const columns: ColumnDef<OrderSummary>[] = [
-	{
-		accessorKey: "orderNumber",
-		header: "Order",
-		cell: ({ row }) => h(
-			RouterLink,
-			{ to: `/orders/${row.original.orderNumber}`, class: "text-primary font-medium hover:underline" },
-			() => row.original.orderNumber,
-		),
-	},
-	{
-		accessorKey: "status",
-		header: "Status",
-		cell: ({ row }) => h(OrderStatusBadge, { status: row.original.status }),
-	},
-	{
-		accessorKey: "itemCount",
-		header: "Items",
-		cell: ({ row }) => h("span", { class: "text-muted-foreground text-sm tabular-nums" }, `${row.original.itemCount}`),
-	},
-	{
-		accessorKey: "totalCents",
-		header: "Total",
-		cell: ({ row }) => h("span", { class: "font-medium tabular-nums" }, formatPrice(row.original.totalCents)),
-	},
-	{
-		accessorKey: "placedAt",
-		header: "Placed",
-		cell: ({ row }) => h("span", { class: "text-muted-foreground text-sm" }, formatDate(row.original.placedAt)),
-	},
-	{
-		id: "actions",
-		header: () => h("span", { class: "sr-only" }, "Actions"),
-		cell: ({ row }) => h(
-			RouterLink,
-			{
-				"to": `/orders/${row.original.orderNumber}`,
-				"class": "text-muted-foreground hover:text-primary flex justify-end",
-				"aria-label": `View order ${row.original.orderNumber}`,
-			},
-			() => h(ChevronRight, { class: "size-4" }),
-		),
-		enableSorting: false,
-		enableHiding: false,
-	},
-]
+const columns = computed<ColumnDef<OrderSummary>[]>(() => {
+	const list: ColumnDef<OrderSummary>[] = [
+		{
+			accessorKey: "orderNumber",
+			header: "Order",
+			cell: ({ row }) => h(
+				RouterLink,
+				{ to: `/orders/${row.original.orderNumber}`, class: "text-primary font-medium hover:underline" },
+				() => row.original.orderNumber,
+			),
+		},
+		{
+			accessorKey: "poNumber",
+			header: "PO number",
+			cell: ({ row }) => h("span", { class: "text-muted-foreground text-sm" }, row.original.poNumber || "—"),
+		},
+	]
+
+	// Admins see every customer's orders, so identify whose order each row is.
+	if (isAdmin.value) {
+		list.push({
+			accessorKey: "customerName",
+			header: "Customer",
+			cell: ({ row }) => h("span", { class: "block max-w-56 truncate text-sm", title: row.original.customerName }, row.original.customerName),
+		})
+	}
+
+	list.push(
+		{
+			accessorKey: "status",
+			header: "Status",
+			cell: ({ row }) => h(OrderStatusBadge, { status: row.original.status }),
+		},
+		{
+			accessorKey: "placedAt",
+			header: "Placed",
+			cell: ({ row }) => h("span", { class: "text-muted-foreground text-sm" }, formatDate(row.original.placedAt)),
+		},
+		{
+			accessorKey: "totalCents",
+			header: "Total",
+			cell: ({ row }) => h("span", { class: "font-medium tabular-nums" }, formatPrice(row.original.totalCents)),
+		},
+		{
+			id: "actions",
+			header: () => h("span", { class: "sr-only" }, "Actions"),
+			cell: ({ row }) => h(
+				RouterLink,
+				{
+					"to": `/orders/${row.original.orderNumber}`,
+					"class": "text-muted-foreground hover:text-primary flex justify-end",
+					"aria-label": `View order ${row.original.orderNumber}`,
+				},
+				() => h(ChevronRight, { class: "size-4" }),
+			),
+			enableSorting: false,
+			enableHiding: false,
+		},
+	)
+
+	return list
+})
 </script>
 
 <template>
@@ -154,13 +173,13 @@ const columns: ColumnDef<OrderSummary>[] = [
 					:table="table"
 					:custom-is-filtered="Boolean(search)"
 					:on-reset="() => patchQuery({ page: undefined, search: undefined })"
-					:column-labels="{ orderNumber: 'Order', status: 'Status', itemCount: 'Items', totalCents: 'Total', placedAt: 'Placed' }"
+					:column-labels="{ orderNumber: 'Order', poNumber: 'PO number', customerName: 'Customer', status: 'Status', placedAt: 'Placed', totalCents: 'Total' }"
 				>
 					<template #filters>
 						<DataTableSearch
 							:model-value="search"
 							:min-chars="1"
-							placeholder="Search by order number"
+							placeholder="Search by order or PO number"
 							@update:model-value="onSearch"
 						/>
 					</template>

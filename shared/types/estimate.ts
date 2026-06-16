@@ -5,6 +5,7 @@ export type EstimateStatus = "submitted" | "expired" | "converted"
 export interface EstimateSummary {
 	id: number
 	quoteNumber: string
+	customerName: string
 	status: EstimateStatus
 	totalCents: number
 	itemCount: number

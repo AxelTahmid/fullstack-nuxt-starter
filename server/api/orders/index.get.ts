@@ -27,7 +27,7 @@ export default defineEventHandler(async (event): Promise<PaginatedList<OrderSumm
 	}
 
 	const searchFilter = search
-		? ` and (contains(OrderNumber,'${escapeODataString(search)}') or contains(OrderReference,'${escapeODataString(search)}'))`
+		? ` and (contains(OrderNumber,'${escapeODataString(search)}') or contains(OrderReference,'${escapeODataString(search)}') or contains(PurchaseOrderNumber,'${escapeODataString(search)}'))`
 		: ""
 
 	// Pagination is pushed to Sage via OData $skip/$top; $count returns the total

@@ -29,6 +29,8 @@ export interface OrderDetail {
 export interface OrderSummary {
 	id: number
 	orderNumber: string
+	poNumber: string | null
+	customerName: string
 	status: OrderStatus
 	totalCents: number
 	placedAt: string
