@@ -146,6 +146,9 @@ export default defineNuxtConfig({
 			gzip: true,
 			brotli: true,
 		},
+		typescript: {
+			tsConfig: { compilerOptions: { composite: true } },
+		},
 	},
 
 	vite: {
@@ -154,6 +157,9 @@ export default defineNuxtConfig({
 
 	typescript: {
 		typeCheck: false,
+		tsConfig: { compilerOptions: { composite: true } },
+		sharedTsConfig: { compilerOptions: { composite: true } },
+		nodeTsConfig: { compilerOptions: { composite: true } },
 	},
 
 	debug: process.env.NODE_ENV !== "production",

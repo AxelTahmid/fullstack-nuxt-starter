@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { AlertCircle, ArrowLeft, Check, ImageIcon, LoaderCircle, Plus } from "@lucide/vue"
 import type { FetchError } from "ofetch"
-import type { ProductDetailResponse } from "#shared/types/product"
+import type { ICItemPricingDetailT, ICItemPricingT, ICItemT } from "#shared/sage300"
+import type { StockStatus } from "#shared/types/product"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -25,21 +26,54 @@ const sourceKey = computed(() => {
 	return Array.isArray(value) ? value[0] ?? "" : String(value ?? "")
 })
 
-const { data, error } = await useFetch<ProductDetailResponse>(
-	() => `/api/products/${encodeURIComponent(sourceKey.value)}`,
-)
+const { data, error } = await useFetch<{
+	item: ICItemT
+	pricing: ICItemPricingT | null
+	pricingUnavailableReason: string | null
+}>(() => `/api/products/${encodeURIComponent(sourceKey.value)}`)
 
-const product = computed(() => data.value?.product)
+const item = computed(() => data.value?.item)
 const pricing = computed(() => data.value?.pricing)
-const inventory = computed(() => data.value?.inventory)
-const sage = computed(() => data.value?.sage)
-const isInCart = computed(() => {
-	const key = product.value?.sourceKey
-	return key ? cart.summary.value.lines.some(line => line.sku === key) : false
+const itemSourceKey = computed(() => item.value?.UnformattedItemNumber || item.value?.ItemNumber || sourceKey.value)
+const comments = computed(() => [item.value?.Comment1, item.value?.Comment2, item.value?.Comment3, item.value?.Comment4]
+	.map(comment => comment?.trim())
+	.filter((comment): comment is string => Boolean(comment)))
+const itemName = computed(() => item.value?.Description?.trim() || item.value?.ItemNumber?.trim() || itemSourceKey.value || "Unnamed Sage item")
+const itemDescription = computed(() => comments.value.join(" ") || item.value?.Description?.trim() || "No product description was returned by Sage.")
+const itemCategory = computed(() => item.value?.Category?.trim() || "Uncategorized")
+const itemManufacturer = computed(() => item.value?.PreferredVendor?.trim() || "Sage 300")
+const itemStockStatus = computed<StockStatus>(() => {
+	const sageItem = item.value
+	if (!sageItem || sageItem.Sellable === false || sageItem.Status === false) {
+		return "out_of_stock"
+	}
+
+	const available = sageItem.QuantityAvailable ?? sageItem.QuantityOnHand
+	if (typeof available !== "number") {
+		return "in_stock"
+	}
+
+	if (available <= 0) {
+		return "out_of_stock"
+	}
+
+	return available <= 5 ? "low_stock" : "in_stock"
 })
+const defaultPricingDetail = computed<ICItemPricingDetailT | undefined>(() => pricing.value?.ItemPricingDetails?.find(detail => detail.DefaultUnit && typeof detail.UnitPrice === "number")
+	?? pricing.value?.ItemPricingDetails?.find(detail => typeof detail.UnitPrice === "number"))
+const unitPrice = computed(() => pricing.value?.SalePrice ?? defaultPricingDetail.value?.UnitPrice ?? pricing.value?.BasePrice ?? null)
+const currencyCode = computed(() => pricing.value?.CurrencyCode || "CAD")
+const unitOfMeasure = computed(() => pricing.value?.SaleUnitOfMeasure
+	|| pricing.value?.PricingUnitOfMeasure
+	|| defaultPricingDetail.value?.QuantityUnit
+	|| item.value?.StockingUnitOfMeasure
+	|| "unit")
+const pricingUnavailableReason = computed(() => data.value?.pricingUnavailableReason
+	|| (pricing.value && unitPrice.value === null ? "Sage pricing exists, but no unit price was returned." : null))
+const isInCart = computed(() => cart.summary.value.lines.some(line => line.sku === itemSourceKey.value))
 
 useHead({
-	title: computed(() => product.value?.name ? `${product.value.name} · Product` : "Product detail"),
+	title: computed(() => itemName.value ? `${itemName.value} · Product` : "Product detail"),
 })
 
 const adding = ref(false)
@@ -56,8 +90,13 @@ function valueOrDash(value: string | number | boolean | null | undefined) {
 	return String(value)
 }
 
-function formatDate(value: string | null | undefined) {
+function formatDate(value: Date | string | null | undefined) {
 	if (!value) {
+		return "-"
+	}
+
+	const date = value instanceof Date ? value : new Date(value)
+	if (Number.isNaN(date.getTime())) {
 		return "-"
 	}
 
@@ -65,50 +104,50 @@ function formatDate(value: string | null | undefined) {
 		month: "short",
 		day: "numeric",
 		year: "numeric",
-	}).format(new Date(value))
+	}).format(date)
 }
 
-function formatOptionalPrice(cents: number | null | undefined, currencyCode: string | null | undefined) {
-	if (cents === null || cents === undefined || !currencyCode) {
+function formatSagePrice(value: number | null | undefined) {
+	if (typeof value !== "number") {
 		return "-"
 	}
 
-	return formatPrice(cents, currencyCode)
+	return formatPrice(Math.round(value * 100), currencyCode.value)
 }
 
 const inventoryRows = computed(() => [
-	{ label: "Available", value: valueOrDash(inventory.value?.quantityAvailable) },
-	{ label: "On hand", value: valueOrDash(inventory.value?.quantityOnHand) },
-	{ label: "Committed", value: valueOrDash(inventory.value?.quantityCommitted) },
-	{ label: "On purchase order", value: valueOrDash(inventory.value?.quantityOnPurchaseOrder) },
-	{ label: "On sales order", value: valueOrDash(inventory.value?.quantityOnSalesOrder) },
-	{ label: "Stocking UOM", value: valueOrDash(inventory.value?.stockingUnitOfMeasure) },
-	{ label: "Unit weight", value: valueOrDash(inventory.value?.unitWeight) },
-	{ label: "Weight UOM", value: valueOrDash(inventory.value?.weightUnitOfMeasure) },
+	{ label: "Available", value: valueOrDash(item.value?.QuantityAvailable) },
+	{ label: "On hand", value: valueOrDash(item.value?.QuantityOnHand) },
+	{ label: "Committed", value: valueOrDash(item.value?.QuantityCommitted) },
+	{ label: "On purchase order", value: valueOrDash(item.value?.QuantityOnPurchaseOrder) },
+	{ label: "On sales order", value: valueOrDash(item.value?.QuantityOnSalesOrder) },
+	{ label: "Stocking UOM", value: valueOrDash(item.value?.StockingUnitOfMeasure) },
+	{ label: "Unit weight", value: valueOrDash(item.value?.UnitWeight) },
+	{ label: "Weight UOM", value: valueOrDash(item.value?.WeightUnitOfMeasure) },
 ])
 
 const sageRows = computed(() => [
-	{ label: "Item number", value: valueOrDash(sage.value?.itemNumber) },
-	{ label: "Sage key", value: valueOrDash(sage.value?.unformattedItemNumber) },
-	{ label: "Account set", value: valueOrDash(sage.value?.accountSetCode) },
-	{ label: "Default price list", value: valueOrDash(sage.value?.defaultPriceListCode) },
-	{ label: "Vendor item", value: valueOrDash(sage.value?.preferredVendorItem) },
-	{ label: "Tariff code", value: valueOrDash(sage.value?.tariffCode) },
-	{ label: "Stock item", value: valueOrDash(sage.value?.stockItem) },
-	{ label: "Sellable", value: valueOrDash(sage.value?.sellable) },
-	{ label: "Active", value: valueOrDash(sage.value?.active) },
-	{ label: "Last maintained", value: formatDate(sage.value?.dateLastMaintained) },
-	{ label: "Inactive date", value: formatDate(sage.value?.dateInactive) },
+	{ label: "Item number", value: valueOrDash(item.value?.ItemNumber || itemSourceKey.value) },
+	{ label: "Sage key", value: valueOrDash(itemSourceKey.value) },
+	{ label: "Account set", value: valueOrDash(item.value?.AccountSetCode) },
+	{ label: "Default price list", value: valueOrDash(item.value?.DefaultPriceListCode) },
+	{ label: "Vendor item", value: valueOrDash(item.value?.PreferredVendorItem) },
+	{ label: "Tariff code", value: valueOrDash(item.value?.TariffCode) },
+	{ label: "Stock item", value: valueOrDash(item.value?.StockItem) },
+	{ label: "Sellable", value: valueOrDash(item.value?.Sellable) },
+	{ label: "Active", value: valueOrDash(item.value?.Status) },
+	{ label: "Last maintained", value: formatDate(item.value?.DateLastMaintained) },
+	{ label: "Inactive date", value: formatDate(item.value?.DateInactive) },
 ])
 
 async function addToCart() {
-	if (!product.value) {
+	if (!item.value) {
 		return
 	}
 
 	adding.value = true
 	try {
-		await cart.addItem(product.value.sourceKey, 1)
+		await cart.addItem(itemSourceKey.value, 1)
 		toast.success("Added to cart.")
 	}
 	catch (error) {
@@ -138,25 +177,25 @@ async function addToCart() {
 				</Button>
 
 				<div
-					v-if="product"
+					v-if="item"
 					class="space-y-2"
 				>
 					<div class="flex flex-wrap items-center gap-2">
 						<p class="text-sm font-medium text-muted-foreground">
-							{{ product.sku }}
+							{{ item.ItemNumber || itemSourceKey }}
 						</p>
 
 						<Badge variant="secondary">
-							{{ stockLabel(product.stockStatus) }}
+							{{ stockLabel(itemStockStatus) }}
 						</Badge>
 					</div>
 
 					<h1 class="max-w-4xl text-3xl font-semibold tracking-tight">
-						{{ product.name }}
+						{{ itemName }}
 					</h1>
 
 					<p class="text-sm text-muted-foreground">
-						{{ product.category }} / {{ product.manufacturer }}
+						{{ itemCategory }} / {{ itemManufacturer }}
 					</p>
 				</div>
 
@@ -173,7 +212,7 @@ async function addToCart() {
 			</div>
 
 			<Button
-				v-if="product"
+				v-if="item"
 				type="button"
 				:disabled="adding"
 				@click="addToCart"
@@ -215,17 +254,7 @@ async function addToCart() {
 		>
 			<Card class="overflow-hidden py-0">
 				<div class="aspect-square bg-muted">
-					<img
-						v-if="product?.imageUrl"
-						:src="product.imageUrl"
-						:alt="product.name"
-						class="size-full object-cover"
-					>
-
-					<div
-						v-else
-						class="flex size-full items-center justify-center text-muted-foreground"
-					>
+					<div class="flex size-full items-center justify-center text-muted-foreground">
 						<ImageIcon class="size-12" />
 					</div>
 				</div>
@@ -240,11 +269,11 @@ async function addToCart() {
 
 						<CardContent class="space-y-4">
 							<p class="text-sm leading-6 text-muted-foreground">
-								{{ product?.description || "No product description was returned by Sage." }}
+								{{ itemDescription }}
 							</p>
 
 							<div
-								v-if="data?.comments.length"
+								v-if="comments.length"
 								class="space-y-2"
 							>
 								<p class="text-sm font-medium">
@@ -253,7 +282,7 @@ async function addToCart() {
 
 								<ul class="space-y-1 text-sm text-muted-foreground">
 									<li
-										v-for="comment in data.comments"
+										v-for="comment in comments"
 										:key="comment"
 									>
 										{{ comment }}
@@ -324,10 +353,10 @@ async function addToCart() {
 							</p>
 
 							<p
-								v-if="formatOptionalPrice(pricing?.unitPriceCents, pricing?.currencyCode) !== '-'"
+								v-if="unitPrice !== null"
 								class="mt-1 text-3xl font-semibold tracking-tight"
 							>
-								{{ formatOptionalPrice(pricing?.unitPriceCents, pricing?.currencyCode) }}
+								{{ formatSagePrice(unitPrice) }}
 							</p>
 
 							<p
@@ -338,17 +367,17 @@ async function addToCart() {
 							</p>
 
 							<p class="mt-1 text-sm text-muted-foreground">
-								Per {{ pricing?.unitOfMeasure || inventory?.stockingUnitOfMeasure || "unit" }}
+								Per {{ unitOfMeasure }}
 							</p>
 						</div>
 
-						<Alert v-if="pricing?.unavailableReason">
+						<Alert v-if="pricingUnavailableReason">
 							<AlertCircle class="size-4" />
 
 							<AlertTitle>Pricing not returned</AlertTitle>
 
 							<AlertDescription>
-								{{ pricing.unavailableReason }}
+								{{ pricingUnavailableReason }}
 							</AlertDescription>
 						</Alert>
 
@@ -359,7 +388,7 @@ async function addToCart() {
 								</dt>
 
 								<dd class="font-medium">
-									{{ pricing?.currencyCode || "-" }}
+									{{ pricing?.CurrencyCode || "-" }}
 								</dd>
 							</div>
 
@@ -369,7 +398,7 @@ async function addToCart() {
 								</dt>
 
 								<dd class="font-medium">
-									{{ pricing?.priceListCode || "-" }}
+									{{ pricing?.PriceListCode || item?.DefaultPriceListCode || "-" }}
 								</dd>
 							</div>
 
@@ -379,7 +408,7 @@ async function addToCart() {
 								</dt>
 
 								<dd class="font-medium">
-									{{ formatOptionalPrice(pricing?.basePriceCents, pricing?.currencyCode) }}
+									{{ formatSagePrice(pricing?.BasePrice) }}
 								</dd>
 							</div>
 
@@ -389,7 +418,7 @@ async function addToCart() {
 								</dt>
 
 								<dd class="font-medium">
-									{{ formatOptionalPrice(pricing?.salePriceCents, pricing?.currencyCode) }}
+									{{ formatSagePrice(pricing?.SalePrice) }}
 								</dd>
 							</div>
 
@@ -399,7 +428,7 @@ async function addToCart() {
 								</dt>
 
 								<dd class="font-medium">
-									{{ formatDate(pricing?.saleStartsOn) }}
+									{{ formatDate(pricing?.SaleStartDate) }}
 								</dd>
 							</div>
 
@@ -409,7 +438,7 @@ async function addToCart() {
 								</dt>
 
 								<dd class="font-medium">
-									{{ formatDate(pricing?.saleEndsOn) }}
+									{{ formatDate(pricing?.SaleEndDate) }}
 								</dd>
 							</div>
 						</dl>
