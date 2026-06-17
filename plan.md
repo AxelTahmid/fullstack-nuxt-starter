@@ -52,7 +52,7 @@ Anything not on this list lives in Sage and is read/written through the generate
 ## 3. Sage Product Read Model
 
 - `GET /api/products` — requires login, calls `icItemsGet`, supports OData `$filter/$top/$skip/$count`, maps `ICItem → ProductListItem`, returns nullable `priceCents`.
-- `GET /api/products/[sourceKey]` — item detail + pricing (`ICItemPricing`), with a graceful "pricing unavailable" path.
+- `GET /api/products/[sourceKey]` — item detail + pricing (`ICItemPricing`), with a graceful "pricing unavailable" path. Pricing resolves from a global price list (`sage300.priceListCode`) or the item's `DefaultPriceListCode`; it is **not** scoped to the logged-in customer's `ARCustomers.CustomerPriceList` yet (see §12 remaining work, item 5).
 
 Keep this direction. No local product tables for catalog data. Keep page-size pagination; do not scan all Sage items to compute global facet counts.
 
@@ -198,7 +198,7 @@ Applied in `0009_create_audit_logs_table`:
 
 ```text
 audit_logs:
-  id integer identity primary key
+  id uuid primary key default uuidv7()        -- time-ordered UUIDv7 (Postgres 18)
   actor_user_id integer null references users(id) on delete set null
   action text not null
   target_type text not null
@@ -208,6 +208,7 @@ audit_logs:
   ip_address text null
   user_agent text null
   created_at timestamptz not null default now()
+  archived_at timestamptz null
 
 indexes:
   (actor_user_id, created_at)
@@ -298,6 +299,7 @@ Remaining work groups:
 2. Password onboarding security: optional upgrade from emailed generated passwords to one-time setup/reset links.
 3. Product images: implement S3/object-storage metadata lookup keyed by Sage item number/source key.
 4. Customer profile policy: decide whether customers can edit their own email or whether email changes remain admin-only.
+5. Per-customer contract pricing: `GET /api/products/[sourceKey]` resolves pricing from a global price list (`sage300.priceListCode`) or the item's `DefaultPriceListCode` — **not** the logged-in customer's `ARCustomers.CustomerPriceList`. Every customer therefore sees the same list price, not their negotiated/contract price. Decide whether to resolve the customer's price list (and contract prices) across catalog/detail/cart/checkout/estimate pricing.
 
 ## 13. Build Order
 

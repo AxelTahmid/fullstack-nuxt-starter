@@ -70,13 +70,13 @@ log-db:
 # Database Management (Kysely)
 # ----------------------------------------------------------------------
 
-.PHONY: db-migrate db-migrate-up db-migrate-down db-status db-gen-types db-seed
+.PHONY: db-migrate db-up db-down db-status db-gen db-seed db-reset
 
-## db-migrate: Run all pending Kysely database migrations and seed demo data
-db-migrate:
+## db-latest: Run all pending Kysely database migrations and seed demo data
+db-latest:
 	@echo "Running all pending migrations..."
 	@docker compose exec app npx tsx server/db/migrate.ts latest
-	@$(MAKE) db-gen-types
+	@$(MAKE) db-gen
 	@$(MAKE) db-seed
 
 ## db-seed: Seed demo customer data
@@ -84,14 +84,14 @@ db-seed:
 	@echo "Seeding demo data..."
 	@docker compose exec app npx tsx server/db/seed.ts
 
-## db-migrate-up: Run next pending migration
-db-migrate-up:
+## db-up: Run next pending migration
+db-up:
 	@echo "Running next migration..."
 	@docker compose exec app npx tsx server/db/migrate.ts up
-	@$(MAKE) db-gen-types
+	@$(MAKE) db-gen
 
-## db-migrate-down: Rollback last migration
-db-migrate-down:
+## db-down: Rollback last migration
+db-down:
 	@echo "Rolling back last migration..."
 	@docker compose exec app npx tsx server/db/migrate.ts down
 
@@ -100,8 +100,15 @@ db-status:
 	@echo "Checking migration status..."
 	@docker compose exec app npx tsx server/db/migrate.ts status
 
-## db-gen-types: Generate TypeScript types from database schema
-db-gen-types:
+## db-reset: Reset database to initial state (rollback all migrations)
+db-reset:
+	@echo "Resetting Database..."
+	@docker compose exec app npx tsx server/db/migrate.ts reset
+	@echo "Seed demo data..."
+	@$(MAKE) db-seed
+
+## db-gen: Generate TypeScript types from database schema
+db-gen:
 	@echo "Generating database types..."
 	@docker compose exec app yarn db:generate-types
 	@echo "Types generated successfully"

@@ -16,7 +16,7 @@ type UserRecord = {
 }
 
 type AuditLogRecord = {
-	id: number
+	id: string
 	actor_user_id: number | null
 	actor_email: string | null
 	action: string

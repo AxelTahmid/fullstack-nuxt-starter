@@ -3,7 +3,7 @@ import { sql, type Kysely } from "kysely"
 export async function up(db: Kysely<unknown>): Promise<void> {
 	await db.schema
 		.createTable("audit_logs")
-		.addColumn("id", "integer", col => col.generatedAlwaysAsIdentity().primaryKey())
+		.addColumn("id", "uuid", col => col.primaryKey().defaultTo(sql`uuidv7()`))
 		.addColumn("actor_user_id", "integer", col => col.references("users.id").onDelete("set null"))
 		.addColumn("action", "text", col => col.notNull())
 		.addColumn("target_type", "text", col => col.notNull())
@@ -13,6 +13,7 @@ export async function up(db: Kysely<unknown>): Promise<void> {
 		.addColumn("ip_address", "text")
 		.addColumn("user_agent", "text")
 		.addColumn("created_at", "timestamptz", col => col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`))
+		.addColumn("archived_at", "timestamptz")
 		.execute()
 
 	await db.schema

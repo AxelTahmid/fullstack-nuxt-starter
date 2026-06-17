@@ -34,7 +34,7 @@ export interface SageCustomerLookup {
 }
 
 export interface AuditLogEntry {
-	id: number
+	id: string
 	actorUserId: number | null
 	actorEmail: string | null
 	action: string

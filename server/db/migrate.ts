@@ -1,9 +1,5 @@
 /* eslint-disable import/no-nodejs-modules, no-console, no-restricted-syntax */
 import "dotenv/config"
-import { promises as fs } from "node:fs"
-import path from "node:path"
-import { fileURLToPath, pathToFileURL } from "node:url"
-import { execSync } from "node:child_process"
 import { Kysely, PostgresDialect } from "kysely"
 import {
 	type Migration,
@@ -11,6 +7,10 @@ import {
 	type MigrationResult,
 	Migrator,
 } from "kysely/migration"
+import { execSync } from "node:child_process"
+import { promises as fs } from "node:fs"
+import path from "node:path"
+import { fileURLToPath, pathToFileURL } from "node:url"
 import pg from "pg"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -168,7 +168,7 @@ async function migrateReset() {
 
 	console.log("\nSeeding...")
 	try {
-		execSync("tsx database/seed-owner.ts", {
+		execSync("tsx database/seed.ts", {
 			stdio: "inherit",
 			cwd: path.join(__dirname, ".."),
 		})

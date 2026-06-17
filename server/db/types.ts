@@ -35,8 +35,9 @@ export type Timestamp = ColumnType<Date, Date | string, Date | string>
 export interface AuditLogs {
 	action: string
 	actor_user_id: number | null
+	archived_at: Timestamp | null
 	created_at: Generated<Timestamp>
-	id: Generated<number>
+	id: Generated<string>
 	ip_address: string | null
 	metadata: Generated<Json>
 	summary: string
