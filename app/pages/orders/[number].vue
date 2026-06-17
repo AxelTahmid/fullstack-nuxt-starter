@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, CheckCircle2, MapPin, Receipt, Truck } from "@lucide/vue"
+import { ArrowLeft, CheckCircle2, MapPin, Receipt, Truck, User } from "@lucide/vue"
 import type { OrderDetail } from "#shared/types/order"
 
 definePageMeta({
@@ -123,7 +123,31 @@ const carrierLabels: Record<string, string> = {
 				</span>
 			</section>
 
-			<section class="grid gap-4 md:grid-cols-3">
+			<section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				<div class="border-border/60 bg-card rounded-md border p-5">
+					<div class="text-muted-foreground flex items-center gap-2">
+						<User class="size-4" />
+
+						<p class="text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+							Customer
+						</p>
+					</div>
+
+					<p
+						class="text-foreground mt-3 truncate text-sm font-semibold"
+						:title="order.customerName"
+					>
+						{{ order.customerName }}
+					</p>
+
+					<p
+						v-if="order.customerNumber && order.customerNumber !== order.customerName"
+						class="text-muted-foreground mt-1 font-mono text-xs"
+					>
+						{{ order.customerNumber }}
+					</p>
+				</div>
+
 				<div class="border-border/60 bg-card rounded-md border p-5">
 					<div class="text-muted-foreground flex items-center gap-2">
 						<MapPin class="size-4" />

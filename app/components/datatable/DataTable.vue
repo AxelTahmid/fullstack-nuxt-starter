@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TData, TValue">
-import { LoaderCircle, SearchX } from "@lucide/vue"
+import { SearchX } from "@lucide/vue"
 import type {
 	ColumnDef,
 	ColumnFiltersState,
@@ -85,9 +85,9 @@ defineExpose({
 	table,
 })
 
-const hasRows = computed(() => props.data.length > 0)
-const showSkeleton = computed(() => Boolean(props.loading && !hasRows.value))
-const showRefreshing = computed(() => Boolean(props.loading && hasRows.value))
+// Any load — initial, pagination, search, or refresh — shows the skeleton
+// instead of keeping the previous rows behind a subtle refresh indicator.
+const showSkeleton = computed(() => Boolean(props.loading))
 const visibleColumnCount = computed(() => {
 	const count = table.getVisibleLeafColumns().length
 	return count > 0 ? count : props.columns.length
@@ -102,14 +102,6 @@ const visibleColumnCount = computed(() => {
 		/>
 
 		<div class="surface-panel surface-outline overflow-hidden rounded-[1.45rem] border">
-			<div
-				v-if="showRefreshing"
-				class="text-muted-foreground border-border/60 flex items-center gap-2 border-b px-4 py-3 text-sm"
-			>
-				<LoaderCircle class="text-primary size-4 animate-spin" />
-				Refreshing results
-			</div>
-
 			<Table class="min-w-full">
 				<TableHeader class="bg-muted/35">
 					<TableRow

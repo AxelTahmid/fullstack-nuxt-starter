@@ -2,7 +2,7 @@
 import type { EstimateDetail } from "#shared/types/estimate"
 import type { CheckoutResponse } from "#shared/types/order"
 import type { FetchError } from "ofetch"
-import { AlertCircle, ArrowLeft, CalendarClock, FileText, LoaderCircle, MapPin, PackageCheck } from "@lucide/vue"
+import { AlertCircle, ArrowLeft, CalendarClock, FileText, LoaderCircle, MapPin, PackageCheck, User } from "@lucide/vue"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -69,7 +69,9 @@ async function convertToOrder() {
 		>
 			<Skeleton class="h-9 w-64" />
 
-			<div class="grid gap-4 md:grid-cols-3">
+			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				<Skeleton class="h-24" />
+
 				<Skeleton class="h-24" />
 
 				<Skeleton class="h-24" />
@@ -145,7 +147,14 @@ async function convertToOrder() {
 				</div>
 			</section>
 
-			<section class="grid gap-4 md:grid-cols-3">
+			<section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				<EstimateStatCard
+					:icon="User"
+					label="Customer"
+					:value="estimate.customerName"
+					:sub="estimate.customerNumber && estimate.customerNumber !== estimate.customerName ? estimate.customerNumber : undefined"
+				/>
+
 				<EstimateStatCard
 					:icon="MapPin"
 					label="Delivery site"

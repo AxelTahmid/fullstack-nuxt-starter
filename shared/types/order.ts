@@ -13,6 +13,8 @@ export interface OrderLine {
 export interface OrderDetail {
 	id: number
 	orderNumber: string
+	customerName: string
+	customerNumber: string
 	status: OrderStatus
 	subtotalCents: number
 	shippingCents: number
@@ -31,6 +33,7 @@ export interface OrderSummary {
 	orderNumber: string
 	poNumber: string | null
 	customerName: string
+	customerNumber: string
 	status: OrderStatus
 	totalCents: number
 	placedAt: string

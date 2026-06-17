@@ -6,6 +6,7 @@ export interface EstimateSummary {
 	id: number
 	quoteNumber: string
 	customerName: string
+	customerNumber: string
 	status: EstimateStatus
 	totalCents: number
 	itemCount: number
@@ -16,6 +17,8 @@ export interface EstimateSummary {
 export interface EstimateDetail {
 	id: number
 	quoteNumber: string
+	customerName: string
+	customerNumber: string
 	status: EstimateStatus
 	subtotalCents: number
 	taxCents: number

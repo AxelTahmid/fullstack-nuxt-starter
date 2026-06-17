@@ -104,8 +104,6 @@ db-status:
 db-reset:
 	@echo "Resetting Database..."
 	@docker compose exec app npx tsx server/db/migrate.ts reset
-	@echo "Seed demo data..."
-	@$(MAKE) db-seed
 
 ## db-gen: Generate TypeScript types from database schema
 db-gen:

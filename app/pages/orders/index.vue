@@ -32,8 +32,9 @@ const pageSize = computed(() => {
 })
 const search = computed(() => typeof route.query.search === "string" ? route.query.search : "")
 
-const { data, pending, refresh } = await useFetch<PaginatedList<OrderSummary>>("/api/orders", {
+const { data, pending, refresh } = useFetch<PaginatedList<OrderSummary>>("/api/orders", {
 	query: { page, pageSize, search },
+	lazy: true,
 })
 
 const rows = computed(() => data.value?.rows ?? [])
@@ -90,7 +91,13 @@ const columns = computed<ColumnDef<OrderSummary>[]>(() => {
 		list.push({
 			accessorKey: "customerName",
 			header: "Customer",
-			cell: ({ row }) => h("span", { class: "block max-w-56 truncate text-sm", title: row.original.customerName }, row.original.customerName),
+			cell: ({ row }) => {
+				const { customerName, customerNumber } = row.original
+				const children = [h("span", { class: "block truncate text-sm font-medium", title: customerName }, customerName)]
+				if (customerNumber && customerNumber !== customerName)
+					children.push(h("span", { class: "text-muted-foreground block truncate font-mono text-xs", title: customerNumber }, customerNumber))
+				return h("div", { class: "max-w-56 leading-tight" }, children)
+			},
 		})
 	}
 

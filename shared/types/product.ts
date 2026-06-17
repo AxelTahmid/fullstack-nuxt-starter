@@ -9,7 +9,12 @@ export interface ProductListItem {
 	category: string
 	manufacturer: string
 	imageUrl: string | null
+	/** Effective price (sale price when on sale, otherwise base). */
 	priceCents: number | null
+	basePriceCents: number | null
+	salePriceCents: number | null
+	onSale: boolean
+	currencyCode: string
 	stockStatus: StockStatus
 	tags: string[]
 }

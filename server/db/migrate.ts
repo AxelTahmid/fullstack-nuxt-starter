@@ -168,7 +168,7 @@ async function migrateReset() {
 
 	console.log("\nSeeding...")
 	try {
-		execSync("tsx database/seed.ts", {
+		execSync("npx tsx db/seed.ts", {
 			stdio: "inherit",
 			cwd: path.join(__dirname, ".."),
 		})

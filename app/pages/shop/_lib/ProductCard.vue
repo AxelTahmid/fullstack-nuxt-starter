@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Check, Eye, ImageIcon, LoaderCircle, Plus } from "@lucide/vue"
-import { stockLabel } from "./format"
+import { formatPrice, stockLabel } from "./format"
 
 defineProps<{
 	product: ProductListItem
@@ -46,12 +46,21 @@ function productPath(product: ProductListItem) {
 						{{ product.sku }}
 					</p>
 
-					<Badge
-						variant="secondary"
-						class="shrink-0 text-[0.68rem]"
-					>
-						{{ stockLabel(product.stockStatus) }}
-					</Badge>
+					<div class="flex shrink-0 items-center gap-1.5">
+						<Badge
+							v-if="product.onSale"
+							class="bg-primary text-primary-foreground text-[0.62rem]"
+						>
+							Sale
+						</Badge>
+
+						<Badge
+							variant="secondary"
+							class="text-[0.68rem]"
+						>
+							{{ stockLabel(product.stockStatus) }}
+						</Badge>
+					</div>
 				</div>
 
 				<div class="min-w-0 space-y-1">
@@ -64,43 +73,74 @@ function productPath(product: ProductListItem) {
 					</p>
 				</div>
 
-				<div class="flex justify-end gap-1.5">
-					<Button
-						as-child
-						type="button"
-						variant="outline"
-						size="icon-sm"
-						:title="`View ${product.name}`"
-						:aria-label="`View ${product.name}`"
-					>
-						<NuxtLink :to="productPath(product)">
-							<Eye class="size-4" />
-						</NuxtLink>
-					</Button>
+				<div class="flex items-end justify-between gap-2">
+					<div class="min-w-0">
+						<template v-if="product.onSale && product.salePriceCents !== null">
+							<p class="text-primary text-sm font-bold">
+								{{ formatPrice(product.salePriceCents, product.currencyCode) }}
+							</p>
 
-					<Button
-						type="button"
-						size="icon-sm"
-						:title="inCart ? `${product.name} is in cart` : `Add ${product.name}`"
-						:aria-label="inCart ? `${product.name} is in cart` : `Add ${product.name}`"
-						:disabled="adding"
-						@click="emit('add', product)"
-					>
-						<LoaderCircle
-							v-if="adding"
-							class="size-4 animate-spin"
-						/>
+							<p
+								v-if="product.basePriceCents !== null"
+								class="text-muted-foreground text-xs line-through"
+							>
+								{{ formatPrice(product.basePriceCents, product.currencyCode) }}
+							</p>
+						</template>
 
-						<Check
-							v-else-if="inCart"
-							class="size-4"
-						/>
+						<p
+							v-else-if="product.basePriceCents !== null"
+							class="text-foreground text-sm font-semibold"
+						>
+							{{ formatPrice(product.basePriceCents, product.currencyCode) }}
+						</p>
 
-						<Plus
+						<p
 							v-else
-							class="size-4"
-						/>
-					</Button>
+							class="text-muted-foreground text-xs"
+						>
+							Price on request
+						</p>
+					</div>
+
+					<div class="flex shrink-0 gap-1.5">
+						<Button
+							as-child
+							type="button"
+							variant="outline"
+							size="icon-sm"
+							:title="`View ${product.name}`"
+							:aria-label="`View ${product.name}`"
+						>
+							<NuxtLink :to="productPath(product)">
+								<Eye class="size-4" />
+							</NuxtLink>
+						</Button>
+
+						<Button
+							type="button"
+							size="icon-sm"
+							:title="inCart ? `${product.name} is in cart` : `Add ${product.name}`"
+							:aria-label="inCart ? `${product.name} is in cart` : `Add ${product.name}`"
+							:disabled="adding"
+							@click="emit('add', product)"
+						>
+							<LoaderCircle
+								v-if="adding"
+								class="size-4 animate-spin"
+							/>
+
+							<Check
+								v-else-if="inCart"
+								class="size-4"
+							/>
+
+							<Plus
+								v-else
+								class="size-4"
+							/>
+						</Button>
+					</div>
 				</div>
 			</div>
 		</div>

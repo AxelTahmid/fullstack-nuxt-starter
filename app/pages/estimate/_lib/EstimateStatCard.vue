@@ -6,6 +6,7 @@ defineProps<{
 	icon: Component
 	label: string
 	value: string
+	sub?: string
 }>()
 </script>
 
@@ -23,9 +24,21 @@ defineProps<{
 				</p>
 			</div>
 
-			<p class="text-foreground text-sm font-semibold">
-				{{ value }}
-			</p>
+			<div>
+				<p
+					class="text-foreground truncate text-sm font-semibold"
+					:title="value"
+				>
+					{{ value }}
+				</p>
+
+				<p
+					v-if="sub"
+					class="text-muted-foreground mt-0.5 truncate font-mono text-xs"
+				>
+					{{ sub }}
+				</p>
+			</div>
 		</CardContent>
 	</Card>
 </template>

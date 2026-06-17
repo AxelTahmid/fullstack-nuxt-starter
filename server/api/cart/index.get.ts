@@ -58,42 +58,60 @@ async function loadItems(sourceKeys: string[]) {
 		.filter((entry): entry is [string, ICItemT] => Boolean(entry[0])))
 }
 
+// Sage's OData rejects long `$filter` strings, so fetch pricing in small chunks
+// and merge. A large cart would otherwise exceed the limit and price at $0.
+const PRICING_CHUNK_SIZE = 10
+
 async function loadPricing(items: ICItemT[]) {
 	const keyedItems = items.filter(item => itemKey(item))
+	const pricingMap = new Map<string, ICItemPricingT>()
 	if (keyedItems.length === 0) {
-		return new Map<string, ICItemPricingT>()
+		return pricingMap
 	}
 
 	const { sage300 } = useRuntimeConfig()
 	const currencyCode = String(sage300.currencyCode || "CAD")
 	const configuredPriceListCode = String(sage300.priceListCode || "")
-	const itemFilters = keyedItems.map((item) => {
-		const sourceKey = itemKey(item)
-		const priceListCode = configuredPriceListCode || item.DefaultPriceListCode?.trim()
-		const sourceFilter = `UnformattedItemNumber eq '${escapeODataString(sourceKey)}'`
 
-		return priceListCode
-			? `(${sourceFilter} and PriceListCode eq '${escapeODataString(priceListCode)}')`
-			: sourceFilter
+	const chunks = Array.from(
+		{ length: Math.ceil(keyedItems.length / PRICING_CHUNK_SIZE) },
+		(_, i) => keyedItems.slice(i * PRICING_CHUNK_SIZE, (i + 1) * PRICING_CHUNK_SIZE),
+	)
+
+	const chunkResults = await Promise.all(chunks.map(async (chunk) => {
+		const itemFilters = chunk.map((item) => {
+			const sourceKey = itemKey(item)
+			const priceListCode = configuredPriceListCode || item.DefaultPriceListCode?.trim()
+			const sourceFilter = `UnformattedItemNumber eq '${escapeODataString(sourceKey)}'`
+
+			return priceListCode
+				? `(${sourceFilter} and PriceListCode eq '${escapeODataString(priceListCode)}')`
+				: sourceFilter
+		})
+
+		try {
+			const response = await icItemPricingGet({
+				path: sagePath(),
+				query: {
+					$filter: `CurrencyCode eq '${escapeODataString(currencyCode)}' and (${itemFilters.join(" or ")})`,
+					$top: chunk.length,
+				},
+			})
+			return (response.data as ICItemPricingListResponseT).value ?? []
+		}
+		catch {
+			return []
+		}
+	}))
+
+	chunkResults.flat().forEach((price) => {
+		const key = price.UnformattedItemNumber || price.ItemNumber || ""
+		if (key) {
+			pricingMap.set(key, price)
+		}
 	})
 
-	try {
-		const response = await icItemPricingGet({
-			path: sagePath(),
-			query: {
-				$filter: `CurrencyCode eq '${escapeODataString(currencyCode)}' and (${itemFilters.join(" or ")})`,
-				$top: keyedItems.length,
-			},
-		})
-		const data = response.data as ICItemPricingListResponseT
-
-		return new Map((data.value ?? [])
-			.map(price => [price.UnformattedItemNumber || price.ItemNumber || "", price])
-			.filter((entry): entry is [string, ICItemPricingT] => Boolean(entry[0])))
-	}
-	catch {
-		return new Map<string, ICItemPricingT>()
-	}
+	return pricingMap
 }
 
 function buildSummary(lines: CartLine[]): CartSummary {

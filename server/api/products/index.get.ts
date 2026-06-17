@@ -1,12 +1,16 @@
 import type {
 	ICItemListResponseT,
+	ICItemPricingListResponseT,
+	ICItemPricingT,
 	ICItemT,
 } from "#shared/sage300"
 import {
+	icItemPricingGet,
 	icItemsGet,
 } from "#shared/sage300"
 import type { ProductListItem, ProductListResponse } from "#shared/types/product"
 import { requireSessionUser } from "~~/server/utils/auth"
+import { resolveItemPricing } from "~~/server/utils/sage300"
 
 const DEFAULT_PAGE_SIZE = 24
 const DEFAULT_MANUFACTURER = "Manufacturer unavailable"
@@ -82,12 +86,71 @@ function stockStatus(item: ICItemT): ProductListItem["stockStatus"] {
 	return available <= 5 ? "low_stock" : "in_stock"
 }
 
-function toProductListItem(item: ICItemT): ProductListItem | undefined {
+// Sage's OData rejects long `$filter` strings (a full 24-item page is over the
+// limit and 400s/404s), so pricing is fetched in small chunks and merged. Each
+// chunk is independent: one failing chunk only drops its own items' prices.
+const PRICING_CHUNK_SIZE = 10
+
+async function loadPricing(items: ICItemT[]) {
+	const keyed = items.filter(item => itemKey(item))
+	const pricingMap = new Map<string, ICItemPricingT>()
+	if (keyed.length === 0) {
+		return pricingMap
+	}
+
+	const { sage300 } = useRuntimeConfig()
+	const currencyCode = String(sage300.currencyCode || "CAD")
+	const configuredPriceListCode = String(sage300.priceListCode || "")
+
+	const chunks = Array.from(
+		{ length: Math.ceil(keyed.length / PRICING_CHUNK_SIZE) },
+		(_, i) => keyed.slice(i * PRICING_CHUNK_SIZE, (i + 1) * PRICING_CHUNK_SIZE),
+	)
+
+	const chunkResults = await Promise.all(chunks.map(async (chunk) => {
+		const itemFilters = chunk.map((item) => {
+			const sourceKey = itemKey(item)
+			const priceListCode = configuredPriceListCode || item.DefaultPriceListCode?.trim()
+			const sourceFilter = `UnformattedItemNumber eq '${escapeODataString(sourceKey)}'`
+
+			return priceListCode
+				? `(${sourceFilter} and PriceListCode eq '${escapeODataString(priceListCode)}')`
+				: sourceFilter
+		})
+
+		try {
+			const response = await icItemPricingGet({
+				path: sagePath(),
+				query: {
+					$filter: `CurrencyCode eq '${escapeODataString(currencyCode)}' and (${itemFilters.join(" or ")})`,
+					$top: chunk.length,
+				},
+			})
+			return (response.data as ICItemPricingListResponseT).value ?? []
+		}
+		catch {
+			return []
+		}
+	}))
+
+	chunkResults.flat().forEach((price) => {
+		const key = price.UnformattedItemNumber || price.ItemNumber || ""
+		if (key) {
+			pricingMap.set(key, price)
+		}
+	})
+
+	return pricingMap
+}
+
+function toProductListItem(item: ICItemT, pricing: ICItemPricingT | undefined, currencyCode: string): ProductListItem | undefined {
 	const sourceKey = itemKey(item)
 
 	if (!sourceKey) {
 		return
 	}
+
+	const { baseCents, saleCents, onSale } = resolveItemPricing(pricing)
 
 	return {
 		id: null,
@@ -98,7 +161,11 @@ function toProductListItem(item: ICItemT): ProductListItem | undefined {
 		category: item.Category?.trim() || "Uncategorized",
 		manufacturer: item.PreferredVendor?.trim() || DEFAULT_MANUFACTURER,
 		imageUrl: null,
-		priceCents: null,
+		priceCents: saleCents ?? baseCents,
+		basePriceCents: baseCents,
+		salePriceCents: saleCents,
+		onSale,
+		currencyCode,
 		stockStatus: stockStatus(item),
 		tags: [
 			item.StockingUnitOfMeasure,
@@ -128,7 +195,7 @@ function countFacets(items: ProductListItem[]) {
 }
 
 export default defineEventHandler(async (event): Promise<ProductListResponse> => {
-	await requireSessionUser(event)
+	const sessionUser = await requireSessionUser(event)
 
 	const query = getQuery(event)
 	const category = typeof query.category === "string" && query.category.length > 0 ? query.category : undefined
@@ -138,10 +205,17 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 	const page = Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1
 	const filter = buildItemFilter(category, manufacturer, q)
 
+	// Customers only see items they can actually purchase: active, sellable, and
+	// in stock. Admins see the full catalog for management.
+	const availabilityFilter = sessionUser.role === "admin"
+		? undefined
+		: "Sellable eq true and Status eq true and QuantityAvailable gt 0"
+	const $filter = [filter, availabilityFilter].filter(Boolean).join(" and ") || undefined
+
 	const productsResponse = await icItemsGet({
 		path: sagePath(),
 		query: {
-			...(filter ? { $filter: filter } : {}),
+			...($filter ? { $filter } : {}),
 			$top: DEFAULT_PAGE_SIZE,
 			$skip: (page - 1) * DEFAULT_PAGE_SIZE,
 			$count: true,
@@ -149,8 +223,13 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 	})
 	const productsData = productsResponse.data as ICItemListResponseT & { "@odata.count"?: number }
 	const sageItems = productsData.value ?? []
+
+	const { sage300 } = useRuntimeConfig()
+	const currencyCode = String(sage300.currencyCode || "CAD")
+	const pricingMap = await loadPricing(sageItems)
+
 	const items = sageItems
-		.map(item => toProductListItem(item))
+		.map(item => toProductListItem(item, pricingMap.get(itemKey(item)), currencyCode))
 		.filter((item): item is ProductListItem => Boolean(item))
 	const total = productsData["@odata.count"] ?? items.length
 	const totalPages = Math.max(1, Math.ceil(total / DEFAULT_PAGE_SIZE))
