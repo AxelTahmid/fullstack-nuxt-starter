@@ -2,6 +2,7 @@ import type { ICItemListResponseT, ICItemT } from "#shared/sage300"
 import { icItemsGetByUnformattedItemNumber } from "#shared/sage300"
 import { cartItemAddSchema } from "#shared/schemas/checkout"
 import { cartRepo } from "~~/server/db/repository"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
 import { requireSessionUser } from "~~/server/utils/auth"
 
 function sagePath() {
@@ -49,6 +50,17 @@ export default defineEventHandler(async (event) => {
 
 	await requireItem(body.sourceKey)
 	const item = await cartRepo.upsertItem(user.id, body.sourceKey, body.quantity)
+
+	await auditNonCustomerAction(event, user, {
+		action: "cart.item_add",
+		targetType: "cart_item",
+		targetId: String(item.id),
+		summary: `${user.email} added ${body.sourceKey} to cart`,
+		metadata: {
+			sourceKey: body.sourceKey,
+			quantity: body.quantity,
+		},
+	})
 
 	return { item }
 })

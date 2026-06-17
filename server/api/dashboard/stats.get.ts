@@ -2,7 +2,8 @@ import type { DashboardStats } from "#shared/types/dashboard"
 import { requireSessionUser } from "~~/server/utils/auth"
 
 export default defineEventHandler(async (event): Promise<DashboardStats> => {
-	await requireSessionUser(event)
+	const user = await requireSessionUser(event)
+	const isAdmin = user.role === "admin"
 
 	return {
 		kpis: {
@@ -13,7 +14,16 @@ export default defineEventHandler(async (event): Promise<DashboardStats> => {
 			projectedExpenditureCents: 0,
 			supplyChainHealthPct: 100,
 		},
-		criticalActions: [],
+		criticalActions: isAdmin
+			? []
+			: [{
+					id: "customer-review-cart",
+					priority: "low",
+					title: "Review active cart",
+					detail: "Keep your cart current before requesting an estimate or submitting an order.",
+					dueLabel: "When ready",
+					linkTo: "/cart",
+				}],
 		recentActivity: [],
 	}
 })

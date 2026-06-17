@@ -3,6 +3,7 @@ import { icItemsGet, oeOrdersPost } from "#shared/sage300"
 import { checkoutSchema } from "#shared/schemas/checkout"
 import type { CheckoutResponse } from "#shared/types/order"
 import { authRepo, cartRepo } from "~~/server/db/repository"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
 import { requireSessionUser } from "~~/server/utils/auth"
 import {
 	escapeODataString,
@@ -132,6 +133,16 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
 	const orderNumber = order?.OrderNumber?.trim() || orderReference
 
 	await cartRepo.clearItems(sessionUser.id)
+	await auditNonCustomerAction(event, sessionUser, {
+		action: "order.submit",
+		targetType: "order",
+		targetId: orderNumber,
+		summary: `${sessionUser.email} submitted order ${orderNumber}`,
+		metadata: {
+			customerNumber: user.sage_customer_number,
+			lineCount: cartItems.length,
+		},
+	})
 
 	return {
 		orderNumber,

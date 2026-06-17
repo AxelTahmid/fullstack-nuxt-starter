@@ -2,12 +2,13 @@
 import { ArrowLeft, CheckCircle2, LoaderCircle, RotateCcw, Upload } from "@lucide/vue"
 import type { FetchError } from "ofetch"
 import type { BrandSettings } from "#shared/types/brand"
+import { DEFAULT_RADIUS, DEFAULT_SEEDS, DEFAULT_THEME, resolveTheme } from "#shared/utils/theme"
 import { toast } from "~/components/toast"
 import { useBrand } from "~/composables/useBrand"
 
 definePageMeta({
 	layout: "dashboard",
-	middleware: ["authenticated"],
+	middleware: ["authenticated", "admin"],
 })
 
 useHead({
@@ -22,9 +23,12 @@ const defaults: BrandSettings = {
 	orgName: "SupplyKey",
 	tagline: "Mine Supply Company",
 	logoDataUrl: null,
-	primaryColor: "#003f63",
-	sidebarColor: "#0b1a26",
-	accentColor: "#5d3002",
+	primaryColor: DEFAULT_SEEDS.primary,
+	sidebarColor: DEFAULT_SEEDS.sidebar,
+	accentColor: DEFAULT_SEEDS.accent,
+	surfaceColor: DEFAULT_SEEDS.surface,
+	radius: DEFAULT_RADIUS,
+	theme: DEFAULT_THEME,
 }
 
 const form = reactive<BrandSettings>({
@@ -34,6 +38,9 @@ const form = reactive<BrandSettings>({
 	primaryColor: brand.value?.primaryColor ?? defaults.primaryColor,
 	sidebarColor: brand.value?.sidebarColor ?? defaults.sidebarColor,
 	accentColor: brand.value?.accentColor ?? defaults.accentColor,
+	surfaceColor: brand.value?.surfaceColor ?? defaults.surfaceColor,
+	radius: brand.value?.radius ?? defaults.radius,
+	theme: brand.value?.theme ?? defaults.theme,
 })
 
 watch(brand, (next) => {
@@ -45,7 +52,36 @@ watch(brand, (next) => {
 	form.primaryColor = next.primaryColor
 	form.sidebarColor = next.sidebarColor
 	form.accentColor = next.accentColor
+	form.surfaceColor = next.surfaceColor
+	form.radius = next.radius
+	form.theme = next.theme
 })
+
+const colorFields = [
+	{ key: "primaryColor", label: "Primary", hint: "CTAs, active navigation, links, chart accents" },
+	{ key: "sidebarColor", label: "Sidebar", hint: "Left navigation shell background" },
+	{ key: "surfaceColor", label: "Surface", hint: "Page, card, and panel base — shifts the whole palette" },
+	{ key: "accentColor", label: "Accent", hint: "Subtle highlighted surfaces" },
+] as const
+
+const radiusOptions = [
+	{ label: "None", value: "0rem" },
+	{ label: "S", value: "0.25rem" },
+	{ label: "M", value: "0.375rem" },
+	{ label: "L", value: "0.5rem" },
+	{ label: "XL", value: "0.75rem" },
+]
+
+const presets: { name: string, seeds: Pick<BrandSettings, "primaryColor" | "sidebarColor" | "accentColor" | "surfaceColor" | "radius"> }[] = [
+	{ name: "SupplyKey", seeds: { primaryColor: "#003f63", sidebarColor: "#0b1a26", accentColor: "#5d3002", surfaceColor: "#f9f9fd", radius: "0.375rem" } },
+	{ name: "Forest", seeds: { primaryColor: "#1f7a3d", sidebarColor: "#10241a", accentColor: "#b8860b", surfaceColor: "#f6faf7", radius: "0.5rem" } },
+	{ name: "Slate", seeds: { primaryColor: "#334155", sidebarColor: "#0f172a", accentColor: "#d97706", surfaceColor: "#f8fafc", radius: "0.25rem" } },
+	{ name: "Crimson", seeds: { primaryColor: "#9f1239", sidebarColor: "#1c0a10", accentColor: "#0f766e", surfaceColor: "#fdf6f7", radius: "0.5rem" } },
+]
+
+function applyPreset(seeds: typeof presets[number]["seeds"]) {
+	Object.assign(form, seeds)
+}
 
 const fileInput = useTemplateRef<{ click: () => void }>("fileInput")
 const isSaving = ref(false)
@@ -95,6 +131,8 @@ async function save() {
 			primaryColor: form.primaryColor,
 			sidebarColor: form.sidebarColor,
 			accentColor: form.accentColor,
+			surfaceColor: form.surfaceColor,
+			radius: form.radius,
 		})
 		toast.success("Brand updated. Theme propagating…")
 	}
@@ -107,9 +145,20 @@ async function save() {
 	}
 }
 
-const primaryPreview = computed(() => form.primaryColor)
-const sidebarPreview = computed(() => form.sidebarColor)
-const accentPreview = computed(() => form.accentColor)
+// Resolve seeds to the full palette the same way the API does, so the preview
+// matches exactly what will be saved. Tokens are applied as scoped CSS
+// variables; the preview markup then uses ordinary token utilities.
+const previewTheme = computed(() => resolveTheme({
+	primary: form.primaryColor,
+	accent: form.accentColor,
+	sidebar: form.sidebarColor,
+	surface: form.surfaceColor,
+}))
+
+const previews = computed(() => [
+	{ label: "Light", vars: { ...previewTheme.value.light, "--radius": form.radius } },
+	{ label: "Dark", vars: { ...previewTheme.value.dark, "--radius": form.radius } },
+])
 </script>
 
 <template>
@@ -135,7 +184,7 @@ const accentPreview = computed(() => form.accentColor)
 			</h1>
 
 			<p class="text-muted-foreground max-w-2xl text-sm leading-7">
-				Control the organization name, logo, and color scheme applied across every screen of the platform. Changes take effect immediately for all active sessions.
+				Set the organization identity and the four color seeds. The full light and dark palette is generated from the seeds and applied across every screen immediately for all active sessions. Status colors (success, warning, error) stay fixed.
 			</p>
 		</section>
 
@@ -242,73 +291,92 @@ const accentPreview = computed(() => form.accentColor)
 						Color Scheme
 					</h2>
 
+					<div class="mb-5">
+						<p class="text-muted-foreground mb-2 text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+							Presets
+						</p>
+
+						<div class="flex flex-wrap gap-2">
+							<Button
+								v-for="preset in presets"
+								:key="preset.name"
+								type="button"
+								class="border-border/70 text-foreground hover:border-primary hover:text-primary inline-flex items-center gap-2 rounded-md border px-3 py-2 text-[0.62rem] font-bold tracking-[0.12em] uppercase transition-all"
+								@click="applyPreset(preset.seeds)"
+							>
+								<span class="flex -space-x-1">
+									<span
+										class="border-card size-3 rounded-full border"
+										:style="{ backgroundColor: preset.seeds.primaryColor }"
+									/>
+
+									<span
+										class="border-card size-3 rounded-full border"
+										:style="{ backgroundColor: preset.seeds.sidebarColor }"
+									/>
+
+									<span
+										class="border-card size-3 rounded-full border"
+										:style="{ backgroundColor: preset.seeds.accentColor }"
+									/>
+								</span>
+								{{ preset.name }}
+							</Button>
+						</div>
+					</div>
+
 					<div class="space-y-4">
-						<div class="bg-muted flex items-center gap-4 rounded-md p-4">
+						<div
+							v-for="field in colorFields"
+							:key="field.key"
+							class="bg-muted flex items-center gap-4 rounded-md p-4"
+						>
 							<Input
-								v-model="form.primaryColor"
+								v-model="form[field.key]"
 								type="color"
+								:aria-label="`${field.label} color`"
 								class="border-border/50 size-14 cursor-pointer rounded-md border bg-transparent"
 							/>
 
 							<div class="flex-1">
 								<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
-									Primary
+									{{ field.label }}
 								</p>
 
-								<p
-									class="text-foreground mt-1 font-mono text-sm font-semibold"
-									style="font-family: var(--font-display);"
+								<p class="text-foreground mt-1 font-mono text-sm font-semibold">
+									{{ form[field.key] }}
+								</p>
+
+								<p class="text-muted-foreground text-[0.62rem]">
+									{{ field.hint }}
+								</p>
+							</div>
+						</div>
+
+						<div class="bg-muted flex flex-wrap items-center justify-between gap-3 rounded-md p-4">
+							<div>
+								<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+									Corner Radius
+								</p>
+
+								<p class="text-muted-foreground mt-1 text-[0.62rem]">
+									Roundness of cards, inputs, and buttons
+								</p>
+							</div>
+
+							<div class="border-border/60 bg-card inline-flex rounded-md border p-0.5">
+								<Button
+									v-for="option in radiusOptions"
+									:key="option.value"
+									type="button"
+									class="rounded-sm px-3 py-1.5 text-[0.62rem] font-bold tracking-[0.12em] uppercase transition-all"
+									:class="form.radius === option.value
+										? 'bg-primary text-primary-foreground'
+										: 'text-muted-foreground hover:text-foreground'"
+									@click="form.radius = option.value"
 								>
-									{{ form.primaryColor }}
-								</p>
-
-								<p class="text-muted-foreground text-[0.62rem]">
-									CTAs, active navigation, chart accents
-								</p>
-							</div>
-						</div>
-
-						<div class="bg-muted flex items-center gap-4 rounded-md p-4">
-							<Input
-								v-model="form.sidebarColor"
-								type="color"
-								class="border-border/50 size-14 cursor-pointer rounded-md border bg-transparent"
-							/>
-
-							<div class="flex-1">
-								<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
-									Sidebar
-								</p>
-
-								<p class="text-foreground mt-1 font-mono text-sm font-semibold">
-									{{ form.sidebarColor }}
-								</p>
-
-								<p class="text-muted-foreground text-[0.62rem]">
-									Left navigation shell background
-								</p>
-							</div>
-						</div>
-
-						<div class="bg-muted flex items-center gap-4 rounded-md p-4">
-							<Input
-								v-model="form.accentColor"
-								type="color"
-								class="border-border/50 size-14 cursor-pointer rounded-md border bg-transparent"
-							/>
-
-							<div class="flex-1">
-								<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
-									Accent
-								</p>
-
-								<p class="text-foreground mt-1 font-mono text-sm font-semibold">
-									{{ form.accentColor }}
-								</p>
-
-								<p class="text-muted-foreground text-[0.62rem]">
-									Secondary highlights and decorative accents
-								</p>
+									{{ option.label }}
+								</Button>
 							</div>
 						</div>
 					</div>
@@ -350,15 +418,14 @@ const accentPreview = computed(() => form.accentColor)
 					Live Preview
 				</p>
 
-				<div class="border-border/60 bg-card overflow-hidden rounded-md border">
-					<div
-						class="flex items-center gap-3 p-4"
-						:style="{ backgroundColor: sidebarPreview, color: '#d3e4f8' }"
-					>
-						<div
-							class="flex size-9 items-center justify-center rounded-md text-[0.68rem] font-extrabold"
-							:style="{ backgroundColor: primaryPreview, color: '#ffffff' }"
-						>
+				<div
+					v-for="preview in previews"
+					:key="preview.label"
+					:style="preview.vars"
+					class="bg-background border-border overflow-hidden rounded-lg border"
+				>
+					<div class="bg-sidebar text-sidebar-foreground flex items-center gap-3 p-4">
+						<div class="bg-sidebar-primary text-sidebar-primary-foreground flex size-9 items-center justify-center rounded-md text-[0.68rem] font-extrabold">
 							<img
 								v-if="form.logoDataUrl"
 								:src="form.logoDataUrl"
@@ -377,27 +444,24 @@ const accentPreview = computed(() => form.accentColor)
 								{{ form.orgName }}
 							</p>
 
-							<p class="truncate text-[0.58rem] font-semibold tracking-[0.16em] uppercase opacity-60">
+							<p class="truncate text-[0.58rem] font-semibold tracking-[0.16em] uppercase opacity-70">
 								{{ form.tagline }}
 							</p>
 						</div>
+
+						<span class="bg-sidebar-accent text-sidebar-accent-foreground rounded-sm px-2 py-0.5 text-[0.54rem] font-bold tracking-[0.14em] uppercase">
+							{{ preview.label }}
+						</span>
 					</div>
 
 					<div class="space-y-3 p-5">
-						<p class="text-muted-foreground text-[0.58rem] font-bold tracking-[0.18em] uppercase">
-							Dashboard Card
-						</p>
-
-						<div
-							class="rounded-md p-4 text-white"
-							:style="{ backgroundColor: primaryPreview }"
-						>
-							<p class="text-[0.58rem] font-bold tracking-[0.16em] uppercase opacity-70">
+						<div class="border-border bg-card rounded-md border p-4">
+							<p class="text-muted-foreground text-[0.58rem] font-bold tracking-[0.16em] uppercase">
 								Active Orders
 							</p>
 
 							<p
-								class="metric-value mt-1 text-3xl font-extrabold"
+								class="metric-value text-card-foreground mt-1 text-3xl font-extrabold"
 								style="font-family: var(--font-display);"
 							>
 								24
@@ -406,25 +470,22 @@ const accentPreview = computed(() => form.accentColor)
 
 						<Button
 							type="button"
-							class="w-full rounded-md px-4 py-2.5 text-[0.62rem] font-bold tracking-[0.14em] text-white uppercase"
-							:style="{ backgroundColor: primaryPreview }"
+							class="bg-primary text-primary-foreground w-full rounded-md px-4 py-2.5 text-[0.62rem] font-bold tracking-[0.14em] uppercase"
 						>
 							Primary CTA
 						</Button>
 
+						<div class="border-input bg-muted text-muted-foreground rounded-md border px-3 py-2 text-[0.66rem]">
+							Search orders…
+						</div>
+
 						<div class="flex gap-2">
-							<span
-								class="rounded-sm px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.14em] text-white uppercase"
-								:style="{ backgroundColor: primaryPreview }"
-							>
-								Primary
+							<span class="bg-accent text-accent-foreground rounded-sm px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.14em] uppercase">
+								Accent
 							</span>
 
-							<span
-								class="rounded-sm px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.14em] text-white uppercase"
-								:style="{ backgroundColor: accentPreview }"
-							>
-								Accent
+							<span class="bg-secondary text-secondary-foreground rounded-sm px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.14em] uppercase">
+								Secondary
 							</span>
 						</div>
 					</div>

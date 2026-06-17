@@ -1,12 +1,13 @@
 import { userRepo } from "~~/server/utils/db"
-import { requireSessionUser } from "~~/server/utils/auth"
+import { requireAdmin } from "~~/server/utils/auth"
+import { toUserListRow } from "~~/server/utils/user-dto"
 
 export default defineEventHandler(async (event) => {
-	await requireSessionUser(event)
+	await requireAdmin(event)
 
 	const users = await userRepo.listUsers()
 
 	return {
-		users,
+		users: users.map(toUserListRow),
 	}
 })

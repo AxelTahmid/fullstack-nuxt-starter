@@ -32,6 +32,19 @@ export type JsonValue = JsonArray | JsonObject | JsonPrimitive
 
 export type Timestamp = ColumnType<Date, Date | string, Date | string>
 
+export interface AuditLogs {
+	action: string
+	actor_user_id: number | null
+	created_at: Generated<Timestamp>
+	id: Generated<number>
+	ip_address: string | null
+	metadata: Generated<Json>
+	summary: string
+	target_id: string | null
+	target_type: string
+	user_agent: string | null
+}
+
 export interface BrandSettings {
 	accent_color: string
 	created_at: Generated<Timestamp>
@@ -39,8 +52,11 @@ export interface BrandSettings {
 	logo_data_url: string | null
 	org_name: string
 	primary_color: string
+	radius: Generated<string>
 	sidebar_color: string
+	surface_color: Generated<string>
 	tagline: string
+	theme: Json
 	updated_at: Timestamp | null
 }
 
@@ -210,6 +226,9 @@ export interface Users {
 	id: Generated<number>
 	last_active_at: Timestamp | null
 	name: string | null
+	password_hash: string | null
+	password_reset_required: Generated<boolean>
+	password_set_at: Timestamp | null
 	role: Generated<string>
 	sage_customer_name: string | null
 	sage_customer_number: string | null
@@ -217,6 +236,7 @@ export interface Users {
 }
 
 export interface DB {
+	"audit_logs": AuditLogs
 	"brand_settings": BrandSettings
 	"cart_items": CartItems
 	"email_auth_tokens": EmailAuthTokens

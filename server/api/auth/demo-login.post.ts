@@ -1,4 +1,5 @@
 import { authRepo } from "~~/server/utils/db"
+import { toSessionUser } from "~~/server/utils/auth"
 
 const DEMO_EMAIL = "demo@supplykey.ca"
 
@@ -30,17 +31,7 @@ export default defineEventHandler(async (event) => {
 
 	await authRepo.updateLastActive(user.id)
 
-	await setUserSession(event, {
-		user: {
-			id: user.id,
-			email: user.email,
-			name: user.name,
-			role: user.role,
-			email_verified: true,
-			last_active_at: user.last_active_at,
-			created_at: user.created_at,
-		},
-	})
+	await setUserSession(event, { user: toSessionUser({ ...user, email_verified: true }) })
 
 	return {
 		success: true,

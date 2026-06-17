@@ -1,6 +1,7 @@
 import { createEnquirySchema } from "#shared/schemas/enquiry"
 import type { EnquiryCreateResponse } from "#shared/types/enquiry"
 import { enquiryRepo } from "~~/server/db/repository"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
 import { requireSessionUser } from "~~/server/utils/auth"
 
 function enquiryNumber() {
@@ -26,6 +27,17 @@ export default defineEventHandler(async (event): Promise<EnquiryCreateResponse> 
 			authorName: sessionUser.name || sessionUser.email,
 			authorRole: "Buyer",
 			body: body.initialMessage,
+		},
+	})
+
+	await auditNonCustomerAction(event, sessionUser, {
+		action: "enquiry.create",
+		targetType: "enquiry",
+		targetId: enquiry.enquiry_number,
+		summary: `${sessionUser.email} created enquiry ${enquiry.enquiry_number}`,
+		metadata: {
+			priority: enquiry.priority,
+			productSku: enquiry.product_sku,
 		},
 	})
 

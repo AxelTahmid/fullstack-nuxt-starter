@@ -11,4 +11,12 @@ export const queueConfigs: Record<JobName, Queue> = {
 		expireInSeconds: 1 * TIME.HOUR,
 		deleteAfterSeconds: 3 * TIME.DAY,
 	},
+	[JOB_NAMES.SEND_USER_CREDENTIAL_EMAIL]: {
+		name: JOB_NAMES.SEND_USER_CREDENTIAL_EMAIL,
+		retryLimit: 3,
+		retryDelay: 2 * TIME.MINUTE,
+		retryBackoff: true,
+		expireInSeconds: 1 * TIME.HOUR,
+		deleteAfterSeconds: 3 * TIME.DAY,
+	},
 }

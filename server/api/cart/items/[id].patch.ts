@@ -1,5 +1,6 @@
 import { cartItemUpdateSchema } from "#shared/schemas/checkout"
 import { cartRepo } from "~~/server/db/repository"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
 import { requireSessionUser } from "~~/server/utils/auth"
 
 export default defineEventHandler(async (event) => {
@@ -21,6 +22,19 @@ export default defineEventHandler(async (event) => {
 			statusMessage: "Cart item not found",
 		})
 	}
+
+	await auditNonCustomerAction(event, user, {
+		action: body.quantity === 0 ? "cart.item_remove" : "cart.item_update",
+		targetType: "cart_item",
+		targetId: String(item.id),
+		summary: body.quantity === 0
+			? `${user.email} removed ${item.source_key} from cart`
+			: `${user.email} updated ${item.source_key} cart quantity`,
+		metadata: {
+			sourceKey: item.source_key,
+			quantity: body.quantity,
+		},
+	})
 
 	return { item }
 })

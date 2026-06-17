@@ -11,18 +11,24 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { FileStack, Inbox, LayoutDashboard, MessagesSquare, Palette, Receipt, ShoppingBasket, ShoppingCart, Store } from "@lucide/vue"
+import { FileStack, Inbox, LayoutDashboard, MessagesSquare, Palette, Receipt, ShoppingBasket, ShoppingCart, Store, Users } from "@lucide/vue"
 import type { AppNavItem } from "~/components/app-shell"
 import { useBrand } from "~/composables/useBrand"
 
+type NavItem = AppNavItem & {
+	adminOnly?: boolean
+}
+
 const route = useRoute()
+const { user } = useUserSession()
 const { brand } = useBrand()
 const orgName = computed(() => brand.value?.orgName ?? "SupplyKey")
 const tagline = computed(() => brand.value?.tagline ?? "Mine Supply Company")
 const logoDataUrl = computed(() => brand.value?.logoDataUrl ?? null)
 const initials = computed(() => orgName.value.slice(0, 2).toUpperCase())
+const isAdmin = computed(() => user.value?.role === "admin")
 
-const menuGroups = computed(() => [
+const allMenuGroups = computed<{ title: string, items: NavItem[] }[]>(() => [
 	{
 		title: "Operations",
 		items: [
@@ -50,7 +56,7 @@ const menuGroups = computed(() => [
 				href: "/orders",
 				icon: Receipt,
 			},
-		] satisfies AppNavItem[],
+		] satisfies NavItem[],
 	},
 	{
 		title: "Procurement",
@@ -67,7 +73,7 @@ const menuGroups = computed(() => [
 				href: "/rfp",
 				icon: FileStack,
 			},
-		] satisfies AppNavItem[],
+		] satisfies NavItem[],
 	},
 	{
 		title: "Communications",
@@ -84,20 +90,35 @@ const menuGroups = computed(() => [
 				href: "/enquiries",
 				icon: MessagesSquare,
 			},
-		] satisfies AppNavItem[],
+		] satisfies NavItem[],
 	},
 	{
 		title: "Settings",
 		items: [
 			{
+				label: "Users",
+				description: "Account access",
+				href: "/users",
+				icon: Users,
+				adminOnly: true,
+			},
+			{
 				label: "Branding",
 				description: "Logo and color scheme",
 				href: "/settings/branding",
 				icon: Palette,
+				adminOnly: true,
 			},
-		] satisfies AppNavItem[],
+		] satisfies NavItem[],
 	},
 ])
+
+const menuGroups = computed(() => allMenuGroups.value
+	.map(group => ({
+		...group,
+		items: group.items.filter(item => !item.adminOnly || isAdmin.value),
+	}))
+	.filter(group => group.items.length > 0))
 
 function isActive(path: string) {
 	if (path === "/dashboard")

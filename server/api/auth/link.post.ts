@@ -1,6 +1,8 @@
 import { z } from "zod"
 import { log } from "#shared/log"
 import type { Queue } from "~~/server/db/queue"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
+import { toSessionUser } from "~~/server/utils/auth"
 import { authRepo, userRepo } from "~~/server/utils/db"
 import { sendMail } from "~~/server/utils/mailer"
 
@@ -19,7 +21,15 @@ export default defineEventHandler(async (event) => {
 
 	if (!user) {
 		const isFirstUser = await userRepo.countUsers() === 0
-		user = await authRepo.createUser(email, isFirstUser ? "admin" : "customer")
+		if (!isFirstUser) {
+			return {
+				success: true,
+				message: "If an account exists for this email, a magic link will arrive shortly.",
+				expires_in: ttlMinutes * 60,
+			}
+		}
+
+		user = await authRepo.createUser(email, "admin")
 		log.info({ email, role: user.role }, "Created user")
 	}
 
@@ -48,6 +58,16 @@ export default defineEventHandler(async (event) => {
 			text: `Open this sign-in link: ${magicLink}`,
 		})
 	}
+
+	await auditNonCustomerAction(event, toSessionUser(user), {
+		action: "auth.magic_link_requested",
+		targetType: "user",
+		targetId: String(user.id),
+		summary: `${user.email} requested a magic link`,
+		metadata: {
+			redirect: redirect ?? null,
+		},
+	})
 
 	return {
 		success: true,

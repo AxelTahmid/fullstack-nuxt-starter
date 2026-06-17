@@ -1,4 +1,5 @@
 import { cartRepo } from "~~/server/db/repository"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
 import { requireSessionUser } from "~~/server/utils/auth"
 
 export default defineEventHandler(async (event) => {
@@ -19,6 +20,17 @@ export default defineEventHandler(async (event) => {
 			statusMessage: "Cart item not found",
 		})
 	}
+
+	await auditNonCustomerAction(event, user, {
+		action: "cart.item_remove",
+		targetType: "cart_item",
+		targetId: String(item.id),
+		summary: `${user.email} removed ${item.source_key} from cart`,
+		metadata: {
+			sourceKey: item.source_key,
+			quantity: item.quantity,
+		},
+	})
 
 	return { item }
 })

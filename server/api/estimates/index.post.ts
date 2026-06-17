@@ -3,6 +3,7 @@ import { icItemsGet, oeOrdersPost } from "#shared/sage300"
 import { createEstimateSchema } from "#shared/schemas/estimate"
 import type { EstimateResponse } from "#shared/types/estimate"
 import { authRepo, cartRepo } from "~~/server/db/repository"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
 import { requireSessionUser } from "~~/server/utils/auth"
 import {
 	escapeODataString,
@@ -148,8 +149,20 @@ export default defineEventHandler(async (event): Promise<EstimateResponse> => {
 		body: payload,
 	})
 	const order = postedOrder(response.data)
+	const quoteNumber = order?.OrderNumber?.trim() || reference
+
+	await auditNonCustomerAction(event, sessionUser, {
+		action: "estimate.request",
+		targetType: "estimate",
+		targetId: quoteNumber,
+		summary: `${sessionUser.email} requested estimate ${quoteNumber}`,
+		metadata: {
+			customerNumber: user.sage_customer_number,
+			lineCount: requestedItems.length,
+		},
+	})
 
 	return {
-		quoteNumber: order?.OrderNumber?.trim() || reference,
+		quoteNumber,
 	}
 })

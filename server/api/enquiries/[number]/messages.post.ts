@@ -1,6 +1,7 @@
 import { postMessageSchema } from "#shared/schemas/enquiry"
 import type { EnquiryMessage } from "#shared/types/enquiry"
 import { enquiryRepo } from "~~/server/db/repository"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
 import { requireSessionUser } from "~~/server/utils/auth"
 
 export default defineEventHandler(async (event): Promise<EnquiryMessage> => {
@@ -36,6 +37,17 @@ export default defineEventHandler(async (event): Promise<EnquiryMessage> => {
 				authorRole: "Buyer",
 				body: body.body,
 			})
+
+	await auditNonCustomerAction(event, sessionUser, {
+		action: "enquiry.respond",
+		targetType: "enquiry",
+		targetId: enquiry.enquiry_number,
+		summary: `${sessionUser.email} responded to enquiry ${enquiry.enquiry_number}`,
+		metadata: {
+			asSupplier: body.asSupplier,
+			messageId: message.id,
+		},
+	})
 
 	return {
 		id: message.id,

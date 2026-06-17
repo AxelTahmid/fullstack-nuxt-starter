@@ -3,6 +3,7 @@ import { log } from "#shared/log"
 import { queueConfigs } from "./config"
 import {
 	createSendAuthLinkEmailHandler,
+	createSendUserCredentialEmailHandler,
 	JOB_NAMES,
 	type JobName,
 	type JobTypeMap,
@@ -15,6 +16,8 @@ export class Queue {
 		await this.createRequiredQueues()
 		await this.boss.work(JOB_NAMES.SEND_AUTH_LINK_EMAIL, createSendAuthLinkEmailHandler())
 		log.info(`✓ Worker registered: ${JOB_NAMES.SEND_AUTH_LINK_EMAIL}`)
+		await this.boss.work(JOB_NAMES.SEND_USER_CREDENTIAL_EMAIL, createSendUserCredentialEmailHandler())
+		log.info(`✓ Worker registered: ${JOB_NAMES.SEND_USER_CREDENTIAL_EMAIL}`)
 	}
 
 	private async createRequiredQueues() {
@@ -46,6 +49,10 @@ export class Queue {
 			appName,
 			expiresInMinutes,
 		})
+	}
+
+	async sendUserCredentialEmail(data: JobTypeMap[typeof JOB_NAMES.SEND_USER_CREDENTIAL_EMAIL]) {
+		return this.publishJob(JOB_NAMES.SEND_USER_CREDENTIAL_EMAIL, data)
 	}
 
 	async getQueueSize(name: JobName) {

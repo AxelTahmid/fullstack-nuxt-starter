@@ -2,6 +2,7 @@ import type { OEOrderListResponseT, OEOrderT, OEOrderWritableT } from "#shared/s
 import { oeOrdersGet, oeOrdersPost } from "#shared/sage300"
 import type { CheckoutResponse } from "#shared/types/order"
 import { authRepo } from "~~/server/db/repository"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
 import { requireSessionUser } from "~~/server/utils/auth"
 import { escapeODataString, sagePath } from "~~/server/utils/sage300"
 
@@ -106,6 +107,17 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
 			statusMessage: "Sage did not return an order number for the conversion",
 		})
 	}
+
+	await auditNonCustomerAction(event, sessionUser, {
+		action: "estimate.convert",
+		targetType: "order",
+		targetId: orderNumber,
+		summary: `${sessionUser.email} converted estimate ${number} to order ${orderNumber}`,
+		metadata: {
+			estimateNumber: quote.OrderNumber?.trim() || number,
+			customerNumber: quote.CustomerNumber || user?.sage_customer_number || null,
+		},
+	})
 
 	return {
 		orderNumber,

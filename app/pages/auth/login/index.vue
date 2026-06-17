@@ -25,7 +25,9 @@ const logoSrc = computed(() => brand.value?.logoDataUrl || defaultLogo)
 const orgTagline = computed(() => brand.value?.tagline ?? "Mine Supply Company")
 
 const email = ref("")
+const password = ref("")
 const isLoading = ref(false)
+const isPasswordLoading = ref(false)
 const isDemoLoading = ref(false)
 const success = ref(false)
 const redirectTarget = computed(() => {
@@ -61,6 +63,46 @@ async function handleMagicLink() {
 	}
 	finally {
 		isLoading.value = false
+	}
+}
+
+async function handlePasswordLogin() {
+	if (!email.value.trim()) {
+		toast.error("Email is required.")
+		return
+	}
+	if (!password.value) {
+		toast.error("Password is required.")
+		return
+	}
+
+	isPasswordLoading.value = true
+	try {
+		const response = await $fetch<{
+			user: {
+				passwordResetRequired: boolean
+			}
+		}>("/api/auth/password", {
+			method: "POST",
+			body: {
+				email: email.value,
+				password: password.value,
+			},
+		})
+		toast.success("Signed in.")
+		await navigateTo(response.user.passwordResetRequired
+			? {
+					path: "/auth/password",
+					query: redirectTarget.value ? { redirect: redirectTarget.value } : undefined,
+				}
+			: redirectTarget.value || "/dashboard")
+	}
+	catch (error) {
+		const fetchError = error as FetchError<{ message?: string }>
+		toast.error(fetchError.data?.message || "Unable to sign in.")
+	}
+	finally {
+		isPasswordLoading.value = false
 	}
 }
 
@@ -141,7 +183,7 @@ function resetState() {
 					<form
 						v-else
 						class="space-y-8"
-						@submit.prevent="handleMagicLink"
+						@submit.prevent="handlePasswordLogin"
 					>
 						<div class="mb-2">
 							<h2
@@ -177,15 +219,34 @@ function resetState() {
 							</div>
 						</div>
 
+						<div class="space-y-2">
+							<Label
+								for="password"
+								class="text-muted-foreground text-[0.6875rem] font-bold tracking-[0.16em] uppercase"
+							>
+								Password
+							</Label>
+
+							<Input
+								id="password"
+								v-model="password"
+								type="password"
+								placeholder="Temporary password"
+								autocomplete="current-password"
+								:disabled="isPasswordLoading"
+								class="border-border/60 bg-muted text-foreground placeholder:text-muted-foreground/60 focus:border-primary w-full border-0 border-b-2 px-3 py-3 text-sm transition-all placeholder:font-light focus:outline-none disabled:opacity-60"
+							/>
+						</div>
+
 						<div>
 							<Button
 								type="submit"
 								class="group bg-primary text-primary-foreground flex w-full items-center justify-center rounded-[0.375rem] px-4 py-4 text-sm font-extrabold tracking-[0.15em] uppercase transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
-								:disabled="isLoading"
+								:disabled="isPasswordLoading"
 								style="font-family: var(--font-display);"
 							>
 								<LoaderCircle
-									v-if="isLoading"
+									v-if="isPasswordLoading"
 									class="mr-2 size-4 animate-spin"
 								/>
 
@@ -194,7 +255,21 @@ function resetState() {
 									class="mr-2 size-4 transition-transform group-hover:translate-x-0.5"
 								/>
 
-								<span>{{ isLoading ? "Dispatching..." : "Initialize Authentication" }}</span>
+								<span>{{ isPasswordLoading ? "Signing in..." : "Sign In" }}</span>
+							</Button>
+
+							<Button
+								type="button"
+								variant="ghost"
+								class="text-muted-foreground hover:text-foreground mt-3 w-full rounded-[0.375rem] text-xs font-bold tracking-[0.12em] uppercase"
+								:disabled="isLoading || isPasswordLoading"
+								@click="handleMagicLink"
+							>
+								<LoaderCircle
+									v-if="isLoading"
+									class="mr-2 size-4 animate-spin"
+								/>
+								{{ isLoading ? "Sending link..." : "Send magic link instead" }}
 							</Button>
 						</div>
 					</form>

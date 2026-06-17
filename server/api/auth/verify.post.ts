@@ -1,4 +1,6 @@
 import { z } from "zod"
+import { auditNonCustomerAction } from "~~/server/utils/audit"
+import { toSessionUser } from "~~/server/utils/auth"
 import { authRepo } from "~~/server/utils/db"
 
 const bodySchema = z.object({
@@ -29,16 +31,15 @@ export default defineEventHandler(async (event) => {
 
 	await authRepo.updateLastActive(user.id)
 
-	await setUserSession(event, {
-		user: {
-			id: user.id,
-			email: user.email,
-			name: user.name,
-			role: user.role,
-			email_verified: true,
-			last_active_at: user.last_active_at,
-			created_at: user.created_at,
-		},
+	const sessionUser = toSessionUser({ ...user, email_verified: true })
+	await setUserSession(event, { user: sessionUser })
+
+	await auditNonCustomerAction(event, sessionUser, {
+		action: "auth.magic_link_login",
+		targetType: "user",
+		targetId: String(user.id),
+		summary: `${user.email} signed in with magic link`,
+		metadata: {},
 	})
 
 	return {

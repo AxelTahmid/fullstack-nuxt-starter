@@ -8,6 +8,7 @@ export interface SessionUser {
 	name: string | null
 	role: UserRole
 	email_verified: boolean
+	password_reset_required: boolean
 	last_active_at: Date | null
 	created_at: Date
 }
@@ -16,7 +17,15 @@ function isUserRole(role: string): role is UserRole {
 	return role === "admin" || role === "customer"
 }
 
-function toSessionUser(user: Awaited<ReturnType<typeof authRepo.findUserById>>): SessionUser {
+function canUseTemporaryPasswordSession(event: H3Event) {
+	const pathname = getRequestURL(event).pathname
+
+	return pathname === "/api/auth/password/change"
+		|| pathname === "/api/auth/logout"
+		|| pathname === "/api/auth/me"
+}
+
+export function toSessionUser(user: Awaited<ReturnType<typeof authRepo.findUserById>>): SessionUser {
 	if (!user) {
 		throw new Error("Cannot build session from missing user")
 	}
@@ -27,6 +36,7 @@ function toSessionUser(user: Awaited<ReturnType<typeof authRepo.findUserById>>):
 		name: user.name,
 		role: isUserRole(user.role) ? user.role : "customer",
 		email_verified: user.email_verified,
+		password_reset_required: user.password_reset_required,
 		last_active_at: user.last_active_at,
 		created_at: user.created_at,
 	}
@@ -63,10 +73,39 @@ export async function requireSessionUser(event: H3Event) {
 		})
 	}
 
+	if (user.password_reset_required && !canUseTemporaryPasswordSession(event)) {
+		throw createError({
+			statusCode: 403,
+			statusMessage: "Password change required",
+		})
+	}
+
 	const sessionUser = toSessionUser(user)
-	if (sessionUser.id !== session.user.id || sessionUser.email !== session.user.email || sessionUser.role !== session.user.role) {
+	if (
+		sessionUser.id !== session.user.id
+		|| sessionUser.email !== session.user.email
+		|| sessionUser.role !== session.user.role
+		|| sessionUser.password_reset_required !== session.user.password_reset_required
+	) {
 		await setUserSession(event, { user: sessionUser })
 	}
 
 	return sessionUser
+}
+
+export async function requireRole(event: H3Event, roles: UserRole[]) {
+	const user = await requireSessionUser(event)
+
+	if (!roles.includes(user.role)) {
+		throw createError({
+			statusCode: 403,
+			statusMessage: "Forbidden",
+		})
+	}
+
+	return user
+}
+
+export async function requireAdmin(event: H3Event) {
+	return requireRole(event, ["admin"])
 }
