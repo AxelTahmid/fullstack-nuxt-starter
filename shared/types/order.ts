@@ -8,6 +8,10 @@ export interface OrderLine {
 	unitPriceCents: number
 	quantity: number
 	lineTotalCents: number
+	/** Admin / Sage cross-reference fields. */
+	quantityShipped: number
+	quantityBackordered: number
+	priceList: string | null
 }
 
 export interface OrderDetail {
@@ -25,6 +29,10 @@ export interface OrderDetail {
 	deliverySite: string
 	carrier: string
 	placedAt: string
+	/** Admin / Sage cross-reference fields. */
+	orderType: string
+	reference: string | null
+	expectedShipDate: string | null
 	lines: OrderLine[]
 }
 

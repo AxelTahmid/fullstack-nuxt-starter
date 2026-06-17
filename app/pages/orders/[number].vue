@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, CheckCircle2, MapPin, Receipt, Truck, User } from "@lucide/vue"
+import { ArrowLeft, CheckCircle2, Database, MapPin, Receipt, Truck, User } from "@lucide/vue"
 import type { OrderDetail } from "#shared/types/order"
 
 definePageMeta({
@@ -50,6 +50,15 @@ const carrierLabels: Record<string, string> = {
 	heavy_freight: "Heavy Freight LTL",
 	express_courier: "Express Courier",
 	standard_logistics: "Standard Logistics",
+}
+
+// Admins cross-reference orders directly against Sage, so they get the raw
+// identifiers and per-line quantities that customers don't need.
+const { user } = useUserSession()
+const isAdmin = computed(() => (user.value as { role?: string } | null)?.role === "admin")
+
+function formatDateOrDash(iso: string | null) {
+	return iso ? formatDate(iso) : "—"
 }
 </script>
 
@@ -198,6 +207,115 @@ const carrierLabels: Record<string, string> = {
 				</div>
 			</section>
 
+			<section
+				v-if="isAdmin"
+				class="border-primary/30 bg-primary/3 rounded-md border p-6"
+			>
+				<div class="mb-4 flex items-center gap-2">
+					<Database class="text-primary size-4" />
+
+					<h2 class="text-foreground text-sm font-bold tracking-[0.16em] uppercase">
+						Sage reference
+					</h2>
+
+					<span class="bg-primary/10 text-primary rounded-sm px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.14em] uppercase">
+						Admin
+					</span>
+				</div>
+
+				<dl class="grid gap-x-6 gap-y-4 text-sm sm:grid-cols-2 lg:grid-cols-3">
+					<div>
+						<dt class="text-muted-foreground text-[0.6rem] font-bold tracking-[0.16em] uppercase">
+							Order number
+						</dt>
+
+						<dd class="text-foreground mt-1 font-mono">
+							{{ order.orderNumber }}
+						</dd>
+					</div>
+
+					<div>
+						<dt class="text-muted-foreground text-[0.6rem] font-bold tracking-[0.16em] uppercase">
+							Uniquifier
+						</dt>
+
+						<dd class="text-foreground mt-1 font-mono">
+							{{ order.id }}
+						</dd>
+					</div>
+
+					<div>
+						<dt class="text-muted-foreground text-[0.6rem] font-bold tracking-[0.16em] uppercase">
+							Reference
+						</dt>
+
+						<dd class="text-foreground mt-1 font-mono">
+							{{ order.reference || "—" }}
+						</dd>
+					</div>
+
+					<div>
+						<dt class="text-muted-foreground text-[0.6rem] font-bold tracking-[0.16em] uppercase">
+							Order type
+						</dt>
+
+						<dd class="text-foreground mt-1">
+							{{ order.orderType }}
+						</dd>
+					</div>
+
+					<div>
+						<dt class="text-muted-foreground text-[0.6rem] font-bold tracking-[0.16em] uppercase">
+							Customer number
+						</dt>
+
+						<dd class="text-foreground mt-1 font-mono">
+							{{ order.customerNumber || "—" }}
+						</dd>
+					</div>
+
+					<div>
+						<dt class="text-muted-foreground text-[0.6rem] font-bold tracking-[0.16em] uppercase">
+							PO number
+						</dt>
+
+						<dd class="text-foreground mt-1 font-mono">
+							{{ order.poNumber || "—" }}
+						</dd>
+					</div>
+
+					<div>
+						<dt class="text-muted-foreground text-[0.6rem] font-bold tracking-[0.16em] uppercase">
+							Terms code
+						</dt>
+
+						<dd class="text-foreground mt-1 font-mono">
+							{{ order.paymentMethod }}
+						</dd>
+					</div>
+
+					<div>
+						<dt class="text-muted-foreground text-[0.6rem] font-bold tracking-[0.16em] uppercase">
+							Order date
+						</dt>
+
+						<dd class="text-foreground mt-1">
+							{{ formatDate(order.placedAt) }}
+						</dd>
+					</div>
+
+					<div>
+						<dt class="text-muted-foreground text-[0.6rem] font-bold tracking-[0.16em] uppercase">
+							Expected ship
+						</dt>
+
+						<dd class="text-foreground mt-1">
+							{{ formatDateOrDash(order.expectedShipDate) }}
+						</dd>
+					</div>
+				</dl>
+			</section>
+
 			<section class="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
 				<div class="border-border/60 bg-card rounded-md border p-6">
 					<div class="mb-5 flex items-center justify-between">
@@ -230,6 +348,13 @@ const carrierLabels: Record<string, string> = {
 
 								<p class="text-muted-foreground mt-1 text-xs">
 									{{ line.quantity }} × {{ formatPrice(line.unitPriceCents) }}
+								</p>
+
+								<p
+									v-if="isAdmin"
+									class="text-muted-foreground mt-1.5 font-mono text-[0.66rem]"
+								>
+									{{ line.sourceKey }}<span v-if="line.priceList"> · {{ line.priceList }}</span> · ord {{ line.quantity }} / shp {{ line.quantityShipped }} / bo {{ line.quantityBackordered }}
 								</p>
 							</div>
 

@@ -131,6 +131,9 @@ export function orderLines(order: OEOrderT): OrderLine[] {
 			unitPriceCents,
 			quantity,
 			lineTotalCents,
+			quantityShipped: detail.QuantityShippedtodate ?? detail.QuantityShipped ?? 0,
+			quantityBackordered: detail.QuantityBackordered ?? 0,
+			priceList: detail.PriceList?.trim() || null,
 		}
 	})
 }
@@ -191,6 +194,9 @@ export function toOrderDetail(order: OEOrderT): OrderDetail {
 		deliverySite: order.ShipToName?.trim() || order.ShipToLocationCode?.trim() || "Delivery site unavailable",
 		carrier: order.ShipViaCodeDescription?.trim() || order.ShipViaCode?.trim() || "To be confirmed",
 		placedAt: toIsoDate(order.OrderDate),
+		orderType: order.OrderType?.trim() || "—",
+		reference: order.OrderReference?.trim() || null,
+		expectedShipDate: toNullableIsoDate(order.ExpectedShipDate),
 		lines,
 	}
 }
