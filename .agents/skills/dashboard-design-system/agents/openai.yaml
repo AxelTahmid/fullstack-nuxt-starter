@@ -1,5 +1,0 @@
-interface:
-  display_name: "Kleos Admin UI System"
-  short_description: "Kleos shadcn-vue dashboard UI patterns"
-  brand_color: "#ffd665"
-  default_prompt: "Use $kleos-dashboard-design-system to build or refine Kleos Admin dashboard UI with shadcn-vue, TanStack Form, and route-query datatables."

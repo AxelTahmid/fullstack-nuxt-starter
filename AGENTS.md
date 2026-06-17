@@ -7,7 +7,7 @@ This repository is a full-stack Nuxt v4 starter, Use these rules when making cha
 ## 0) Non-negotiables
 
 - Before modifying code, evaluate each installed skill against the current task. For each skill, determine YES/NO relevance and invoke all YES skills before proceeding.
-- For frontend UI work, treat the dashboard design/system skills in `.agents/skills/*` as relevant by default when the task touches pages, shared UI, datatables, forms, overlays, or layout polish.
+- For frontend UI work, treat the `DESIGN.md` as relevant by default when the task touches pages, shared UI, datatables, forms, overlays, or layout polish.
 - No placeholders. No TODOs. No "left as an exercise".
 - Keep TypeScript strict. Avoid `any` unless the reason is documented inline.
 - Ship working code with correct imports, runtime behavior, and error handling.
