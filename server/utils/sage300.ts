@@ -1,4 +1,4 @@
-import type { ICItemPricingT, ICItemT, OEOrderT } from "#shared/sage300"
+import type { ICItemT, OEOrderT } from "#shared/sage300"
 import type { EstimateDetail, EstimateStatus, EstimateSummary } from "#shared/types/estimate"
 import type { OrderDetail, OrderLine, OrderStatus, OrderSummary } from "#shared/types/order"
 
@@ -50,51 +50,6 @@ export function odataCount(data: unknown): number | null {
 
 export function dollarsToCents(value: number | undefined) {
 	return typeof value === "number" ? Math.round(value * 100) : 0
-}
-
-export interface ResolvedItemPricing {
-	/** Regular price in cents (`null` when no price could be resolved). */
-	baseCents: number | null
-	/** Active sale price in cents, or `null` when the item is not on sale. */
-	saleCents: number | null
-	/** True when a valid, in-window sale price below the base price exists. */
-	onSale: boolean
-}
-
-/**
- * Resolve an `ICItemPricing` record into base / sale prices.
- *
- * Base price prefers `BasePrice`, falling back to the default unit-of-measure
- * `UnitPrice` from `ItemPricingDetails` (some Sage configs leave `BasePrice` at
- * 0 and carry the real price per UOM). A sale price only counts when it is a
- * positive discount below the base and inside `SaleStartDate`/`SaleEndDate`.
- */
-export function resolveItemPricing(pricing: ICItemPricingT | undefined): ResolvedItemPricing {
-	if (!pricing) {
-		return { baseCents: null, saleCents: null, onSale: false }
-	}
-
-	const detail = pricing.ItemPricingDetails?.find(row => row.DefaultUnit && typeof row.UnitPrice === "number")
-		?? pricing.ItemPricingDetails?.find(row => typeof row.UnitPrice === "number")
-	const baseRaw = typeof pricing.BasePrice === "number" && pricing.BasePrice > 0
-		? pricing.BasePrice
-		: detail?.UnitPrice
-	const baseCents = typeof baseRaw === "number" && baseRaw > 0 ? Math.round(baseRaw * 100) : null
-
-	const now = Date.now()
-	const startedOk = !pricing.SaleStartDate || new Date(pricing.SaleStartDate).getTime() <= now
-	const notEnded = !pricing.SaleEndDate || new Date(pricing.SaleEndDate).getTime() >= now
-	const saleCentsRaw = typeof pricing.SalePrice === "number" && pricing.SalePrice > 0
-		? Math.round(pricing.SalePrice * 100)
-		: null
-	const saleCents = saleCentsRaw !== null
-		&& startedOk
-		&& notEnded
-		&& (baseCents === null || saleCentsRaw < baseCents)
-		? saleCentsRaw
-		: null
-
-	return { baseCents, saleCents, onSale: saleCents !== null }
 }
 
 export function toIsoDate(value: Date | string | undefined) {

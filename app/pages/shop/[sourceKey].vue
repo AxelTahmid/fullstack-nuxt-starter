@@ -59,9 +59,15 @@ const itemStockStatus = computed<StockStatus>(() => {
 
 	return available <= 5 ? "low_stock" : "in_stock"
 })
-const defaultPricingDetail = computed<ICItemPricingDetailT | undefined>(() => pricing.value?.ItemPricingDetails?.find(detail => detail.DefaultUnit && typeof detail.UnitPrice === "number")
-	?? pricing.value?.ItemPricingDetails?.find(detail => typeof detail.UnitPrice === "number"))
-const unitPrice = computed(() => pricing.value?.SalePrice ?? defaultPricingDetail.value?.UnitPrice ?? pricing.value?.BasePrice ?? null)
+const defaultPricingDetail = computed<ICItemPricingDetailT | undefined>(() => pricing.value?.ItemPricingDetails?.find(detail => detail.DefaultUnit && typeof detail.UnitPrice === "number" && detail.UnitPrice > 0)
+	?? pricing.value?.ItemPricingDetails?.find(detail => typeof detail.UnitPrice === "number" && detail.UnitPrice > 0))
+// A 0 SalePrice / BasePrice means "not set", so only use positive values —
+// otherwise the current price reads $0.00 when an item simply isn't on sale.
+const unitPrice = computed(() => {
+	const sale = typeof pricing.value?.SalePrice === "number" && pricing.value.SalePrice > 0 ? pricing.value.SalePrice : null
+	const base = typeof pricing.value?.BasePrice === "number" && pricing.value.BasePrice > 0 ? pricing.value.BasePrice : null
+	return sale ?? defaultPricingDetail.value?.UnitPrice ?? base ?? null
+})
 const currencyCode = computed(() => pricing.value?.CurrencyCode || "CAD")
 const unitOfMeasure = computed(() => pricing.value?.SaleUnitOfMeasure
 	|| pricing.value?.PricingUnitOfMeasure
