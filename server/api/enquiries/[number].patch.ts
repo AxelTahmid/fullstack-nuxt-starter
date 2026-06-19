@@ -24,6 +24,15 @@ export default defineEventHandler(async (event): Promise<{ status: EnquiryStatus
 	}
 
 	const body = await readValidatedBody(event, updateEnquirySchema.parse)
+
+	// Priority is an admin-only triage control.
+	if (body.priority !== undefined && sessionUser.role !== "admin") {
+		throw createError({
+			statusCode: 403,
+			statusMessage: "Only admins can change priority",
+		})
+	}
+
 	const updated = await enquiryRepo.updateEnquiry(enquiry.id, {
 		status: body.status,
 		priority: body.priority,

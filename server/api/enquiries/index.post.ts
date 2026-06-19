@@ -32,7 +32,8 @@ export default defineEventHandler(async (event): Promise<EnquiryCreateResponse> 
 		subject: body.subject,
 		supplierName: body.supplierName,
 		productSku: body.productSku?.trim() || null,
-		priority: body.priority,
+		// Priority is admin-managed; new enquiries default to medium until triaged.
+		priority: "low",
 		firstMessage: {
 			authorUserId: sessionUser.id,
 			authorName: sessionUser.name || sessionUser.email,

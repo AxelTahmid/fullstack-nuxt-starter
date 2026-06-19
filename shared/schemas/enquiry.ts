@@ -7,7 +7,6 @@ export const createEnquirySchema = z.object({
 	subject: z.string().min(1, "Subject is required").max(200),
 	supplierName: z.string().min(1, "Supplier is required").max(200),
 	productSku: z.string().max(80).optional(),
-	priority: enquiryPriorityEnum.default("medium"),
 	initialMessage: z.string().min(1, "Initial message is required").max(4000),
 })
 

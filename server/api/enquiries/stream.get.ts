@@ -1,4 +1,3 @@
-import { log } from "#shared/log"
 import { channelFor, subscribeEnquiry } from "~~/server/utils/enquiryBus"
 import { requireSessionUser } from "~~/server/utils/auth"
 
@@ -18,7 +17,6 @@ export default defineEventHandler(async (event) => {
 	setResponseHeader(event, "Cache-Control", "no-cache, no-transform")
 
 	const eventStream = createEventStream(event)
-	log.info({ userId: sessionUser.id, role: sessionUser.role, channel }, "SSE enquiry stream connected")
 
 	const push = (payload: unknown) => {
 		// eslint-disable-next-line harlanzw/no-silent-catch -- client disconnected mid-write; onClosed performs teardown
@@ -33,7 +31,6 @@ export default defineEventHandler(async (event) => {
 	eventStream.onClosed(async () => {
 		clearInterval(heartbeat)
 		unsubscribe()
-		log.info({ userId: sessionUser.id, role: sessionUser.role }, "SSE enquiry stream closed")
 		await eventStream.close()
 	})
 

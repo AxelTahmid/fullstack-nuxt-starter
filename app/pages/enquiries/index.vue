@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowUpRight, LoaderCircle, Plus, Search, X } from "@lucide/vue"
 import type { FetchError } from "ofetch"
-import type { EnquiryPriority, EnquirySummary } from "#shared/types/enquiry"
+import type { EnquirySummary } from "#shared/types/enquiry"
 import { toast } from "~/components/toast"
 import { useEnquiryStream } from "~/composables/useEnquiryStream"
 
@@ -73,12 +73,10 @@ const form = reactive({
 	subject: "",
 	supplierName: "",
 	productSku: "",
-	priority: "medium" as EnquiryPriority,
 	initialMessage: "",
 })
 const isSubmitting = ref(false)
 
-const priorityOptions: EnquiryPriority[] = ["low", "medium", "high", "urgent"]
 const supplierSuggestions = [
 	"SupplyKey Direct",
 	"Global Metal Logistics Corp",
@@ -92,7 +90,6 @@ function openModal() {
 	form.subject = ""
 	form.supplierName = ""
 	form.productSku = ""
-	form.priority = "medium"
 	form.initialMessage = ""
 	isModalOpen.value = true
 }
@@ -114,7 +111,6 @@ async function submitEnquiry() {
 				subject: form.subject.trim(),
 				supplierName: form.supplierName.trim(),
 				productSku: form.productSku.trim() || undefined,
-				priority: form.priority,
 				initialMessage: form.initialMessage.trim(),
 			},
 		})
@@ -224,6 +220,7 @@ async function submitEnquiry() {
 						<div class="min-w-0 flex-1 space-y-2">
 							<div class="flex items-center gap-2">
 								<span
+									v-if="isAdmin"
 									class="rounded-sm px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.14em] uppercase"
 									:class="priorityStyles[enquiry.priority]"
 								>
@@ -370,26 +367,6 @@ async function submitEnquiry() {
 									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 font-mono text-sm focus:ring-2 focus:outline-none"
 									:disabled="isSubmitting"
 								/>
-							</div>
-						</div>
-
-						<div>
-							<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
-								Priority
-							</Label>
-
-							<div class="mt-2 grid grid-cols-4 gap-2">
-								<Button
-									v-for="option in priorityOptions"
-									:key="option"
-									type="button"
-									class="rounded-md px-3 py-2 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all"
-									:class="form.priority === option ? priorityStyles[option] : 'bg-muted text-muted-foreground hover:text-foreground'"
-									:disabled="isSubmitting"
-									@click="form.priority = option"
-								>
-									{{ option }}
-								</Button>
 							</div>
 						</div>
 

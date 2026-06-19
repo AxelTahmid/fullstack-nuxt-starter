@@ -342,6 +342,7 @@ onScopeDispose(() => {
 				<header class="border-border/40 flex flex-col gap-3 border-b p-6">
 					<div class="flex items-center gap-2">
 						<span
+							v-if="thread.viewerSide === 'support'"
 							class="rounded-sm px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.14em] uppercase"
 							:class="priorityStyles[thread.priority]"
 						>
@@ -526,7 +527,10 @@ onScopeDispose(() => {
 					</p>
 				</div>
 
-				<div class="border-border/60 bg-card rounded-md border p-5">
+				<div
+					v-if="thread.viewerSide === 'support'"
+					class="border-border/60 bg-card rounded-md border p-5"
+				>
 					<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
 						Priority
 					</p>
