@@ -13,7 +13,6 @@ export const createEnquirySchema = z.object({
 
 export const postMessageSchema = z.object({
 	body: z.string().min(1, "Message body is required").max(4000),
-	asSupplier: z.boolean().optional().default(false),
 })
 
 export const updateEnquirySchema = z.object({

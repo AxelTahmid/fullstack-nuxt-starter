@@ -2,6 +2,7 @@ import { updateEnquirySchema } from "#shared/schemas/enquiry"
 import type { EnquiryPriority, EnquiryStatus } from "#shared/types/enquiry"
 import { enquiryRepo } from "~~/server/db/repository"
 import { requireSessionUser } from "~~/server/utils/auth"
+import { publishEnquiryEvent } from "~~/server/utils/enquiryBus"
 
 export default defineEventHandler(async (event): Promise<{ status: EnquiryStatus, priority: EnquiryPriority }> => {
 	const sessionUser = await requireSessionUser(event)
@@ -28,8 +29,15 @@ export default defineEventHandler(async (event): Promise<{ status: EnquiryStatus
 		priority: body.priority,
 	})
 
-	return {
-		status: (updated?.status ?? enquiry.status) as EnquiryStatus,
-		priority: (updated?.priority ?? enquiry.priority) as EnquiryPriority,
-	}
+	const status = (updated?.status ?? enquiry.status) as EnquiryStatus
+	const priority = (updated?.priority ?? enquiry.priority) as EnquiryPriority
+
+	publishEnquiryEvent(enquiry.user_id, {
+		type: "status",
+		enquiryNumber: enquiry.enquiry_number,
+		status,
+		priority,
+	})
+
+	return { status, priority }
 })

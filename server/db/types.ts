@@ -106,6 +106,14 @@ export interface EnquiryMessages {
 	created_at: Generated<Timestamp>
 	enquiry_id: number
 	id: Generated<number>
+	sender_side: Generated<string>
+}
+
+export interface EnquiryReads {
+	enquiry_id: number
+	last_read_at: Generated<Timestamp>
+	last_read_message_id: Generated<number>
+	side: string
 }
 
 export interface QueueBam {
@@ -243,6 +251,7 @@ export interface DB {
 	"email_auth_tokens": EmailAuthTokens
 	"enquiries": Enquiries
 	"enquiry_messages": EnquiryMessages
+	"enquiry_reads": EnquiryReads
 	"queue.bam": QueueBam
 	"queue.job": QueueJob
 	"queue.job_dependency": QueueJobDependency

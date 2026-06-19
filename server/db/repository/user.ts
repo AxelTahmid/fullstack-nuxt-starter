@@ -70,6 +70,16 @@ class UserRepository extends Database {
 			.executeTakeFirst()
 	}
 
+	/** Active admins, used as the support-side recipients for enquiry notifications. */
+	async listActiveAdmins() {
+		return this.db
+			.selectFrom("users")
+			.select(["id", "email", "name"])
+			.where("role", "=", "admin")
+			.where("deactivated", "=", false)
+			.execute()
+	}
+
 	async findUserBySageCustomerNumber(sageCustomerNumber: string) {
 		return this.db
 			.selectFrom("users")

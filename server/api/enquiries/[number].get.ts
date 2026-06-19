@@ -1,5 +1,5 @@
-import type { EnquiryMessage, EnquiryPriority, EnquiryStatus, EnquiryThread } from "#shared/types/enquiry"
-import { enquiryRepo } from "~~/server/db/repository"
+import type { EnquiryMessage, EnquiryPriority, EnquiryStatus, EnquiryThread, MessageSenderSide } from "#shared/types/enquiry"
+import { enquiryRepo, userRepo } from "~~/server/db/repository"
 import { requireSessionUser } from "~~/server/utils/auth"
 
 export default defineEventHandler(async (event): Promise<EnquiryThread> => {
@@ -21,7 +21,11 @@ export default defineEventHandler(async (event): Promise<EnquiryThread> => {
 		})
 	}
 
-	const messages = await enquiryRepo.listMessages(enquiry.id)
+	const [messages, readMarkers, owner] = await Promise.all([
+		enquiryRepo.listMessages(enquiry.id),
+		enquiryRepo.getReadMarkers(enquiry.id),
+		userRepo.findUserById(enquiry.user_id),
+	])
 
 	return {
 		id: enquiry.id,
@@ -32,10 +36,16 @@ export default defineEventHandler(async (event): Promise<EnquiryThread> => {
 		status: enquiry.status as EnquiryStatus,
 		priority: enquiry.priority as EnquiryPriority,
 		createdAt: new Date(enquiry.created_at).toISOString(),
+		customerName: owner?.name ?? null,
+		customerEmail: owner?.email ?? "",
+		viewerSide: sessionUser.role === "admin" ? "support" : "customer",
+		customerLastReadMessageId: readMarkers.customer,
+		supportLastReadMessageId: readMarkers.support,
 		messages: messages.map((message): EnquiryMessage => ({
 			id: message.id,
 			authorName: message.author_name,
 			authorRole: message.author_role,
+			senderSide: message.sender_side as MessageSenderSide,
 			body: message.body,
 			attachmentName: message.attachment_name,
 			createdAt: new Date(message.created_at).toISOString(),

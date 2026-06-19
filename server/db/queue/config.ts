@@ -19,4 +19,12 @@ export const queueConfigs: Record<JobName, Queue> = {
 		expireInSeconds: 1 * TIME.HOUR,
 		deleteAfterSeconds: 3 * TIME.DAY,
 	},
+	[JOB_NAMES.SEND_ENQUIRY_MESSAGE_NOTIFICATION]: {
+		name: JOB_NAMES.SEND_ENQUIRY_MESSAGE_NOTIFICATION,
+		retryLimit: 3,
+		retryDelay: 1 * TIME.MINUTE,
+		retryBackoff: true,
+		expireInSeconds: 1 * TIME.HOUR,
+		deleteAfterSeconds: 3 * TIME.DAY,
+	},
 }

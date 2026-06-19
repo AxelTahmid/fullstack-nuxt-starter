@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ArrowLeft, Bold, Factory, FileText, Italic, LoaderCircle, MapPin, Paperclip, Send, Smile, Sparkles } from "@lucide/vue"
+import { ArrowLeft, Bold, Check, Factory, FileText, Italic, LoaderCircle, Paperclip, Send, Smile, Users } from "@lucide/vue"
 import type { FetchError } from "ofetch"
-import type { EnquiryPriority, EnquiryStatus, EnquirySummary, EnquiryThread } from "#shared/types/enquiry"
+import type { EnquiryMessage, EnquiryPriority, EnquiryReadResponse, EnquiryStatus, EnquirySummary, EnquiryThread, MessageSenderSide } from "#shared/types/enquiry"
 import { toast } from "~/components/toast"
+import { useEnquiryStream } from "~/composables/useEnquiryStream"
 
 definePageMeta({
 	layout: "dashboard",
@@ -18,6 +19,8 @@ const { data: thread, pending, error, refresh: refreshThread } = await useFetch<
 )
 
 const { data: enquiries, refresh: refreshList } = await useFetch<EnquirySummary[]>("/api/enquiries")
+
+const { unreadMap, clearUnread, setActiveEnquiry, onEnquiryEvent } = useEnquiryStream()
 
 useHead({
 	title: computed(() => thread.value ? `${thread.value.enquiryNumber} · ${thread.value.subject}` : "Enquiry"),
@@ -46,38 +49,91 @@ function formatDateTime(iso: string) {
 	return date.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })
 }
 
-function isBuyer(authorRole: string) {
-	return authorRole.toLowerCase().includes("procurement") || authorRole.toLowerCase().includes("buyer")
+/** A message belongs to the viewer's own side (rendered on the right). */
+function isMine(side: MessageSenderSide) {
+	return side === (thread.value?.viewerSide ?? "customer")
 }
 
-const replyBody = ref("")
-const sendingRole = ref<"buyer" | "supplier" | null>(null)
-const editingField = ref<"priority" | "status" | null>(null)
+// Read receipt: has the other party seen my latest message?
+const otherSideLastRead = computed(() => {
+	if (!thread.value) {
+		return null
+	}
+	return thread.value.viewerSide === "customer"
+		? thread.value.supportLastReadMessageId
+		: thread.value.customerLastReadMessageId
+})
 
-async function sendMessage(asSupplier: boolean) {
+const lastOwnMessageId = computed(() => {
+	if (!thread.value) {
+		return null
+	}
+	const own = thread.value.messages.filter(message => isMine(message.senderSide))
+	return own.length ? own[own.length - 1]!.id : null
+})
+
+const ownLatestSeen = computed(() =>
+	otherSideLastRead.value !== null
+	&& lastOwnMessageId.value !== null
+	&& otherSideLastRead.value >= lastOwnMessageId.value,
+)
+
+const lastActivity = computed(() => {
+	const messages = thread.value?.messages
+	return messages && messages.length ? messages[messages.length - 1]!.createdAt : null
+})
+
+const replyBody = ref("")
+const sending = ref(false)
+const editingField = ref<"priority" | "status" | null>(null)
+const messagesContainer = useTemplateRef<HTMLElement>("messagesContainer")
+
+function scrollToBottom() {
+	nextTick(() => {
+		const el = messagesContainer.value
+		if (el) {
+			el.scrollTop = el.scrollHeight
+		}
+	})
+}
+
+async function markThreadRead() {
+	if (!number.value) {
+		return
+	}
+	try {
+		await $fetch<EnquiryReadResponse>(`/api/enquiries/${number.value}/read`, { method: "POST" })
+		clearUnread(number.value)
+	}
+	catch {
+		// Non-fatal: the badge will reconcile on the next list refresh.
+	}
+}
+
+async function sendMessage() {
 	if (!replyBody.value.trim()) {
 		toast.error("Message body cannot be empty.")
 		return
 	}
-	sendingRole.value = asSupplier ? "supplier" : "buyer"
+	sending.value = true
 	try {
-		await $fetch(`/api/enquiries/${number.value}/messages`, {
+		const message = await $fetch<EnquiryMessage>(`/api/enquiries/${number.value}/messages`, {
 			method: "POST",
-			body: {
-				body: replyBody.value.trim(),
-				asSupplier,
-			},
+			body: { body: replyBody.value.trim() },
 		})
 		replyBody.value = ""
-		await Promise.all([refreshThread(), refreshList()])
-		toast.success(asSupplier ? "Supplier reply inserted." : "Message dispatched.")
+		if (thread.value && !thread.value.messages.some(existing => existing.id === message.id)) {
+			thread.value = { ...thread.value, messages: [...thread.value.messages, message] }
+		}
+		scrollToBottom()
+		await refreshList()
 	}
 	catch (err) {
 		const fetchError = err as FetchError<{ message?: string }>
 		toast.error(fetchError.data?.message || "Unable to send message.")
 	}
 	finally {
-		sendingRole.value = null
+		sending.value = false
 	}
 }
 
@@ -87,7 +143,7 @@ function handleReplyKeydown(event: KeyboardEvent) {
 	}
 
 	event.preventDefault()
-	sendMessage(false)
+	sendMessage()
 }
 
 async function updatePriority(value: EnquiryPriority) {
@@ -133,6 +189,51 @@ async function updateStatus(value: EnquiryStatus) {
 		editingField.value = null
 	}
 }
+
+// Realtime: append inbound messages, refresh receipts, and reflect status changes.
+onEnquiryEvent((realtimeEvent) => {
+	if (realtimeEvent.enquiryNumber !== number.value || !thread.value) {
+		return
+	}
+
+	if (realtimeEvent.type === "message") {
+		if (thread.value.messages.some(existing => existing.id === realtimeEvent.message.id)) {
+			return
+		}
+		thread.value = { ...thread.value, messages: [...thread.value.messages, realtimeEvent.message] }
+		scrollToBottom()
+		if (realtimeEvent.message.senderSide !== thread.value.viewerSide) {
+			void markThreadRead()
+		}
+		void refreshList()
+	}
+	else if (realtimeEvent.type === "read") {
+		thread.value = realtimeEvent.side === "customer"
+			? { ...thread.value, customerLastReadMessageId: realtimeEvent.lastReadMessageId }
+			: { ...thread.value, supportLastReadMessageId: realtimeEvent.lastReadMessageId }
+	}
+	else if (realtimeEvent.type === "status") {
+		thread.value = { ...thread.value, status: realtimeEvent.status, priority: realtimeEvent.priority }
+	}
+})
+
+onMounted(() => {
+	setActiveEnquiry(number.value)
+	scrollToBottom()
+	void markThreadRead()
+})
+
+watch(number, (next, previous) => {
+	if (next && next !== previous) {
+		setActiveEnquiry(next)
+		scrollToBottom()
+		void markThreadRead()
+	}
+})
+
+onScopeDispose(() => {
+	setActiveEnquiry(null)
+})
 </script>
 
 <template>
@@ -193,7 +294,7 @@ async function updateStatus(value: EnquiryStatus) {
 								? 'bg-primary text-primary-foreground'
 								: 'hover:bg-muted text-foreground'"
 						>
-							<div class="flex items-center justify-between">
+							<div class="flex items-center justify-between gap-2">
 								<span
 									class="text-[0.6rem] font-bold tracking-[0.14em] uppercase"
 									:class="row.enquiryNumber === thread.enquiryNumber ? 'text-primary-foreground/70' : 'text-muted-foreground'"
@@ -202,6 +303,14 @@ async function updateStatus(value: EnquiryStatus) {
 								</span>
 
 								<span
+									v-if="(unreadMap[row.enquiryNumber] ?? 0) > 0 && row.enquiryNumber !== thread.enquiryNumber"
+									class="bg-primary text-primary-foreground inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[0.56rem] font-bold"
+								>
+									{{ unreadMap[row.enquiryNumber] }}
+								</span>
+
+								<span
+									v-else
 									class="rounded-sm px-1.5 py-0.5 text-[0.56rem] font-bold tracking-[0.12em] uppercase"
 									:class="row.enquiryNumber === thread.enquiryNumber
 										? 'bg-primary-foreground/20 text-primary-foreground'
@@ -263,16 +372,19 @@ async function updateStatus(value: EnquiryStatus) {
 					</p>
 				</header>
 
-				<div class="flex-1 space-y-5 overflow-y-auto p-6">
+				<div
+					ref="messagesContainer"
+					class="flex-1 space-y-5 overflow-y-auto p-6"
+				>
 					<article
 						v-for="message in thread.messages"
 						:key="message.id"
 						class="flex gap-4"
-						:class="isBuyer(message.authorRole) ? 'flex-row-reverse' : ''"
+						:class="isMine(message.senderSide) ? 'flex-row-reverse' : ''"
 					>
 						<div
 							class="flex size-9 shrink-0 items-center justify-center rounded-md text-xs font-bold"
-							:class="isBuyer(message.authorRole) ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'"
+							:class="isMine(message.senderSide) ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'"
 							style="font-family: var(--font-display);"
 						>
 							{{ message.authorName.slice(0, 2).toUpperCase() }}
@@ -281,7 +393,7 @@ async function updateStatus(value: EnquiryStatus) {
 						<div class="max-w-[78%] space-y-1.5">
 							<div
 								class="text-muted-foreground flex items-center gap-2 text-[0.62rem] font-bold tracking-[0.12em] uppercase"
-								:class="isBuyer(message.authorRole) ? 'justify-end' : ''"
+								:class="isMine(message.senderSide) ? 'justify-end' : ''"
 							>
 								<span>{{ message.authorName }}</span>
 
@@ -292,7 +404,7 @@ async function updateStatus(value: EnquiryStatus) {
 
 							<div
 								class="rounded-md p-4 text-sm leading-6"
-								:class="isBuyer(message.authorRole) ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'"
+								:class="isMine(message.senderSide) ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'"
 							>
 								<p>{{ message.body }}</p>
 
@@ -306,12 +418,20 @@ async function updateStatus(value: EnquiryStatus) {
 								</div>
 							</div>
 
-							<p
-								class="text-muted-foreground text-[0.6rem]"
-								:class="isBuyer(message.authorRole) ? 'text-right' : ''"
+							<div
+								class="text-muted-foreground flex items-center gap-1.5 text-[0.6rem]"
+								:class="isMine(message.senderSide) ? 'justify-end' : ''"
 							>
-								{{ formatDateTime(message.createdAt) }}
-							</p>
+								<span>{{ formatDateTime(message.createdAt) }}</span>
+
+								<span
+									v-if="isMine(message.senderSide) && message.id === lastOwnMessageId && ownLatestSeen"
+									class="text-primary inline-flex items-center gap-0.5 font-semibold"
+								>
+									<Check class="size-3" />
+									Seen
+								</span>
+							</div>
 						</div>
 					</article>
 				</div>
@@ -323,7 +443,7 @@ async function updateStatus(value: EnquiryStatus) {
 							rows="2"
 							placeholder="Type your reply…"
 							class="text-foreground placeholder:text-muted-foreground/60 w-full resize-none bg-transparent text-sm leading-6 focus:outline-none"
-							:disabled="sendingRole !== null"
+							:disabled="sending"
 							@keydown="handleReplyKeydown"
 						/>
 
@@ -362,44 +482,23 @@ async function updateStatus(value: EnquiryStatus) {
 								</Button>
 							</div>
 
-							<div class="flex items-center gap-2">
-								<Button
-									type="button"
-									class="border-border/70 bg-background text-muted-foreground hover:border-primary hover:text-primary inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-[0.6rem] font-bold tracking-[0.14em] uppercase transition-all disabled:opacity-60"
-									:disabled="sendingRole !== null || !replyBody.trim()"
-									title="Insert as supplier reply (demo)"
-									@click="sendMessage(true)"
-								>
-									<LoaderCircle
-										v-if="sendingRole === 'supplier'"
-										class="size-3.5 animate-spin"
-									/>
+							<Button
+								type="button"
+								class="bg-primary text-primary-foreground inline-flex items-center gap-1.5 rounded-md px-4 py-1.5 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all hover:brightness-110 disabled:opacity-60"
+								:disabled="sending || !replyBody.trim()"
+								@click="sendMessage"
+							>
+								<LoaderCircle
+									v-if="sending"
+									class="size-3.5 animate-spin"
+								/>
 
-									<Sparkles
-										v-else
-										class="size-3.5"
-									/>
-									As Supplier
-								</Button>
-
-								<Button
-									type="button"
-									class="bg-primary text-primary-foreground inline-flex items-center gap-1.5 rounded-md px-4 py-1.5 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all hover:brightness-110 disabled:opacity-60"
-									:disabled="sendingRole !== null || !replyBody.trim()"
-									@click="sendMessage(false)"
-								>
-									<LoaderCircle
-										v-if="sendingRole === 'buyer'"
-										class="size-3.5 animate-spin"
-									/>
-
-									<Send
-										v-else
-										class="size-3.5"
-									/>
-									Send
-								</Button>
-							</div>
+								<Send
+									v-else
+									class="size-3.5"
+								/>
+								Send
+							</Button>
 						</div>
 					</div>
 				</footer>
@@ -513,20 +612,41 @@ async function updateStatus(value: EnquiryStatus) {
 
 				<div class="border-border/60 bg-card rounded-md border p-5">
 					<div class="text-muted-foreground flex items-center gap-2">
-						<MapPin class="size-4" />
+						<Users class="size-4" />
 
 						<p class="text-[0.62rem] font-bold tracking-[0.18em] uppercase">
-							Routing
+							{{ thread.viewerSide === 'support' ? 'Customer' : 'Support' }}
 						</p>
 					</div>
 
-					<p class="text-foreground mt-2 text-sm">
-						Fremantle Terminal
+					<p class="text-foreground mt-2 text-sm font-semibold">
+						{{ thread.viewerSide === 'support'
+							? (thread.customerName || thread.customerEmail || 'Customer')
+							: 'SupplyKey Support' }}
 					</p>
 
-					<p class="text-muted-foreground mt-1 text-xs">
-						Response SLA: ~4 operational hours
+					<p
+						v-if="thread.viewerSide === 'support' && thread.customerName && thread.customerEmail"
+						class="text-muted-foreground mt-1 text-xs"
+					>
+						{{ thread.customerEmail }}
 					</p>
+
+					<div class="border-border/40 mt-3 space-y-1.5 border-t pt-3">
+						<div class="flex items-center justify-between">
+							<span class="text-muted-foreground text-xs">Messages</span>
+
+							<span class="text-foreground text-xs font-semibold">{{ thread.messages.length }}</span>
+						</div>
+
+						<div class="flex items-center justify-between gap-2">
+							<span class="text-muted-foreground text-xs">Last reply</span>
+
+							<span class="text-foreground text-xs font-semibold">
+								{{ lastActivity ? formatDateTime(lastActivity) : '—' }}
+							</span>
+						</div>
+					</div>
 				</div>
 
 				<div class="border-border/60 bg-card rounded-md border p-5">

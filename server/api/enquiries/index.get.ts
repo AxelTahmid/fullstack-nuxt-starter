@@ -4,7 +4,11 @@ import { requireSessionUser } from "~~/server/utils/auth"
 
 export default defineEventHandler(async (event): Promise<EnquirySummary[]> => {
 	const sessionUser = await requireSessionUser(event)
-	const rows = await enquiryRepo.listSummaries(sessionUser.role === "admin" ? undefined : sessionUser.id)
+	const isAdmin = sessionUser.role === "admin"
+	const rows = await enquiryRepo.listSummaries({
+		userId: isAdmin ? undefined : sessionUser.id,
+		viewerSide: isAdmin ? "support" : "customer",
+	})
 
 	return rows.map((row): EnquirySummary => ({
 		id: row.id,
@@ -16,5 +20,6 @@ export default defineEventHandler(async (event): Promise<EnquirySummary[]> => {
 		priority: row.priority as EnquiryPriority,
 		updatedAt: new Date(row.updated_at).toISOString(),
 		lastMessagePreview: row.last_message_preview ?? "",
+		unreadCount: Number(row.unread_count ?? 0),
 	}))
 })

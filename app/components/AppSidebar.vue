@@ -11,9 +11,10 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { FileStack, Inbox, LayoutDashboard, MessagesSquare, Palette, Receipt, ShoppingBasket, ShoppingCart, Store, Users } from "@lucide/vue"
+import { FileStack, Inbox, LayoutDashboard, Palette, Receipt, ShoppingBasket, ShoppingCart, Store, Users } from "@lucide/vue"
 import type { AppNavItem } from "~/components/app-shell"
 import { useBrand } from "~/composables/useBrand"
+import { useEnquiryStream } from "~/composables/useEnquiryStream"
 
 type NavItem = AppNavItem & {
 	adminOnly?: boolean
@@ -22,6 +23,7 @@ type NavItem = AppNavItem & {
 const route = useRoute()
 const { user } = useUserSession()
 const { brand } = useBrand()
+const { totalUnread } = useEnquiryStream()
 const orgName = computed(() => brand.value?.orgName ?? "SupplyKey")
 const tagline = computed(() => brand.value?.tagline ?? "Mine Supply Company")
 const logoDataUrl = computed(() => brand.value?.logoDataUrl ?? null)
@@ -83,12 +85,6 @@ const allMenuGroups = computed<{ title: string, items: NavItem[] }[]>(() => [
 				description: "Supplier follow-ups",
 				href: "/enquiries",
 				icon: Inbox,
-			},
-			{
-				label: "Communication Hub",
-				description: "Threaded messaging",
-				href: "/enquiries",
-				icon: MessagesSquare,
 			},
 		] satisfies NavItem[],
 	},
@@ -194,6 +190,13 @@ function isActive(path: string) {
 									<component :is="item.icon" />
 
 									<span>{{ item.label }}</span>
+
+									<span
+										v-if="item.href === '/enquiries' && totalUnread > 0"
+										class="bg-primary text-primary-foreground ml-auto inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[0.6rem] font-bold group-data-[collapsible=icon]:hidden"
+									>
+										{{ totalUnread }}
+									</span>
 								</NuxtLink>
 							</SidebarMenuButton>
 						</SidebarMenuItem>

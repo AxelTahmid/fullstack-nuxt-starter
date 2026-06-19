@@ -3,6 +3,7 @@ import { ArrowUpRight, LoaderCircle, Plus, Search, X } from "@lucide/vue"
 import type { FetchError } from "ofetch"
 import type { EnquiryPriority, EnquirySummary } from "#shared/types/enquiry"
 import { toast } from "~/components/toast"
+import { useEnquiryStream } from "~/composables/useEnquiryStream"
 
 definePageMeta({
 	layout: "dashboard",
@@ -14,6 +15,26 @@ useHead({
 })
 
 const { data, pending, refresh } = await useFetch<EnquirySummary[]>("/api/enquiries")
+
+const { user } = useUserSession()
+// Admins triage and reply only; customers are the ones who raise enquiries.
+const isAdmin = computed(() => user.value?.role === "admin")
+
+const { unreadMap, setUnreadFromSummaries, onEnquiryEvent } = useEnquiryStream()
+
+// Keep the shared unread map in sync with the list whenever it (re)loads.
+watch(data, (rows) => {
+	if (rows) {
+		setUnreadFromSummaries(rows)
+	}
+}, { immediate: true })
+
+// Any inbound message or status change re-orders/refreshes the list.
+onEnquiryEvent((realtimeEvent) => {
+	if (realtimeEvent.type !== "read") {
+		refresh()
+	}
+})
 
 const searchQuery = ref("")
 const filtered = computed(() => {
@@ -145,6 +166,7 @@ async function submitEnquiry() {
 				</div>
 
 				<Button
+					v-if="!isAdmin"
 					type="button"
 					class="bg-primary text-primary-foreground inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-[0.68rem] font-bold tracking-[0.14em] uppercase transition-all hover:brightness-110"
 					style="font-family: var(--font-display);"
@@ -173,10 +195,11 @@ async function submitEnquiry() {
 				class="border-border/60 bg-card rounded-md border p-12 text-center"
 			>
 				<p class="text-muted-foreground text-sm">
-					No enquiries match this search.
+					{{ isAdmin ? "No enquiries received yet." : "No enquiries match this search." }}
 				</p>
 
 				<Button
+					v-if="!isAdmin"
 					type="button"
 					class="bg-primary text-primary-foreground mt-4 inline-flex items-center gap-2 rounded-md px-4 py-2 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all hover:brightness-110"
 					@click="openModal"
@@ -236,6 +259,13 @@ async function submitEnquiry() {
 						</div>
 
 						<div class="flex flex-col items-end gap-3">
+							<span
+								v-if="(unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount) > 0"
+								class="bg-primary text-primary-foreground inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[0.6rem] font-bold"
+							>
+								{{ unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount }}
+							</span>
+
 							<span class="text-muted-foreground text-[0.62rem] font-semibold tracking-wide whitespace-nowrap">
 								{{ formatDate(enquiry.updatedAt) }}
 							</span>
