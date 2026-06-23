@@ -2,7 +2,7 @@
 import type { EstimateDetail } from "#shared/types/estimate"
 import type { CheckoutResponse } from "#shared/types/order"
 import type { FetchError } from "ofetch"
-import { AlertCircle, ArrowLeft, CalendarClock, FileText, LoaderCircle, MapPin, PackageCheck, User } from "@lucide/vue"
+import { AlertCircle, ArrowLeft, CalendarClock, FileText, LoaderCircle, MapPin, MessageSquarePlus, PackageCheck, User } from "@lucide/vue"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -29,6 +29,19 @@ useHead({
 })
 
 const isConverting = ref(false)
+
+const { user } = useUserSession()
+const isAdmin = computed(() => (user.value as { role?: string } | null)?.role === "admin")
+
+// Customers can open an enquiry pre-linked to this Sage quote.
+const enquiryLink = computed(() => ({
+	path: "/enquiries",
+	query: {
+		sourceType: "quote",
+		sourceReference: estimate.value?.quoteNumber ?? "",
+		subject: estimate.value ? `Enquiry about quote ${estimate.value.quoteNumber}` : "",
+	},
+}))
 
 async function convertToOrder() {
 	isConverting.value = true
@@ -142,6 +155,18 @@ async function convertToOrder() {
 						<NuxtLink :to="`/orders/${estimate.convertedOrderNumber}`">
 							<PackageCheck class="size-4" />
 							View order {{ estimate.convertedOrderNumber }}
+						</NuxtLink>
+					</Button>
+
+					<Button
+						v-if="!isAdmin"
+						as-child
+						variant="outline"
+						size="sm"
+					>
+						<NuxtLink :to="enquiryLink">
+							<MessageSquarePlus class="size-4" />
+							Raise enquiry
 						</NuxtLink>
 					</Button>
 				</div>

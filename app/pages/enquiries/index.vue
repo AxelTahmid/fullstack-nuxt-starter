@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowUpRight, LoaderCircle, Plus, Search, X } from "@lucide/vue"
 import type { FetchError } from "ofetch"
-import type { EnquirySummary } from "#shared/types/enquiry"
+import type { EnquirySourceType, EnquirySummary } from "#shared/types/enquiry"
 import { toast } from "~/components/toast"
 import { useEnquiryStream } from "~/composables/useEnquiryStream"
 
@@ -16,6 +16,7 @@ useHead({
 
 const { data, pending, refresh } = await useFetch<EnquirySummary[]>("/api/enquiries")
 
+const route = useRoute()
 const { user } = useUserSession()
 // Admins triage and reply only; customers are the ones who raise enquiries.
 const isAdmin = computed(() => user.value?.role === "admin")
@@ -73,6 +74,8 @@ const form = reactive({
 	subject: "",
 	supplierName: "",
 	productSku: "",
+	sourceType: "general" as EnquirySourceType,
+	sourceReference: "",
 	initialMessage: "",
 })
 const isSubmitting = ref(false)
@@ -86,13 +89,35 @@ const supplierSuggestions = [
 	"Cummins Power Systems",
 ]
 
-function openModal() {
-	form.subject = ""
-	form.supplierName = ""
-	form.productSku = ""
+function openModal(prefill?: Partial<typeof form>) {
+	form.subject = prefill?.subject ?? ""
+	form.supplierName = prefill?.supplierName ?? ""
+	form.productSku = prefill?.productSku ?? ""
+	form.sourceType = prefill?.sourceType ?? "general"
+	form.sourceReference = prefill?.sourceReference ?? ""
 	form.initialMessage = ""
 	isModalOpen.value = true
 }
+
+// Source pages (order/quote/product detail) deep-link here with prefill params.
+onMounted(() => {
+	const q = route.query
+	if (isAdmin.value || !(q.sourceReference || q.productSku || q.subject)) {
+		return
+	}
+	const str = (value: unknown) => (typeof value === "string" ? value : "")
+	const rawType = str(q.sourceType)
+	const sourceType: EnquirySourceType = rawType === "order" ? "order" : rawType === "quote" ? "quote" : "general"
+	openModal({
+		subject: str(q.subject),
+		supplierName: str(q.supplierName),
+		productSku: str(q.productSku),
+		sourceType,
+		sourceReference: str(q.sourceReference),
+	})
+	// Drop the params so a refresh does not reopen the modal.
+	return navigateTo({ query: {} }, { replace: true })
+})
 
 function closeModal() {
 	isModalOpen.value = false
@@ -111,6 +136,8 @@ async function submitEnquiry() {
 				subject: form.subject.trim(),
 				supplierName: form.supplierName.trim(),
 				productSku: form.productSku.trim() || undefined,
+				sourceType: form.sourceType === "general" ? undefined : form.sourceType,
+				sourceReference: form.sourceReference.trim() || undefined,
 				initialMessage: form.initialMessage.trim(),
 			},
 		})
@@ -120,7 +147,32 @@ async function submitEnquiry() {
 		await navigateTo(`/enquiries/${response.enquiryNumber}`)
 	}
 	catch (err) {
-		const fetchError = err as FetchError<{ message?: string }>
+		const fetchError = err as FetchError<{ message?: string, data?: { enquiryNumber?: string } }>
+		// A 409 means an open enquiry already exists for this item — open it instead.
+		const existing = fetchError.data?.data?.enquiryNumber
+		if (fetchError.statusCode === 409 && existing) {
+			// Don't lose what they typed — add it to the existing open thread.
+			const messageText = form.initialMessage.trim()
+			let appended = false
+			if (messageText) {
+				try {
+					await $fetch(`/api/enquiries/${existing}/messages`, {
+						method: "POST",
+						body: { body: messageText },
+					})
+					appended = true
+				}
+				catch {
+					// Non-fatal: still open the existing thread.
+				}
+			}
+			toast.info(appended
+				? "You already have an open enquiry for this — added your message to it."
+				: "You already have an open enquiry for this. Opening it.")
+			closeModal()
+			await navigateTo(`/enquiries/${existing}`)
+			return
+		}
 		toast.error(fetchError.data?.message || "Unable to create enquiry.")
 	}
 	finally {
@@ -364,6 +416,46 @@ async function submitEnquiry() {
 									v-model="form.productSku"
 									type="text"
 									placeholder="SKI-VLV-XP900"
+									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 font-mono text-sm focus:ring-2 focus:outline-none"
+									:disabled="isSubmitting"
+								/>
+							</div>
+						</div>
+
+						<div class="grid gap-5 sm:grid-cols-2">
+							<div>
+								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+									Linked document (optional)
+								</Label>
+
+								<select
+									v-model="form.sourceType"
+									class="bg-muted text-foreground focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
+									:disabled="isSubmitting"
+								>
+									<option value="general">
+										None
+									</option>
+
+									<option value="order">
+										Order
+									</option>
+
+									<option value="quote">
+										Quote
+									</option>
+								</select>
+							</div>
+
+							<div v-if="form.sourceType !== 'general'">
+								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+									Document number
+								</Label>
+
+								<Input
+									v-model="form.sourceReference"
+									type="text"
+									placeholder="e.g. ORD-001234"
 									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 font-mono text-sm focus:ring-2 focus:outline-none"
 									:disabled="isSubmitting"
 								/>

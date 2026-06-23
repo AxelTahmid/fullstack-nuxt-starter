@@ -1,5 +1,7 @@
 export type EnquiryStatus = "sent" | "received" | "reviewing" | "responded" | "resolved"
 export type EnquiryPriority = "low" | "medium" | "high" | "urgent"
+/** Kind of Sage document an enquiry is linked to (`general` = none). */
+export type EnquirySourceType = "general" | "order" | "quote"
 
 /** Which party authored a message. Customers buy; admins answer as support. */
 export type MessageSenderSide = "customer" | "support"
@@ -36,6 +38,9 @@ export interface EnquiryThread {
 	supplierName: string
 	status: EnquiryStatus
 	priority: EnquiryPriority
+	/** Linked Sage document, if any. */
+	sourceType: EnquirySourceType
+	sourceReference: string | null
 	createdAt: string
 	/** The customer who raised the enquiry (shown to admins triaging). */
 	customerName: string | null

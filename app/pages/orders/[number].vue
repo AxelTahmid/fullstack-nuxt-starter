@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, CheckCircle2, Database, MapPin, Receipt, Truck, User } from "@lucide/vue"
+import { ArrowLeft, CheckCircle2, Database, MapPin, MessageSquarePlus, Receipt, Truck, User } from "@lucide/vue"
 import type { OrderDetail } from "#shared/types/order"
 
 definePageMeta({
@@ -56,6 +56,16 @@ const carrierLabels: Record<string, string> = {
 // identifiers and per-line quantities that customers don't need.
 const { user } = useUserSession()
 const isAdmin = computed(() => (user.value as { role?: string } | null)?.role === "admin")
+
+// Customers can open an enquiry pre-linked to this Sage order.
+const enquiryLink = computed(() => ({
+	path: "/enquiries",
+	query: {
+		sourceType: "order",
+		sourceReference: order.value?.orderNumber ?? "",
+		subject: order.value ? `Enquiry about order ${order.value.orderNumber}` : "",
+	},
+}))
 
 function formatDateOrDash(iso: string | null) {
 	return iso ? formatDate(iso) : "—"
@@ -124,12 +134,23 @@ function formatDateOrDash(iso: string | null) {
 					</p>
 				</div>
 
-				<span
-					class="inline-flex items-center rounded-sm px-3 py-1.5 text-[0.62rem] font-bold tracking-[0.16em] uppercase"
-					:class="statusColors[order.status] ?? 'bg-muted text-foreground'"
-				>
-					{{ order.status }}
-				</span>
+				<div class="flex flex-col items-start gap-3 md:items-end">
+					<span
+						class="inline-flex items-center rounded-sm px-3 py-1.5 text-[0.62rem] font-bold tracking-[0.16em] uppercase"
+						:class="statusColors[order.status] ?? 'bg-muted text-foreground'"
+					>
+						{{ order.status }}
+					</span>
+
+					<NuxtLink
+						v-if="!isAdmin"
+						:to="enquiryLink"
+						class="border-border/70 bg-card text-muted-foreground hover:border-primary hover:text-primary inline-flex items-center gap-1.5 rounded-md border px-3 py-2 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all"
+					>
+						<MessageSquarePlus class="size-3.5" />
+						Raise enquiry
+					</NuxtLink>
+				</div>
 			</section>
 
 			<section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ArrowLeft, Bold, Check, Factory, FileText, Italic, LoaderCircle, Lock, LockOpen, Paperclip, Send, Smile, Users } from "@lucide/vue"
-import type { FetchError } from "ofetch"
 import type { EnquiryMessage, EnquiryPriority, EnquiryReadResponse, EnquiryStatus, EnquirySummary, EnquiryThread, MessageSenderSide } from "#shared/types/enquiry"
+import { ArrowLeft, Bold, Check, Factory, FileText, Italic, Link2, LoaderCircle, Lock, LockOpen, Package, Paperclip, Send, Smile, Users } from "@lucide/vue"
+import type { FetchError } from "ofetch"
 import { toast } from "~/components/toast"
 import { useEnquiryStream } from "~/composables/useEnquiryStream"
 
@@ -82,6 +82,21 @@ const ownLatestSeen = computed(() =>
 const lastActivity = computed(() => {
 	const messages = thread.value?.messages
 	return messages && messages.length ? messages[messages.length - 1]!.createdAt : null
+})
+
+// Link to the Sage document this enquiry references, if any.
+const linkedDocument = computed(() => {
+	const t = thread.value
+	if (!t || !t.sourceReference || t.sourceType === "general") {
+		return null
+	}
+	if (t.sourceType === "order") {
+		return { label: `Order ${t.sourceReference}`, to: `/orders/${t.sourceReference}` }
+	}
+	if (t.sourceType === "quote") {
+		return { label: `Quote ${t.sourceReference}`, to: `/estimate/${t.sourceReference}` }
+	}
+	return null
 })
 
 const replyBody = ref("")
@@ -601,13 +616,39 @@ onScopeDispose(() => {
 					<p class="text-foreground text-sm font-semibold">
 						{{ thread.supplierName }}
 					</p>
+				</div>
 
-					<p
-						v-if="thread.productSku"
-						class="text-muted-foreground mt-2 text-xs"
+				<div
+					v-if="linkedDocument || thread.productSku"
+					class="border-border/60 bg-card rounded-md border p-5"
+				>
+					<div class="text-muted-foreground mb-3 flex items-center gap-2">
+						<Link2 class="size-4" />
+
+						<p class="text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+							Related to
+						</p>
+					</div>
+
+					<NuxtLink
+						v-if="linkedDocument"
+						:to="linkedDocument.to"
+						class="text-primary flex items-center gap-1.5 text-sm font-semibold hover:underline"
 					>
-						SKU: <span class="text-foreground font-mono">{{ thread.productSku }}</span>
-					</p>
+						<FileText class="size-3.5 shrink-0" />
+
+						{{ linkedDocument.label }}
+					</NuxtLink>
+
+					<NuxtLink
+						v-if="thread.productSku"
+						:to="`/shop/${thread.productSku}`"
+						class="text-primary mt-2 flex items-center gap-1.5 font-mono text-xs hover:underline"
+					>
+						<Package class="size-3.5 shrink-0" />
+
+						{{ thread.productSku }}
+					</NuxtLink>
 				</div>
 
 				<div

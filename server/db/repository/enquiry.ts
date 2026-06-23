@@ -109,6 +109,33 @@ class EnquiryRepository extends Database {
 			.executeTakeFirst()
 	}
 
+	/**
+	 * An existing OPEN (non-resolved) enquiry the user already has for the same Sage
+	 * document or product, used to prevent duplicate threads. Returns undefined when
+	 * there is no linkage to dedupe on.
+	 */
+	async findOpenLinked(userId: number, link: { sourceType?: string, sourceReference?: string | null, productSku?: string | null }) {
+		let query = this.db
+			.selectFrom("enquiries")
+			.select(["id", "enquiry_number"])
+			.where("user_id", "=", userId)
+			.where("status", "!=", "resolved")
+
+		if (link.sourceType && link.sourceType !== "general" && link.sourceReference) {
+			query = query
+				.where("source_type", "=", link.sourceType)
+				.where("source_reference", "=", link.sourceReference)
+		}
+		else if (link.productSku) {
+			query = query.where("product_sku", "=", link.productSku)
+		}
+		else {
+			return undefined
+		}
+
+		return query.orderBy("created_at", "desc").executeTakeFirst()
+	}
+
 	async listMessages(enquiryId: number) {
 		return this.db
 			.selectFrom("enquiry_messages")

@@ -26,12 +26,30 @@ export default defineEventHandler(async (event): Promise<EnquiryCreateResponse> 
 
 	const body = await readValidatedBody(event, createEnquirySchema.parse)
 
+	const productSku = body.productSku?.trim() || null
+	const sourceType = body.sourceType ?? "general"
+	const sourceReference = body.sourceReference?.trim() || null
+
+	// One open enquiry per order/quote/product: point the user at the existing thread
+	// instead of letting them open a duplicate.
+	const existingOpen = await enquiryRepo.findOpenLinked(sessionUser.id, { sourceType, sourceReference, productSku })
+	if (existingOpen) {
+		throw createError({
+			statusCode: 409,
+			statusMessage: "An open enquiry already exists for this item",
+			data: { enquiryNumber: existingOpen.enquiry_number },
+		})
+	}
+
 	const { enquiry, firstMessage } = await enquiryRepo.createWithFirstMessage({
 		userId: sessionUser.id,
 		enquiryNumber: enquiryNumber(),
 		subject: body.subject,
 		supplierName: body.supplierName,
-		productSku: body.productSku?.trim() || null,
+		productSku,
+		// Optional linkage to a Sage document (order/quote) the enquiry is about.
+		sourceType,
+		sourceReference,
 		// Priority is admin-managed; new enquiries default to medium until triaged.
 		priority: "low",
 		firstMessage: {

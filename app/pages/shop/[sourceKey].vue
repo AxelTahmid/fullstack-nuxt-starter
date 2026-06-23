@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AlertCircle, ArrowLeft, Check, ImageIcon, LoaderCircle, Plus } from "@lucide/vue"
+import { AlertCircle, ArrowLeft, Check, ImageIcon, LoaderCircle, MessageSquarePlus, Plus } from "@lucide/vue"
 import type { FetchError } from "ofetch"
 import type { ICItemPricingDetailT, ICItemPricingT, ICItemT } from "#shared/sage300"
 import type { StockStatus } from "#shared/types/product"
@@ -83,6 +83,19 @@ useHead({
 })
 
 const adding = ref(false)
+
+const { user } = useUserSession()
+const isAdmin = computed(() => (user.value as { role?: string } | null)?.role === "admin")
+
+// Customers can open an enquiry pre-linked to this Sage product.
+const enquiryLink = computed(() => ({
+	path: "/enquiries",
+	query: {
+		productSku: itemSourceKey.value,
+		subject: `Enquiry about ${itemName.value}`,
+		supplierName: item.value?.PreferredVendor?.trim() || "SupplyKey",
+	},
+}))
 
 function valueOrDash(value: string | number | boolean | null | undefined) {
 	if (value === null || value === undefined || value === "") {
@@ -217,28 +230,43 @@ async function addToCart() {
 				</div>
 			</div>
 
-			<Button
+			<div
 				v-if="item"
-				type="button"
-				:disabled="adding"
-				@click="addToCart"
+				class="flex flex-wrap items-center gap-2"
 			>
-				<LoaderCircle
-					v-if="adding"
-					class="size-4 animate-spin"
-				/>
+				<Button
+					type="button"
+					:disabled="adding"
+					@click="addToCart"
+				>
+					<LoaderCircle
+						v-if="adding"
+						class="size-4 animate-spin"
+					/>
 
-				<Check
-					v-else-if="isInCart"
-					class="size-4"
-				/>
+					<Check
+						v-else-if="isInCart"
+						class="size-4"
+					/>
 
-				<Plus
-					v-else
-					class="size-4"
-				/>
-				Add to cart
-			</Button>
+					<Plus
+						v-else
+						class="size-4"
+					/>
+					Add to cart
+				</Button>
+
+				<Button
+					v-if="!isAdmin"
+					as-child
+					variant="outline"
+				>
+					<NuxtLink :to="enquiryLink">
+						<MessageSquarePlus class="size-4" />
+						Ask about this product
+					</NuxtLink>
+				</Button>
+			</div>
 		</div>
 
 		<Alert

@@ -1,4 +1,4 @@
-import type { EnquiryMessage, EnquiryPriority, EnquiryStatus, EnquiryThread, MessageSenderSide } from "#shared/types/enquiry"
+import type { EnquiryMessage, EnquiryPriority, EnquirySourceType, EnquiryStatus, EnquiryThread, MessageSenderSide } from "#shared/types/enquiry"
 import { enquiryRepo, userRepo } from "~~/server/db/repository"
 import { requireSessionUser } from "~~/server/utils/auth"
 
@@ -35,6 +35,8 @@ export default defineEventHandler(async (event): Promise<EnquiryThread> => {
 		supplierName: enquiry.supplier_name,
 		status: enquiry.status as EnquiryStatus,
 		priority: enquiry.priority as EnquiryPriority,
+		sourceType: enquiry.source_type as EnquirySourceType,
+		sourceReference: enquiry.source_reference,
 		createdAt: new Date(enquiry.created_at).toISOString(),
 		customerName: owner?.name ?? null,
 		customerEmail: owner?.email ?? "",
