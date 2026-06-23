@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeft, Bold, Check, Factory, FileText, Italic, LoaderCircle, Paperclip, Send, Smile, Users } from "@lucide/vue"
+import { ArrowLeft, Bold, Check, Factory, FileText, Italic, LoaderCircle, Lock, LockOpen, Paperclip, Send, Smile, Users } from "@lucide/vue"
 import type { FetchError } from "ofetch"
 import type { EnquiryMessage, EnquiryPriority, EnquiryReadResponse, EnquiryStatus, EnquirySummary, EnquiryThread, MessageSenderSide } from "#shared/types/enquiry"
 import { toast } from "~/components/toast"
@@ -86,8 +86,13 @@ const lastActivity = computed(() => {
 
 const replyBody = ref("")
 const sending = ref(false)
+const updatingClosed = ref(false)
 const editingField = ref<"priority" | "status" | null>(null)
 const messagesContainer = useTemplateRef<HTMLElement>("messagesContainer")
+
+// A resolved enquiry is treated as closed: the customer can no longer reply.
+const isClosed = computed(() => thread.value?.status === "resolved")
+const customerLockedOut = computed(() => isClosed.value && thread.value?.viewerSide === "customer")
 
 function scrollToBottom() {
 	nextTick(() => {
@@ -96,6 +101,15 @@ function scrollToBottom() {
 			el.scrollTop = el.scrollHeight
 		}
 	})
+}
+
+/** Whether the reader is already at/near the newest message (so we don't yank them). */
+function isNearBottom() {
+	const el = messagesContainer.value
+	if (!el) {
+		return true
+	}
+	return el.scrollHeight - el.scrollTop - el.clientHeight < 160
 }
 
 async function markThreadRead() {
@@ -191,6 +205,30 @@ async function updateStatus(value: EnquiryStatus) {
 	}
 }
 
+// Closing resolves the enquiry and locks the customer out of replying; reopening
+// puts it back in the support queue.
+async function setClosed(closed: boolean) {
+	if (!thread.value) {
+		return
+	}
+	updatingClosed.value = true
+	try {
+		await $fetch(`/api/enquiries/${number.value}`, {
+			method: "PATCH",
+			body: { status: closed ? "resolved" : "received" },
+		})
+		await Promise.all([refreshThread(), refreshList()])
+		toast.success(closed ? "Enquiry closed." : "Enquiry reopened.")
+	}
+	catch (err) {
+		const fetchError = err as FetchError<{ message?: string }>
+		toast.error(fetchError.data?.message || "Unable to update enquiry.")
+	}
+	finally {
+		updatingClosed.value = false
+	}
+}
+
 // Realtime: append inbound messages, refresh receipts, and reflect status changes.
 onEnquiryEvent((realtimeEvent) => {
 	if (realtimeEvent.enquiryNumber !== number.value || !thread.value) {
@@ -201,8 +239,11 @@ onEnquiryEvent((realtimeEvent) => {
 		if (thread.value.messages.some(existing => existing.id === realtimeEvent.message.id)) {
 			return
 		}
+		const stick = isNearBottom()
 		thread.value = { ...thread.value, messages: [...thread.value.messages, realtimeEvent.message] }
-		scrollToBottom()
+		if (stick) {
+			scrollToBottom()
+		}
 		if (realtimeEvent.message.senderSide !== thread.value.viewerSide) {
 			void markThreadRead()
 		}
@@ -218,6 +259,10 @@ onEnquiryEvent((realtimeEvent) => {
 	}
 })
 
+// Land on the newest message on first paint and whenever a different thread loads.
+// `flush: post` runs after the DOM updates so the scroll height is final.
+watch(() => thread.value?.id, () => scrollToBottom(), { flush: "post" })
+
 onMounted(() => {
 	setActiveEnquiry(number.value)
 	scrollToBottom()
@@ -227,7 +272,6 @@ onMounted(() => {
 watch(number, (next, previous) => {
 	if (next && next !== previous) {
 		setActiveEnquiry(next)
-		scrollToBottom()
 		void markThreadRead()
 	}
 })
@@ -439,7 +483,18 @@ onScopeDispose(() => {
 				</div>
 
 				<footer class="border-border/40 border-t p-4">
-					<div class="bg-muted rounded-md p-3">
+					<div
+						v-if="customerLockedOut"
+						class="border-border/60 text-muted-foreground flex flex-col items-center gap-1.5 rounded-md border border-dashed px-4 py-4 text-center text-xs"
+					>
+						<Lock class="size-4" />
+						This enquiry has been closed. You can no longer send messages.
+					</div>
+
+					<div
+						v-else
+						class="bg-muted rounded-md p-3"
+					>
 						<Textarea
 							v-model="replyBody"
 							rows="2"
@@ -507,6 +562,33 @@ onScopeDispose(() => {
 			</div>
 
 			<aside class="space-y-3 xl:min-h-0 xl:overflow-y-auto">
+				<Button
+					v-if="thread.viewerSide === 'support'"
+					type="button"
+					class="inline-flex w-full items-center justify-center gap-2 rounded-md border px-4 py-2.5 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all disabled:opacity-60"
+					:class="isClosed
+						? 'border-transparent bg-primary text-primary-foreground hover:brightness-110'
+						: 'border-destructive/40 text-destructive hover:bg-destructive/10'"
+					:disabled="updatingClosed"
+					@click="setClosed(!isClosed)"
+				>
+					<LoaderCircle
+						v-if="updatingClosed"
+						class="size-3.5 animate-spin"
+					/>
+
+					<LockOpen
+						v-else-if="isClosed"
+						class="size-3.5"
+					/>
+
+					<Lock
+						v-else
+						class="size-3.5"
+					/>
+					{{ isClosed ? "Reopen enquiry" : "Close enquiry" }}
+				</Button>
+
 				<div class="border-border/60 bg-card rounded-md border p-5">
 					<div class="text-muted-foreground mb-3 flex items-center gap-2">
 						<Factory class="size-4" />

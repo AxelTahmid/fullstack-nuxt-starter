@@ -25,6 +25,14 @@ export default defineEventHandler(async (event): Promise<EnquiryMessage> => {
 		})
 	}
 
+	// A closed (resolved) enquiry is locked for customers; only admins may still post.
+	if (enquiry.status === "resolved" && sessionUser.role !== "admin") {
+		throw createError({
+			statusCode: 403,
+			statusMessage: "This enquiry is closed",
+		})
+	}
+
 	const body = await readValidatedBody(event, postMessageSchema.parse)
 
 	// Authorship is derived from the real session role: admins answer as support,
