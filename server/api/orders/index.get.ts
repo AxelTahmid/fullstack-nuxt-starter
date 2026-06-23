@@ -31,16 +31,18 @@ export default defineEventHandler(async (event): Promise<PaginatedList<OrderSumm
 		: ""
 
 	// Pagination is pushed to Sage via OData $skip/$top; $count returns the total
-	// (OData v4). The OE list endpoint exposes no $orderby, so rows arrive in
-	// Sage's natural order.
+	// (OData v4). Sage's OE list DOES honour $orderby (the generated SDK type omits
+	// it, but the service accepts it), so newest-first ordering is pushed down too.
+	const query = {
+		$filter: `OrderType ne 'Quote'${customerFilter}${searchFilter}`,
+		$orderby: "OrderDate desc, OrderNumber desc",
+		$skip: (page - 1) * pageSize,
+		$top: pageSize,
+		$count: true,
+	}
 	const response = await oeOrdersGet({
 		path: sagePath(),
-		query: {
-			$filter: `OrderType ne 'Quote'${customerFilter}${searchFilter}`,
-			$skip: (page - 1) * pageSize,
-			$top: pageSize,
-			$count: true,
-		},
+		query,
 	})
 	const data = response.data as OEOrderListResponseT
 

@@ -30,14 +30,18 @@ export default defineEventHandler(async (event): Promise<PaginatedList<EstimateS
 		? ` and (contains(OrderNumber,'${escapeODataString(search)}') or contains(OrderReference,'${escapeODataString(search)}'))`
 		: ""
 
+	// Sage's OE list honours $orderby (the generated SDK type omits it), so quotes
+	// are returned newest-first directly from Sage alongside pagination.
+	const query = {
+		$filter: `OrderType eq 'Quote'${customerFilter}${searchFilter}`,
+		$orderby: "OrderDate desc, OrderNumber desc",
+		$skip: (page - 1) * pageSize,
+		$top: pageSize,
+		$count: true,
+	}
 	const response = await oeOrdersGet({
 		path: sagePath(),
-		query: {
-			$filter: `OrderType eq 'Quote'${customerFilter}${searchFilter}`,
-			$skip: (page - 1) * pageSize,
-			$top: pageSize,
-			$count: true,
-		},
+		query,
 	})
 	const data = response.data as OEOrderListResponseT
 

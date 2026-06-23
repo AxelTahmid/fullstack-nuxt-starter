@@ -84,7 +84,8 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
 	const payload: OEOrderWritableT = {
 		CustomerNumber: quote.CustomerNumber || user?.sage_customer_number || undefined,
 		OrderType: "Active",
-		OrderDate: new Date(),
+		// Sage's API validates OrderDate as an ISO datetime string, not a Date object.
+		OrderDate: new Date().toISOString(),
 		ProcessOECommand: "CreateOrderFromQuotes",
 		PerformMultipleQuotesToOrder: true,
 		RecalculateTax: true,

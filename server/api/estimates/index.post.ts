@@ -114,9 +114,10 @@ export default defineEventHandler(async (event): Promise<EstimateResponse> => {
 	const payload: OEOrderWritableT = {
 		CustomerNumber: user.sage_customer_number,
 		OrderType: "Quote",
-		OrderDate: new Date(),
-		ExpectedShipDate: requestedShipDate,
-		QuoteExpirationDate: quoteExpiry(),
+		// Sage's API validates these as ISO datetime strings, not Date objects.
+		OrderDate: new Date().toISOString(),
+		ExpectedShipDate: requestedShipDate?.toISOString(),
+		QuoteExpirationDate: quoteExpiry().toISOString(),
 		DefaultPriceListCode: priceListCode || undefined,
 		OrderReference: reference,
 		OrderDescription: `SupplyKey estimate ${reference}`,

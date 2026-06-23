@@ -95,8 +95,9 @@ export default defineEventHandler(async (event): Promise<CheckoutResponse> => {
 	const payload: OEOrderWritableT = {
 		CustomerNumber: user.sage_customer_number,
 		OrderType: "Active",
-		OrderDate: new Date(),
-		ExpectedShipDate: requestedShipDate,
+		// Sage's API validates these as ISO datetime strings, not Date objects.
+		OrderDate: new Date().toISOString(),
+		ExpectedShipDate: requestedShipDate?.toISOString(),
 		DefaultPriceListCode: priceListCode || undefined,
 		PurchaseOrderNumber: trimOptional(body.poNumber),
 		OrderReference: orderReference,
