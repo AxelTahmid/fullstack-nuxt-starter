@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import type { EstimateDetail } from "#shared/types/estimate"
-import type { CheckoutResponse } from "#shared/types/order"
-import type { FetchError } from "ofetch"
-import { AlertCircle, ArrowLeft, CalendarClock, FileText, LoaderCircle, MapPin, MessageSquarePlus, PackageCheck, User } from "@lucide/vue"
+import { AlertCircle, ArrowLeft, CalendarClock, FileText, MapPin, MessageSquarePlus, PackageCheck, User } from "@lucide/vue"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
-import { toast } from "~/components/toast"
 import EstimateLineItem from "./_lib/EstimateLineItem.vue"
 import EstimateStatCard from "./_lib/EstimateStatCard.vue"
 import EstimateStatusBadge from "./_lib/EstimateStatusBadge.vue"
@@ -28,8 +25,6 @@ useHead({
 	title: computed(() => estimate.value ? `Estimate ${estimate.value.quoteNumber}` : "Estimate"),
 })
 
-const isConverting = ref(false)
-
 const { user } = useUserSession()
 const isAdmin = computed(() => (user.value as { role?: string } | null)?.role === "admin")
 
@@ -42,24 +37,6 @@ const enquiryLink = computed(() => ({
 		subject: estimate.value ? `Enquiry about quote ${estimate.value.quoteNumber}` : "",
 	},
 }))
-
-async function convertToOrder() {
-	isConverting.value = true
-	try {
-		const response = await $fetch<CheckoutResponse>(`/api/estimates/${quoteNumber.value}/convert`, {
-			method: "POST",
-		})
-		toast.success(`Order ${response.orderNumber} created from this estimate.`)
-		await navigateTo(`/orders/${response.orderNumber}`)
-	}
-	catch (err) {
-		const fetchError = err as FetchError<{ message?: string }>
-		toast.error(fetchError.data?.message || "Unable to convert estimate to order.")
-	}
-	finally {
-		isConverting.value = false
-	}
-}
 </script>
 
 <template>
@@ -122,7 +99,7 @@ async function convertToOrder() {
 					</h1>
 
 					<p class="text-muted-foreground max-w-xl text-sm leading-6">
-						Your quote request has been sent to SupplyKey. Final pricing, availability, and logistics are confirmed before it can be converted to an order.
+						Your quote request has been sent to SupplyKey. Final pricing, availability, and logistics are confirmed on the returned quote.
 					</p>
 				</div>
 
@@ -130,25 +107,7 @@ async function convertToOrder() {
 					<EstimateStatusBadge :status="estimate.status" />
 
 					<Button
-						v-if="estimate.status === 'submitted'"
-						type="button"
-						:disabled="isConverting"
-						@click="convertToOrder"
-					>
-						<LoaderCircle
-							v-if="isConverting"
-							class="size-4 animate-spin"
-						/>
-
-						<PackageCheck
-							v-else
-							class="size-4"
-						/>
-						{{ isConverting ? "Converting…" : "Convert to order" }}
-					</Button>
-
-					<Button
-						v-else-if="estimate.status === 'converted' && estimate.convertedOrderNumber"
+						v-if="estimate.status === 'converted' && estimate.convertedOrderNumber"
 						as-child
 						variant="outline"
 					>

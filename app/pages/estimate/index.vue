@@ -175,7 +175,7 @@ const columns = computed<ColumnDef<EstimateSummary>[]>(() => {
 				</Button>
 
 				<NuxtLink
-					to="/estimate/new"
+					to="/cart"
 					:class="buttonVariants()"
 				>
 					<Plus class="size-4" />
@@ -227,7 +227,7 @@ const columns = computed<ColumnDef<EstimateSummary>[]>(() => {
 					</div>
 
 					<NuxtLink
-						to="/estimate/new"
+						to="/cart"
 						:class="buttonVariants()"
 					>
 						Request estimate

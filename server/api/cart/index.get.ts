@@ -1,8 +1,9 @@
 import type { CartLine, CartSummary } from "#shared/types/cart"
 import type { ICItemListResponseT, ICItemPricingListResponseT, ICItemPricingT, ICItemT } from "#shared/sage300"
 import { icItemPricingGet, icItemsGet } from "#shared/sage300"
-import { cartRepo } from "~~/server/db/repository"
+import { cartRepo, productImageRepo } from "~~/server/db/repository"
 import { requireSessionUser } from "~~/server/utils/auth"
+import { productImagePublicUrl } from "~~/server/utils/objectStorage"
 
 function sagePath() {
 	const { sage300 } = useRuntimeConfig()
@@ -27,12 +28,16 @@ function itemName(item: ICItemT) {
 }
 
 function defaultPricingDetail(pricing: ICItemPricingT | undefined) {
-	return pricing?.ItemPricingDetails?.find(detail => detail.DefaultUnit && typeof detail.UnitPrice === "number")
-		?? pricing?.ItemPricingDetails?.find(detail => typeof detail.UnitPrice === "number")
+	return pricing?.ItemPricingDetails?.find(detail => detail.DefaultUnit && typeof detail.UnitPrice === "number" && detail.UnitPrice > 0)
+		?? pricing?.ItemPricingDetails?.find(detail => typeof detail.UnitPrice === "number" && detail.UnitPrice > 0)
 }
 
+// A 0 SalePrice / BasePrice means "not set", so only treat positive values as a
+// price — otherwise an item that simply isn't on sale shows $0.00 in the cart.
 function unitPriceCents(pricing: ICItemPricingT | undefined) {
-	const unitPrice = pricing?.SalePrice ?? defaultPricingDetail(pricing)?.UnitPrice ?? pricing?.BasePrice
+	const sale = typeof pricing?.SalePrice === "number" && pricing.SalePrice > 0 ? pricing.SalePrice : null
+	const base = typeof pricing?.BasePrice === "number" && pricing.BasePrice > 0 ? pricing.BasePrice : null
+	const unitPrice = sale ?? defaultPricingDetail(pricing)?.UnitPrice ?? base
 
 	return typeof unitPrice === "number" ? Math.round(unitPrice * 100) : 0
 }
@@ -137,6 +142,8 @@ export default defineEventHandler(async (event): Promise<CartSummary> => {
 	const sourceKeys = cartItems.map(item => item.source_key)
 	const itemsByKey = await loadItems(sourceKeys)
 	const pricingByKey = await loadPricing([...itemsByKey.values()])
+	const primaryImages = await productImageRepo.listPrimaryBySourceKeys(sourceKeys)
+	const imageUrlByKey = new Map(primaryImages.map(row => [row.source_key, productImagePublicUrl(row.object_key)]))
 	const lines = cartItems.map((cartItem): CartLine => {
 		const item = itemsByKey.get(cartItem.source_key)
 		const pricing = item ? pricingByKey.get(itemKey(item)) : undefined
@@ -149,7 +156,7 @@ export default defineEventHandler(async (event): Promise<CartSummary> => {
 			name: item ? itemName(item) : "Unavailable item",
 			category: item?.Category?.trim() || "Uncategorized",
 			manufacturer: item?.PreferredVendor?.trim() || "Manufacturer unavailable",
-			imageUrl: null,
+			imageUrl: imageUrlByKey.get(cartItem.source_key) ?? null,
 			unitPriceCents: unitPriceCentsValue,
 			quantity: cartItem.quantity,
 			lineTotalCents: unitPriceCentsValue * cartItem.quantity,

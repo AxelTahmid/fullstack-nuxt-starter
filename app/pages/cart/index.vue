@@ -1,7 +1,15 @@
 <script setup lang="ts">
-import { CheckCircle2, LoaderCircle, Minus, Plus, ShieldCheck, Trash2, Truck } from "@lucide/vue"
+import { CheckCircle2, FileText, ImageIcon, LoaderCircle, Minus, Plus, Trash2 } from "@lucide/vue"
 import type { FetchError } from "ofetch"
+import type { EstimateResponse } from "#shared/types/estimate"
 import type { CheckoutResponse } from "#shared/types/order"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Field, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { NativeSelect } from "@/components/ui/native-select"
+import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
 import { toast } from "~/components/toast"
 import { useCart } from "~/composables/useCart"
 
@@ -25,25 +33,23 @@ const carrier = ref<"arrange_best" | "customer_carrier" | "customer_pickup">("ar
 const paymentMethod = ref<"invoice_net30" | "purchase_order" | "corporate_account">("invoice_net30")
 const poNumber = ref("")
 const isSubmitting = ref(false)
+const isRequestingEstimate = ref(false)
 const updatingId = ref<number | null>(null)
 
 const carriers = [
-	{ value: "arrange_best", label: "Arrange best available", detail: "Confirm carrier, route, and freight cost before release." },
-	{ value: "customer_carrier", label: "Use our carrier", detail: "Provide carrier account and pickup instructions below." },
-	{ value: "customer_pickup", label: "Customer pickup", detail: "Hold for pickup after availability is confirmed." },
+	{ value: "arrange_best", label: "Arrange best available" },
+	{ value: "customer_carrier", label: "Use our carrier account" },
+	{ value: "customer_pickup", label: "Customer pickup" },
 ] as const
 
 const paymentOptions = [
-	{ value: "invoice_net30", label: "Invoice · Net 30", detail: "Company account on file" },
-	{ value: "purchase_order", label: "Purchase Order", detail: "Requires PO number" },
-	{ value: "corporate_account", label: "Corporate Account", detail: "Direct debit authorization" },
+	{ value: "invoice_net30", label: "Invoice · Net 30" },
+	{ value: "purchase_order", label: "Purchase order" },
+	{ value: "corporate_account", label: "Corporate account" },
 ] as const
 
-const displayedShippingCents = computed(() => cart.summary.value.shippingCents)
-const displayedSubtotalCents = computed(() => cart.summary.value.subtotalCents)
-const displayedTaxCents = computed(() => Math.round(displayedSubtotalCents.value * 0.015))
-const displayedTotalCents = computed(() => displayedSubtotalCents.value + displayedShippingCents.value + displayedTaxCents.value)
-const shippingCostLabel = computed(() => displayedShippingCents.value > 0 ? formatPrice(displayedShippingCents.value) : "To be confirmed")
+const hasItems = computed(() => cart.summary.value.lines.length > 0)
+const subtotalCents = computed(() => cart.summary.value.subtotalCents)
 
 function formatPrice(cents: number) {
 	return `$${(cents / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -51,13 +57,20 @@ function formatPrice(cents: number) {
 
 async function adjustQuantity(id: number, delta: number) {
 	const line = cart.summary.value.lines.find(l => l.id === id)
-	if (!line)
+	if (!line) {
 		return
+	}
 
-	const next = Math.max(0, line.quantity + delta)
 	updatingId.value = id
 	try {
-		await cart.updateQuantity(id, next)
+		// Dropping below 1 removes the line rather than leaving a zero-quantity item.
+		if (line.quantity + delta < 1) {
+			await cart.removeItem(id)
+			toast.success("Removed from cart.")
+		}
+		else {
+			await cart.updateQuantity(id, line.quantity + delta)
+		}
 	}
 	catch {
 		toast.error("Unable to update quantity.")
@@ -81,13 +94,20 @@ async function removeLine(id: number) {
 	}
 }
 
-async function placeOrder() {
-	if (!cart.summary.value.lines.length) {
+function validateForSubmit() {
+	if (!hasItems.value) {
 		toast.error("Cart is empty.")
-		return
+		return false
 	}
 	if (!deliverySite.value.trim()) {
 		toast.error("Delivery site is required.")
+		return false
+	}
+	return true
+}
+
+async function placeOrder() {
+	if (!validateForSubmit()) {
 		return
 	}
 	if (paymentMethod.value === "purchase_order" && !poNumber.value.trim()) {
@@ -120,370 +140,377 @@ async function placeOrder() {
 		isSubmitting.value = false
 	}
 }
+
+async function requestEstimate() {
+	if (!validateForSubmit()) {
+		return
+	}
+
+	isRequestingEstimate.value = true
+	try {
+		// Items are omitted so the server builds the quote from the current cart.
+		const response = await $fetch<EstimateResponse>("/api/estimates", {
+			method: "POST",
+			body: {
+				deliverySite: deliverySite.value.trim(),
+				deliveryContact: deliveryContact.value.trim() || undefined,
+				requestedShipDate: requestedShipDate.value || undefined,
+				notes: shippingInstructions.value.trim() || undefined,
+			},
+		})
+		toast.success(`Estimate ${response.quoteNumber} requested.`)
+		await navigateTo(`/estimate/${response.quoteNumber}`)
+	}
+	catch (error) {
+		const fetchError = error as FetchError<{ message?: string }>
+		toast.error(fetchError.data?.message || "Unable to request estimate.")
+	}
+	finally {
+		isRequestingEstimate.value = false
+	}
+}
 </script>
 
 <template>
-	<div class="space-y-8">
-		<section class="space-y-2">
-			<p class="text-muted-foreground text-[0.68rem] font-bold tracking-[0.24em] uppercase">
-				Checkout
-			</p>
-
-			<h1
-				class="text-foreground text-5xl font-extrabold tracking-[-0.045em]"
-				style="font-family: var(--font-display);"
-			>
+	<div class="space-y-6">
+		<div class="space-y-1">
+			<h1 class="text-2xl font-semibold tracking-tight">
 				Cart
 			</h1>
 
-			<p class="text-muted-foreground max-w-2xl text-sm leading-7">
-				Review line items, add shipping details, and choose payment terms.
+			<p class="text-muted-foreground text-sm">
+				Review line items, then place an order or request an estimate. Final pricing, shipping, and tax are confirmed by SupplyKey.
 			</p>
-		</section>
+		</div>
 
-		<section class="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+		<div class="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
 			<div class="space-y-6">
-				<div class="border-border/60 bg-card rounded-md border p-6">
-					<div class="mb-5 flex items-center justify-between">
-						<h2
-							class="text-foreground text-lg font-extrabold tracking-[-0.015em]"
-							style="font-family: var(--font-display);"
-						>
-							Cart Items
-						</h2>
+				<Card>
+					<CardHeader class="flex-row items-center justify-between">
+						<CardTitle>Items</CardTitle>
 
-						<span class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-							{{ cart.summary.value.itemCount }} Units
+						<span class="text-muted-foreground text-sm">
+							{{ cart.summary.value.itemCount }} unit{{ cart.summary.value.itemCount === 1 ? "" : "s" }}
 						</span>
-					</div>
+					</CardHeader>
 
-					<div
-						v-if="!cart.summary.value.lines.length"
-						class="bg-muted rounded-md p-8 text-center"
-					>
-						<p class="text-muted-foreground text-sm">
-							Cart is empty.
-						</p>
-
-						<Button
-							as-child
-							class="bg-primary text-primary-foreground mt-4 inline-flex rounded-md px-4 py-2 text-[0.68rem] font-bold tracking-[0.15em] uppercase transition-all hover:brightness-110"
+					<CardContent>
+						<div
+							v-if="!hasItems"
+							class="bg-muted/50 flex flex-col items-center gap-3 rounded-lg p-8 text-center"
 						>
-							<NuxtLink to="/shop">
-								Browse Catalog
-							</NuxtLink>
-						</Button>
-					</div>
+							<p class="text-muted-foreground text-sm">
+								Your cart is empty.
+							</p>
 
-					<ul
-						v-else
-						class="space-y-3"
-					>
-						<li
-							v-for="line in cart.summary.value.lines"
-							:key="line.id"
-							class="bg-muted flex items-center gap-4 rounded-md p-4"
+							<Button
+								as-child
+								variant="outline"
+								size="sm"
+							>
+								<NuxtLink to="/shop">
+									Browse catalog
+								</NuxtLink>
+							</Button>
+						</div>
+
+						<ul
+							v-else
+							class="divide-y"
 						>
-							<div class="bg-background size-20 shrink-0 overflow-hidden rounded-md">
-								<img
-									v-if="line.imageUrl"
-									:src="line.imageUrl"
-									:alt="line.name"
-									class="size-full object-cover"
-								>
-							</div>
+							<li
+								v-for="line in cart.summary.value.lines"
+								:key="line.id"
+								class="flex items-center gap-4 py-4 first:pt-0 last:pb-0"
+							>
+								<div class="bg-muted text-muted-foreground flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-md border">
+									<img
+										v-if="line.imageUrl"
+										:src="line.imageUrl"
+										:alt="line.name"
+										class="size-full object-cover"
+									>
 
-							<div class="min-w-0 flex-1">
-								<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.14em] uppercase">
-									{{ line.manufacturer }} · {{ line.sku }}
-								</p>
+									<ImageIcon
+										v-else
+										class="size-5"
+									/>
+								</div>
 
-								<p class="text-foreground mt-1 truncate text-sm font-semibold">
-									{{ line.name }}
-								</p>
+								<div class="min-w-0 flex-1">
+									<p class="text-muted-foreground font-mono text-xs">
+										{{ line.manufacturer }} · {{ line.sku }}
+									</p>
 
-								<p class="text-muted-foreground mt-1 text-xs">
-									{{ formatPrice(line.unitPriceCents) }} / unit
-								</p>
-							</div>
+									<p class="truncate text-sm font-medium">
+										{{ line.name }}
+									</p>
 
-							<div class="flex items-center gap-2">
-								<Button
-									type="button"
-									class="border-border/70 text-muted-foreground hover:border-primary hover:text-primary flex size-8 items-center justify-center rounded-md border transition-all disabled:opacity-60"
-									:disabled="updatingId === line.id"
-									@click="adjustQuantity(line.id, -1)"
-								>
-									<Minus class="size-3.5" />
-								</Button>
+									<p class="text-muted-foreground text-xs">
+										{{ formatPrice(line.unitPriceCents) }} / unit
+									</p>
+								</div>
 
-								<span class="min-w-8 text-center text-sm font-bold tabular-nums">
-									{{ updatingId === line.id ? "…" : line.quantity }}
-								</span>
+								<div class="flex items-center gap-1">
+									<Button
+										type="button"
+										variant="outline"
+										size="icon-sm"
+										:disabled="updatingId === line.id"
+										@click="adjustQuantity(line.id, -1)"
+									>
+										<Minus class="size-3.5" />
+									</Button>
 
-								<Button
-									type="button"
-									class="border-border/70 text-muted-foreground hover:border-primary hover:text-primary flex size-8 items-center justify-center rounded-md border transition-all disabled:opacity-60"
-									:disabled="updatingId === line.id"
-									@click="adjustQuantity(line.id, 1)"
-								>
-									<Plus class="size-3.5" />
-								</Button>
-							</div>
+									<span class="w-8 text-center text-sm font-medium tabular-nums">
+										{{ updatingId === line.id ? "…" : line.quantity }}
+									</span>
 
-							<div class="w-24 text-right">
-								<p
-									class="metric-value text-foreground text-lg font-extrabold"
-									style="font-family: var(--font-display);"
-								>
+									<Button
+										type="button"
+										variant="outline"
+										size="icon-sm"
+										:disabled="updatingId === line.id"
+										@click="adjustQuantity(line.id, 1)"
+									>
+										<Plus class="size-3.5" />
+									</Button>
+								</div>
+
+								<p class="w-24 text-right text-sm font-semibold tabular-nums">
 									{{ formatPrice(line.lineTotalCents) }}
 								</p>
+
+								<Button
+									type="button"
+									variant="ghost"
+									size="icon-sm"
+									class="text-muted-foreground hover:text-destructive"
+									:disabled="updatingId === line.id"
+									@click="removeLine(line.id)"
+								>
+									<Trash2 class="size-4" />
+								</Button>
+							</li>
+						</ul>
+					</CardContent>
+				</Card>
+
+				<Card>
+					<CardHeader>
+						<CardTitle>Delivery</CardTitle>
+					</CardHeader>
+
+					<CardContent class="space-y-4">
+						<div class="grid gap-4 sm:grid-cols-2">
+							<Field>
+								<FieldLabel for="delivery-site">
+									Delivery site
+								</FieldLabel>
+
+								<Input
+									id="delivery-site"
+									v-model="deliverySite"
+									placeholder="Receiving address, yard, or site"
+								/>
+							</Field>
+
+							<Field>
+								<FieldLabel for="delivery-contact">
+									Delivery contact
+								</FieldLabel>
+
+								<Input
+									id="delivery-contact"
+									v-model="deliveryContact"
+									placeholder="Name, phone, or receiving desk"
+								/>
+							</Field>
+
+							<Field>
+								<FieldLabel for="ship-date">
+									Requested ship date
+								</FieldLabel>
+
+								<Input
+									id="ship-date"
+									v-model="requestedShipDate"
+									type="date"
+								/>
+							</Field>
+
+							<Field>
+								<FieldLabel for="carrier">
+									Carrier preference
+								</FieldLabel>
+
+								<NativeSelect
+									id="carrier"
+									v-model="carrier"
+								>
+									<option
+										v-for="option in carriers"
+										:key="option.value"
+										:value="option.value"
+									>
+										{{ option.label }}
+									</option>
+								</NativeSelect>
+							</Field>
+						</div>
+
+						<Field>
+							<FieldLabel for="ship-instructions">
+								Shipping instructions
+							</FieldLabel>
+
+							<Textarea
+								id="ship-instructions"
+								v-model="shippingInstructions"
+								placeholder="Dock hours, carrier account, liftgate needs, site access, or handling notes"
+							/>
+						</Field>
+					</CardContent>
+				</Card>
+
+				<Card>
+					<CardHeader>
+						<CardTitle>Payment</CardTitle>
+					</CardHeader>
+
+					<CardContent class="space-y-4">
+						<Field>
+							<FieldLabel for="payment-method">
+								Payment method
+							</FieldLabel>
+
+							<NativeSelect
+								id="payment-method"
+								v-model="paymentMethod"
+							>
+								<option
+									v-for="option in paymentOptions"
+									:key="option.value"
+									:value="option.value"
+								>
+									{{ option.label }}
+								</option>
+							</NativeSelect>
+						</Field>
+
+						<Field v-if="paymentMethod === 'purchase_order'">
+							<FieldLabel for="po-number">
+								PO number
+							</FieldLabel>
+
+							<Input
+								id="po-number"
+								v-model="poNumber"
+								placeholder="PO-2026-00042"
+							/>
+						</Field>
+					</CardContent>
+				</Card>
+			</div>
+
+			<div class="xl:sticky xl:top-6 xl:self-start">
+				<Card>
+					<CardHeader>
+						<CardTitle>Summary</CardTitle>
+					</CardHeader>
+
+					<CardContent class="space-y-4">
+						<dl class="space-y-2 text-sm">
+							<div class="flex items-center justify-between">
+								<dt class="text-muted-foreground">
+									Subtotal
+								</dt>
+
+								<dd class="font-medium tabular-nums">
+									{{ formatPrice(subtotalCents) }}
+								</dd>
 							</div>
+
+							<div class="flex items-center justify-between">
+								<dt class="text-muted-foreground">
+									Shipping
+								</dt>
+
+								<dd class="text-muted-foreground">
+									Confirmed at processing
+								</dd>
+							</div>
+
+							<div class="flex items-center justify-between">
+								<dt class="text-muted-foreground">
+									Tax
+								</dt>
+
+								<dd class="text-muted-foreground">
+									Confirmed at processing
+								</dd>
+							</div>
+						</dl>
+
+						<Separator />
+
+						<div class="flex items-center justify-between">
+							<span class="text-sm font-medium">Estimated total</span>
+
+							<span class="text-2xl font-semibold tabular-nums">
+								{{ formatPrice(subtotalCents) }}
+							</span>
+						</div>
+
+						<p class="text-muted-foreground text-xs">
+							Goods subtotal only. Shipping and tax are added when SupplyKey confirms the order or quote.
+						</p>
+
+						<div class="space-y-2 pt-1">
+							<Button
+								type="button"
+								class="w-full"
+								:disabled="isSubmitting || isRequestingEstimate || !hasItems"
+								@click="placeOrder"
+							>
+								<LoaderCircle
+									v-if="isSubmitting"
+									class="size-4 animate-spin"
+								/>
+
+								<CheckCircle2
+									v-else
+									class="size-4"
+								/>
+								{{ isSubmitting ? "Placing order…" : "Place order" }}
+							</Button>
 
 							<Button
 								type="button"
-								class="text-muted-foreground hover:bg-destructive/10 hover:text-destructive flex size-8 items-center justify-center rounded-md transition-all disabled:opacity-60"
-								:disabled="updatingId === line.id"
-								@click="removeLine(line.id)"
+								variant="outline"
+								class="w-full"
+								:disabled="isSubmitting || isRequestingEstimate || !hasItems"
+								@click="requestEstimate"
 							>
-								<Trash2 class="size-4" />
+								<LoaderCircle
+									v-if="isRequestingEstimate"
+									class="size-4 animate-spin"
+								/>
+
+								<FileText
+									v-else
+									class="size-4"
+								/>
+								{{ isRequestingEstimate ? "Requesting…" : "Request estimate instead" }}
 							</Button>
-						</li>
-					</ul>
-				</div>
-
-				<div class="border-border/60 bg-card rounded-md border p-6">
-					<h2
-						class="text-foreground mb-5 text-lg font-extrabold tracking-[-0.015em]"
-						style="font-family: var(--font-display);"
-					>
-						Shipping
-					</h2>
-
-					<div class="space-y-5">
-						<div class="grid gap-4 md:grid-cols-2">
-							<div>
-								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-									Delivery site
-								</Label>
-
-								<Input
-									v-model="deliverySite"
-									type="text"
-									placeholder="Receiving address, yard, or site"
-									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/50 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
-								/>
-							</div>
-
-							<div>
-								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-									Delivery contact
-								</Label>
-
-								<Input
-									v-model="deliveryContact"
-									type="text"
-									placeholder="Name, phone, or receiving desk"
-									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/50 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
-								/>
-							</div>
 						</div>
 
-						<div>
-							<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-								Requested ship date
-							</Label>
-
-							<Input
-								v-model="requestedShipDate"
-								type="date"
-								class="bg-muted text-foreground focus:ring-primary/50 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none md:max-w-xs"
-							/>
-						</div>
-
-						<div>
-							<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-								Carrier preference
-							</p>
-
-							<div class="mt-3 space-y-2">
-								<Button
-									v-for="option in carriers"
-									:key="option.value"
-									type="button"
-									class="bg-muted flex h-auto w-full cursor-pointer items-center gap-4 rounded-md p-4 text-left transition-all"
-									:class="{ 'ring-primary ring-2': carrier === option.value }"
-									@click="carrier = option.value"
-								>
-									<Truck class="text-muted-foreground size-5" />
-
-									<div class="flex-1">
-										<p class="text-foreground text-sm font-semibold">
-											{{ option.label }}
-										</p>
-
-										<p class="text-muted-foreground text-xs">
-											{{ option.detail }}
-										</p>
-									</div>
-								</Button>
-							</div>
-						</div>
-
-						<div>
-							<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-								Shipping instructions
-							</Label>
-
-							<Textarea
-								v-model="shippingInstructions"
-								placeholder="Dock hours, carrier account, liftgate needs, site access, or handling notes"
-								class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/50 mt-2 min-h-24 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
-							/>
-						</div>
-					</div>
-				</div>
-
-				<div class="border-border/60 bg-card rounded-md border p-6">
-					<h2
-						class="text-foreground mb-5 text-lg font-extrabold tracking-[-0.015em]"
-						style="font-family: var(--font-display);"
-					>
-						Payment Protocol
-					</h2>
-
-					<div class="space-y-3">
-						<Button
-							v-for="option in paymentOptions"
-							:key="option.value"
-							type="button"
-							class="bg-muted flex h-auto w-full cursor-pointer items-center gap-4 rounded-md p-4 text-left transition-all"
-							:class="{ 'ring-primary ring-2': paymentMethod === option.value }"
-							@click="paymentMethod = option.value"
-						>
-							<div class="flex-1">
-								<p class="text-foreground text-sm font-semibold">
-									{{ option.label }}
-								</p>
-
-								<p class="text-muted-foreground text-xs">
-									{{ option.detail }}
-								</p>
-							</div>
-						</Button>
-					</div>
-
-					<div
-						v-if="paymentMethod === 'purchase_order'"
-						class="mt-5"
-					>
-						<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-							PO Number
-						</Label>
-
-						<Input
-							v-model="poNumber"
-							type="text"
-							placeholder="PO-2026-00042"
-							class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/50 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
-						/>
-					</div>
-				</div>
+						<p class="text-muted-foreground text-xs">
+							An estimate sends your cart to SupplyKey as a quote request. Your cart stays intact.
+						</p>
+					</CardContent>
+				</Card>
 			</div>
-
-			<aside class="space-y-4 xl:sticky xl:top-24 xl:self-start">
-				<div class="border-primary/20 bg-primary text-primary-foreground rounded-md border p-6">
-					<p
-						class="text-primary-foreground/70 text-[0.62rem] font-bold tracking-[0.2em] uppercase"
-						style="font-family: var(--font-display);"
-					>
-						Order Summary
-					</p>
-
-					<dl class="mt-5 space-y-3 text-sm">
-						<div class="flex items-center justify-between">
-							<dt class="text-primary-foreground/70">
-								Subtotal
-							</dt>
-
-							<dd class="font-semibold tabular-nums">
-								{{ formatPrice(displayedSubtotalCents) }}
-							</dd>
-						</div>
-
-						<div class="flex items-center justify-between">
-							<dt class="text-primary-foreground/70">
-								Shipping
-							</dt>
-
-							<dd class="font-semibold tabular-nums">
-								{{ shippingCostLabel }}
-							</dd>
-						</div>
-
-						<div class="flex items-center justify-between">
-							<dt class="text-primary-foreground/70">
-								Estimated tax
-							</dt>
-
-							<dd class="font-semibold tabular-nums">
-								{{ formatPrice(displayedTaxCents) }}
-							</dd>
-						</div>
-					</dl>
-
-					<div class="border-primary-foreground/20 mt-5 border-t pt-5">
-						<p class="text-primary-foreground/70 text-[0.62rem] font-bold tracking-[0.2em] uppercase">
-							Estimated total
-						</p>
-
-						<p
-							class="metric-value mt-2 text-4xl font-extrabold"
-							style="font-family: var(--font-display);"
-						>
-							{{ formatPrice(displayedTotalCents) }}
-						</p>
-					</div>
-
-					<Button
-						type="button"
-						class="bg-primary-foreground text-primary mt-6 flex w-full items-center justify-center gap-2 rounded-md px-4 py-3.5 text-[0.72rem] font-extrabold tracking-[0.18em] uppercase transition-all hover:brightness-95 disabled:opacity-60"
-						:disabled="isSubmitting || !cart.summary.value.lines.length"
-						style="font-family: var(--font-display);"
-						@click="placeOrder"
-					>
-						<LoaderCircle
-							v-if="isSubmitting"
-							class="size-4 animate-spin"
-						/>
-
-						<CheckCircle2
-							v-else
-							class="size-4"
-						/>
-						{{ isSubmitting ? "Submitting…" : "Place Order" }}
-					</Button>
-				</div>
-
-				<div class="border-border/60 bg-card rounded-md border p-5">
-					<div class="flex items-start gap-3">
-						<ShieldCheck class="text-primary size-5 shrink-0" />
-
-						<div>
-							<p
-								class="text-foreground text-xs font-bold tracking-[0.08em]"
-								style="font-family: var(--font-display);"
-							>
-								ISO 9001 · Priority Support
-							</p>
-
-							<p class="text-muted-foreground mt-1 text-xs">
-								All SupplyKey line items ship with compliance documentation. Priority dispatch for critical-path operations.
-							</p>
-						</div>
-					</div>
-				</div>
-			</aside>
-		</section>
+		</div>
 	</div>
 </template>

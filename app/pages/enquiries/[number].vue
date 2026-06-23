@@ -125,9 +125,15 @@ const participantName = computed(() => thread.value?.viewerSide === "support"
 function scrollToBottom() {
 	nextTick(() => {
 		const el = messagesContainer.value
-		if (el) {
-			el.scrollTop = el.scrollHeight
+		if (!el) {
+			return
 		}
+		el.scrollTop = el.scrollHeight
+		// A second pass after the browser settles layout (fonts, flex sizing) so we
+		// reliably land on the newest message on first open, not just on resize.
+		requestAnimationFrame(() => {
+			el.scrollTop = el.scrollHeight
+		})
 	})
 }
 
@@ -281,7 +287,9 @@ onEnquiryEvent((realtimeEvent) => {
 
 // Land on the newest message on first paint and whenever a different thread loads.
 // `flush: post` runs after the DOM updates so the scroll height is final.
-watch(() => thread.value?.id, () => scrollToBottom(), { flush: "post" })
+// `immediate` covers the very first open (SSR-hydrated thread); `flush: post` waits
+// for the DOM so scrollHeight is final. Also re-runs when switching threads.
+watch(() => thread.value?.id, () => scrollToBottom(), { flush: "post", immediate: true })
 
 onMounted(() => {
 	setActiveEnquiry(number.value)

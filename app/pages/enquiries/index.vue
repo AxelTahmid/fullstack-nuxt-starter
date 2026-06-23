@@ -254,319 +254,319 @@ async function submitEnquiry() {
 				<Plus class="size-4" />
 				New enquiry
 			</Button>
+		</div>
 
-			<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-				<Tabs v-model="statusFilter">
-					<TabsList>
-						<TabsTrigger value="all">
-							All
-							<Badge
-								variant="secondary"
-								class="ml-1.5"
-							>
-								{{ rows.length }}
-							</Badge>
-						</TabsTrigger>
-
-						<TabsTrigger value="open">
-							Open
-							<Badge
-								variant="secondary"
-								class="ml-1.5"
-							>
-								{{ openCount }}
-							</Badge>
-						</TabsTrigger>
-
-						<TabsTrigger value="resolved">
-							Resolved
-							<Badge
-								variant="secondary"
-								class="ml-1.5"
-							>
-								{{ resolvedCount }}
-							</Badge>
-						</TabsTrigger>
-					</TabsList>
-				</Tabs>
-
-				<div class="relative sm:w-64">
-					<Search class="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-
-					<Input
-						v-model="searchQuery"
-						type="text"
-						placeholder="Search enquiries…"
-						class="pl-9"
-					/>
-				</div>
-			</div>
-
-			<div class="space-y-4">
-				<div
-					v-if="pending"
-					class="space-y-3"
-				>
-					<div
-						v-for="i in 3"
-						:key="i"
-						class="bg-muted h-24 animate-pulse rounded-lg"
-					/>
-				</div>
-
-				<div
-					v-else-if="!filtered.length"
-					class="flex flex-col items-center gap-3 rounded-lg border border-dashed p-12 text-center"
-				>
-					<div class="bg-muted text-muted-foreground flex size-10 items-center justify-center rounded-full">
-						<MessageSquarePlus class="size-5" />
-					</div>
-
-					<p class="text-muted-foreground text-sm">
-						{{ isAdmin ? "No enquiries to show." : "No enquiries match this view." }}
-					</p>
-
-					<Button
-						v-if="!isAdmin"
-						type="button"
-						variant="outline"
-						size="sm"
-						@click="openModal()"
-					>
-						<Plus class="size-4" />
-						New enquiry
-					</Button>
-				</div>
-
-				<ul
-					v-else
-					class="space-y-2"
-				>
-					<li
-						v-for="enquiry in paged"
-						:key="enquiry.id"
-					>
-						<NuxtLink
-							:to="`/enquiries/${enquiry.enquiryNumber}`"
-							class="group bg-card hover:border-primary/50 flex items-start gap-4 rounded-lg border p-4 transition-colors"
+		<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+			<Tabs v-model="statusFilter">
+				<TabsList>
+					<TabsTrigger value="all">
+						All
+						<Badge
+							variant="secondary"
+							class="ml-1.5"
 						>
-							<div class="min-w-0 flex-1 space-y-1.5">
-								<div class="flex flex-wrap items-center gap-2">
-									<span class="text-muted-foreground font-mono text-xs">
-										{{ enquiry.enquiryNumber }}
-									</span>
+							{{ rows.length }}
+						</Badge>
+					</TabsTrigger>
 
-									<Badge
-										v-if="isAdmin"
-										class="capitalize"
-										:class="priorityVariants[enquiry.priority]"
-									>
-										{{ enquiry.priority }}
-									</Badge>
+					<TabsTrigger value="open">
+						Open
+						<Badge
+							variant="secondary"
+							class="ml-1.5"
+						>
+							{{ openCount }}
+						</Badge>
+					</TabsTrigger>
 
-									<Badge
-										class="capitalize"
-										:class="statusVariants[enquiry.status]"
-									>
-										{{ enquiry.status }}
-									</Badge>
-								</div>
+					<TabsTrigger value="resolved">
+						Resolved
+						<Badge
+							variant="secondary"
+							class="ml-1.5"
+						>
+							{{ resolvedCount }}
+						</Badge>
+					</TabsTrigger>
+				</TabsList>
+			</Tabs>
 
-								<h3 class="truncate font-semibold">
-									{{ enquiry.subject }}
-								</h3>
+			<div class="relative sm:w-64">
+				<Search class="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
 
-								<p class="text-muted-foreground truncate text-sm">
-									<span class="text-foreground/80 font-medium">{{ enquiry.supplierName }}</span>
-									· {{ enquiry.lastMessagePreview }}
-								</p>
-							</div>
+				<Input
+					v-model="searchQuery"
+					type="text"
+					placeholder="Search enquiries…"
+					class="pl-9"
+				/>
+			</div>
+		</div>
 
-							<div class="flex shrink-0 flex-col items-end gap-2">
-								<Badge
-									v-if="(unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount) > 0"
-									class="rounded-full"
-								>
-									{{ unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount }}
-								</Badge>
-
-								<span class="text-muted-foreground text-xs whitespace-nowrap">
-									{{ formatDate(enquiry.updatedAt) }}
-								</span>
-
-								<ArrowUpRight class="text-muted-foreground group-hover:text-primary size-4 transition-colors" />
-							</div>
-						</NuxtLink>
-					</li>
-				</ul>
-
-				<AppPagination
-					v-if="!pending && filtered.length"
-					v-model:page="page"
-					:total-pages="totalPages"
-					:total-items="filtered.length"
-					:page-size="PAGE_SIZE"
+		<div class="space-y-4">
+			<div
+				v-if="pending"
+				class="space-y-3"
+			>
+				<div
+					v-for="i in 3"
+					:key="i"
+					class="bg-muted h-24 animate-pulse rounded-lg"
 				/>
 			</div>
 
-			<!-- New enquiry -->
-			<Dialog v-model:open="isModalOpen">
-				<DialogContent class="sm:max-w-xl">
-					<DialogHeader>
-						<DialogTitle>New enquiry</DialogTitle>
+			<div
+				v-else-if="!filtered.length"
+				class="flex flex-col items-center gap-3 rounded-lg border border-dashed p-12 text-center"
+			>
+				<div class="bg-muted text-muted-foreground flex size-10 items-center justify-center rounded-full">
+					<MessageSquarePlus class="size-5" />
+				</div>
 
-						<DialogDescription>
-							Send a question to the SupplyKey team. We'll reply in this thread.
-						</DialogDescription>
-					</DialogHeader>
+				<p class="text-muted-foreground text-sm">
+					{{ isAdmin ? "No enquiries to show." : "No enquiries match this view." }}
+				</p>
 
-					<form
-						class="space-y-4"
-						@submit.prevent="submitEnquiry"
+				<Button
+					v-if="!isAdmin"
+					type="button"
+					variant="outline"
+					size="sm"
+					@click="openModal()"
+				>
+					<Plus class="size-4" />
+					New enquiry
+				</Button>
+			</div>
+
+			<ul
+				v-else
+				class="space-y-2"
+			>
+				<li
+					v-for="enquiry in paged"
+					:key="enquiry.id"
+				>
+					<NuxtLink
+						:to="`/enquiries/${enquiry.enquiryNumber}`"
+						class="group bg-card hover:border-primary/50 flex items-start gap-4 rounded-lg border p-4 transition-colors"
 					>
+						<div class="min-w-0 flex-1 space-y-1.5">
+							<div class="flex flex-wrap items-center gap-2">
+								<span class="text-muted-foreground font-mono text-xs">
+									{{ enquiry.enquiryNumber }}
+								</span>
+
+								<Badge
+									v-if="isAdmin"
+									class="capitalize"
+									:class="priorityVariants[enquiry.priority]"
+								>
+									{{ enquiry.priority }}
+								</Badge>
+
+								<Badge
+									class="capitalize"
+									:class="statusVariants[enquiry.status]"
+								>
+									{{ enquiry.status }}
+								</Badge>
+							</div>
+
+							<h3 class="truncate font-semibold">
+								{{ enquiry.subject }}
+							</h3>
+
+							<p class="text-muted-foreground truncate text-sm">
+								<span class="text-foreground/80 font-medium">{{ enquiry.supplierName }}</span>
+								· {{ enquiry.lastMessagePreview }}
+							</p>
+						</div>
+
+						<div class="flex shrink-0 flex-col items-end gap-2">
+							<Badge
+								v-if="(unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount) > 0"
+								class="rounded-full"
+							>
+								{{ unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount }}
+							</Badge>
+
+							<span class="text-muted-foreground text-xs whitespace-nowrap">
+								{{ formatDate(enquiry.updatedAt) }}
+							</span>
+
+							<ArrowUpRight class="text-muted-foreground group-hover:text-primary size-4 transition-colors" />
+						</div>
+					</NuxtLink>
+				</li>
+			</ul>
+
+			<AppPagination
+				v-if="!pending && filtered.length"
+				v-model:page="page"
+				:total-pages="totalPages"
+				:total-items="filtered.length"
+				:page-size="PAGE_SIZE"
+			/>
+		</div>
+
+		<!-- New enquiry -->
+		<Dialog v-model:open="isModalOpen">
+			<DialogContent class="sm:max-w-xl">
+				<DialogHeader>
+					<DialogTitle>New enquiry</DialogTitle>
+
+					<DialogDescription>
+						Send a question to the SupplyKey team. We'll reply in this thread.
+					</DialogDescription>
+				</DialogHeader>
+
+				<form
+					class="space-y-4"
+					@submit.prevent="submitEnquiry"
+				>
+					<Field>
+						<FieldLabel for="enquiry-subject">
+							Subject
+						</FieldLabel>
+
+						<Input
+							id="enquiry-subject"
+							v-model="form.subject"
+							type="text"
+							placeholder="e.g. Hydraulic valve specs — Pit C"
+							:disabled="isSubmitting"
+						/>
+					</Field>
+
+					<FieldGroup class="grid gap-4 sm:grid-cols-2">
 						<Field>
-							<FieldLabel for="enquiry-subject">
-								Subject
+							<FieldLabel for="enquiry-supplier">
+								Supplier
 							</FieldLabel>
 
 							<Input
-								id="enquiry-subject"
-								v-model="form.subject"
+								id="enquiry-supplier"
+								v-model="form.supplierName"
 								type="text"
-								placeholder="e.g. Hydraulic valve specs — Pit C"
+								placeholder="Supplier name"
+								list="supplier-options"
 								:disabled="isSubmitting"
 							/>
+
+							<datalist id="supplier-options">
+								<option
+									v-for="s in supplierSuggestions"
+									:key="s"
+									:value="s"
+								/>
+							</datalist>
 						</Field>
-
-						<FieldGroup class="grid gap-4 sm:grid-cols-2">
-							<Field>
-								<FieldLabel for="enquiry-supplier">
-									Supplier
-								</FieldLabel>
-
-								<Input
-									id="enquiry-supplier"
-									v-model="form.supplierName"
-									type="text"
-									placeholder="Supplier name"
-									list="supplier-options"
-									:disabled="isSubmitting"
-								/>
-
-								<datalist id="supplier-options">
-									<option
-										v-for="s in supplierSuggestions"
-										:key="s"
-										:value="s"
-									/>
-								</datalist>
-							</Field>
-
-							<Field>
-								<FieldLabel for="enquiry-sku">
-									Product SKU (optional)
-								</FieldLabel>
-
-								<Input
-									id="enquiry-sku"
-									v-model="form.productSku"
-									type="text"
-									placeholder="SKI-VLV-XP900"
-									class="font-mono"
-									:disabled="isSubmitting || linkLocked"
-								/>
-							</Field>
-						</FieldGroup>
-
-						<FieldGroup
-							v-if="!linkLocked || form.sourceType !== 'general'"
-							class="grid gap-4 sm:grid-cols-2"
-						>
-							<Field>
-								<FieldLabel for="enquiry-doc-type">
-									Linked document
-								</FieldLabel>
-
-								<NativeSelect
-									id="enquiry-doc-type"
-									v-model="form.sourceType"
-									:disabled="isSubmitting || linkLocked"
-								>
-									<option value="general">
-										None
-									</option>
-
-									<option value="order">
-										Order
-									</option>
-
-									<option value="quote">
-										Quote
-									</option>
-								</NativeSelect>
-							</Field>
-
-							<Field v-if="form.sourceType !== 'general'">
-								<FieldLabel for="enquiry-doc-ref">
-									Document number
-								</FieldLabel>
-
-								<Input
-									id="enquiry-doc-ref"
-									v-model="form.sourceReference"
-									type="text"
-									placeholder="e.g. ORD-001234"
-									class="font-mono"
-									:disabled="isSubmitting || linkLocked"
-								/>
-							</Field>
-						</FieldGroup>
-
-						<p
-							v-if="linkLocked"
-							class="text-muted-foreground text-xs"
-						>
-							Linked from the {{ linkContextLabel }} you came from — these references can't be changed here.
-						</p>
 
 						<Field>
-							<FieldLabel for="enquiry-message">
-								Message
+							<FieldLabel for="enquiry-sku">
+								Product SKU (optional)
 							</FieldLabel>
 
-							<Textarea
-								id="enquiry-message"
-								v-model="form.initialMessage"
-								rows="4"
-								placeholder="Describe your requirement, quantity, and timeline…"
-								:disabled="isSubmitting"
+							<Input
+								id="enquiry-sku"
+								v-model="form.productSku"
+								type="text"
+								placeholder="SKI-VLV-XP900"
+								class="font-mono"
+								:disabled="isSubmitting || linkLocked"
 							/>
 						</Field>
+					</FieldGroup>
 
-						<DialogFooter>
-							<Button
-								type="button"
-								variant="outline"
-								:disabled="isSubmitting"
-								@click="isModalOpen = false"
-							>
-								Cancel
-							</Button>
+					<FieldGroup
+						v-if="!linkLocked || form.sourceType !== 'general'"
+						class="grid gap-4 sm:grid-cols-2"
+					>
+						<Field>
+							<FieldLabel for="enquiry-doc-type">
+								Linked document
+							</FieldLabel>
 
-							<Button
-								type="submit"
-								:disabled="isSubmitting"
+							<NativeSelect
+								id="enquiry-doc-type"
+								v-model="form.sourceType"
+								:disabled="isSubmitting || linkLocked"
 							>
-								<LoaderCircle
-									v-if="isSubmitting"
-									class="size-4 animate-spin"
-								/>
-								{{ isSubmitting ? "Sending…" : "Send enquiry" }}
-							</Button>
-						</DialogFooter>
-					</form>
-				</DialogContent>
-			</Dialog>
-		</div>
+								<option value="general">
+									None
+								</option>
+
+								<option value="order">
+									Order
+								</option>
+
+								<option value="quote">
+									Quote
+								</option>
+							</NativeSelect>
+						</Field>
+
+						<Field v-if="form.sourceType !== 'general'">
+							<FieldLabel for="enquiry-doc-ref">
+								Document number
+							</FieldLabel>
+
+							<Input
+								id="enquiry-doc-ref"
+								v-model="form.sourceReference"
+								type="text"
+								placeholder="e.g. ORD-001234"
+								class="font-mono"
+								:disabled="isSubmitting || linkLocked"
+							/>
+						</Field>
+					</FieldGroup>
+
+					<p
+						v-if="linkLocked"
+						class="text-muted-foreground text-xs"
+					>
+						Linked from the {{ linkContextLabel }} you came from — these references can't be changed here.
+					</p>
+
+					<Field>
+						<FieldLabel for="enquiry-message">
+							Message
+						</FieldLabel>
+
+						<Textarea
+							id="enquiry-message"
+							v-model="form.initialMessage"
+							rows="4"
+							placeholder="Describe your requirement, quantity, and timeline…"
+							:disabled="isSubmitting"
+						/>
+					</Field>
+
+					<DialogFooter>
+						<Button
+							type="button"
+							variant="outline"
+							:disabled="isSubmitting"
+							@click="isModalOpen = false"
+						>
+							Cancel
+						</Button>
+
+						<Button
+							type="submit"
+							:disabled="isSubmitting"
+						>
+							<LoaderCircle
+								v-if="isSubmitting"
+								class="size-4 animate-spin"
+							/>
+							{{ isSubmitting ? "Sending…" : "Send enquiry" }}
+						</Button>
+					</DialogFooter>
+				</form>
+			</DialogContent>
+		</Dialog>
 	</div>
 </template>
