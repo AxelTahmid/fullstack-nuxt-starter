@@ -6,8 +6,10 @@ import type { ProductImage, StockStatus } from "#shared/types/product"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { NumberField, NumberFieldContent, NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput } from "@/components/ui/number-field"
+import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "~/components/toast"
 import { useCart } from "~/composables/useCart"
 import { formatPrice, stockLabel } from "./_lib/format"
@@ -61,6 +63,15 @@ const itemStockStatus = computed<StockStatus>(() => {
 
 	return available <= 5 ? "low_stock" : "in_stock"
 })
+const stockBadgeVariant = computed(() => {
+	if (itemStockStatus.value === "out_of_stock") {
+		return "destructive" as const
+	}
+	if (itemStockStatus.value === "low_stock") {
+		return "secondary" as const
+	}
+	return "default" as const
+})
 const defaultPricingDetail = computed<ICItemPricingDetailT | undefined>(() => pricing.value?.ItemPricingDetails?.find(detail => detail.DefaultUnit && typeof detail.UnitPrice === "number" && detail.UnitPrice > 0)
 	?? pricing.value?.ItemPricingDetails?.find(detail => typeof detail.UnitPrice === "number" && detail.UnitPrice > 0))
 // A 0 SalePrice / BasePrice means "not set", so only use positive values —
@@ -85,6 +96,7 @@ useHead({
 })
 
 const adding = ref(false)
+const quantity = ref(1)
 
 const { user } = useUserSession()
 const isAdmin = computed(() => (user.value as { role?: string } | null)?.role === "admin")
@@ -150,6 +162,8 @@ const inventoryRows = computed(() => [
 const detailRows = computed(() => [
 	{ label: "Item number", value: valueOrDash(item.value?.ItemNumber || itemSourceKey.value) },
 	{ label: "Product key", value: valueOrDash(itemSourceKey.value) },
+	{ label: "Category", value: itemCategory.value },
+	{ label: "Manufacturer", value: itemManufacturer.value },
 	{ label: "Account set", value: valueOrDash(item.value?.AccountSetCode) },
 	{ label: "Default price list", value: valueOrDash(item.value?.DefaultPriceListCode) },
 	{ label: "Vendor item", value: valueOrDash(item.value?.PreferredVendorItem) },
@@ -161,6 +175,15 @@ const detailRows = computed(() => [
 	{ label: "Inactive date", value: formatDate(item.value?.DateInactive) },
 ])
 
+const pricingRows = computed(() => [
+	{ label: "Currency", value: pricing.value?.CurrencyCode || "-" },
+	{ label: "Price list", value: pricing.value?.PriceListCode || item.value?.DefaultPriceListCode || "-" },
+	{ label: "Base price", value: formatCatalogPrice(pricing.value?.BasePrice) },
+	{ label: "Sale price", value: formatCatalogPrice(pricing.value?.SalePrice) },
+	{ label: "Sale starts", value: formatDate(pricing.value?.SaleStartDate) },
+	{ label: "Sale ends", value: formatDate(pricing.value?.SaleEndDate) },
+])
+
 async function addToCart() {
 	if (!item.value) {
 		return
@@ -168,7 +191,7 @@ async function addToCart() {
 
 	adding.value = true
 	try {
-		await cart.addItem(itemSourceKey.value, 1)
+		await cart.addItem(itemSourceKey.value, Math.max(1, quantity.value))
 		toast.success("Added to cart.")
 	}
 	catch (error) {
@@ -182,94 +205,18 @@ async function addToCart() {
 </script>
 
 <template>
-	<div class="space-y-6">
-		<div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-			<div class="space-y-3">
-				<Button
-					as-child
-					variant="ghost"
-					size="sm"
-					class="w-fit px-2"
-				>
-					<NuxtLink to="/shop">
-						<ArrowLeft class="size-4" />
-						Back to shop
-					</NuxtLink>
-				</Button>
-
-				<div
-					v-if="item"
-					class="space-y-2"
-				>
-					<div class="flex flex-wrap items-center gap-2">
-						<p class="text-sm font-medium text-muted-foreground">
-							{{ item.ItemNumber || itemSourceKey }}
-						</p>
-
-						<Badge variant="secondary">
-							{{ stockLabel(itemStockStatus) }}
-						</Badge>
-					</div>
-
-					<h1 class="max-w-4xl text-3xl font-semibold tracking-tight">
-						{{ itemName }}
-					</h1>
-
-					<p class="text-sm text-muted-foreground">
-						{{ itemCategory }} / {{ itemManufacturer }}
-					</p>
-				</div>
-
-				<div
-					v-else
-					class="space-y-3"
-				>
-					<Skeleton class="h-4 w-28" />
-
-					<Skeleton class="h-9 w-80 max-w-full" />
-
-					<Skeleton class="h-4 w-52" />
-				</div>
-			</div>
-
-			<div
-				v-if="item"
-				class="flex flex-wrap items-center gap-2"
-			>
-				<Button
-					type="button"
-					:disabled="adding"
-					@click="addToCart"
-				>
-					<LoaderCircle
-						v-if="adding"
-						class="size-4 animate-spin"
-					/>
-
-					<Check
-						v-else-if="isInCart"
-						class="size-4"
-					/>
-
-					<Plus
-						v-else
-						class="size-4"
-					/>
-					Add to cart
-				</Button>
-
-				<Button
-					v-if="!isAdmin"
-					as-child
-					variant="outline"
-				>
-					<NuxtLink :to="enquiryLink">
-						<MessageSquarePlus class="size-4" />
-						Ask about this product
-					</NuxtLink>
-				</Button>
-			</div>
-		</div>
+	<div class="space-y-8">
+		<Button
+			as-child
+			variant="ghost"
+			size="sm"
+			class="w-fit px-2"
+		>
+			<NuxtLink to="/shop">
+				<ArrowLeft class="size-4" />
+				Back to shop
+			</NuxtLink>
+		</Button>
 
 		<Alert
 			v-if="error"
@@ -284,202 +231,249 @@ async function addToCart() {
 			</AlertDescription>
 		</Alert>
 
-		<div
-			v-else
-			class="grid gap-6 xl:grid-cols-[minmax(18rem,24rem)_1fr]"
-		>
-			<ProductImages
-				:source-key="itemSourceKey"
-				:product-name="itemName"
-				:is-admin="isAdmin"
-				:initial-images="data?.images ?? []"
-			/>
+		<template v-else>
+			<!-- Hero: gallery + buy box -->
+			<div class="grid gap-8 lg:grid-cols-2">
+				<ProductImages
+					:source-key="itemSourceKey"
+					:product-name="itemName"
+					:is-admin="isAdmin"
+					:initial-images="data?.images ?? []"
+				/>
 
-			<div class="grid gap-6 lg:grid-cols-[1fr_20rem]">
-				<div class="space-y-6">
-					<Card>
-						<CardHeader>
-							<CardTitle>Description</CardTitle>
-						</CardHeader>
+				<div
+					v-if="item"
+					class="space-y-6"
+				>
+					<div class="space-y-2">
+						<div class="flex flex-wrap items-center gap-2">
+							<span class="text-muted-foreground font-mono text-sm">
+								{{ item.ItemNumber || itemSourceKey }}
+							</span>
 
-						<CardContent class="space-y-4">
-							<p class="text-sm leading-6 text-muted-foreground">
-								{{ itemDescription }}
-							</p>
-
-							<div
-								v-if="comments.length"
-								class="space-y-2"
-							>
-								<p class="text-sm font-medium">
-									Product notes
-								</p>
-
-								<ul class="space-y-1 text-sm text-muted-foreground">
-									<li
-										v-for="comment in comments"
-										:key="comment"
-									>
-										{{ comment }}
-									</li>
-								</ul>
-							</div>
-						</CardContent>
-					</Card>
-
-					<Card>
-						<CardHeader>
-							<CardTitle>Inventory</CardTitle>
-						</CardHeader>
-
-						<CardContent>
-							<dl class="grid gap-3 sm:grid-cols-2">
-								<div
-									v-for="row in inventoryRows"
-									:key="row.label"
-									class="rounded-md border p-3"
-								>
-									<dt class="text-xs font-medium text-muted-foreground">
-										{{ row.label }}
-									</dt>
-
-									<dd class="mt-1 text-sm font-semibold">
-										{{ row.value }}
-									</dd>
-								</div>
-							</dl>
-						</CardContent>
-					</Card>
-
-					<Card>
-						<CardHeader>
-							<CardTitle>Product details</CardTitle>
-						</CardHeader>
-
-						<CardContent>
-							<dl class="grid gap-3 sm:grid-cols-2">
-								<div
-									v-for="row in detailRows"
-									:key="row.label"
-									class="rounded-md border p-3"
-								>
-									<dt class="text-xs font-medium text-muted-foreground">
-										{{ row.label }}
-									</dt>
-
-									<dd class="mt-1 break-words text-sm font-semibold">
-										{{ row.value }}
-									</dd>
-								</div>
-							</dl>
-						</CardContent>
-					</Card>
-				</div>
-
-				<Card class="h-fit">
-					<CardHeader>
-						<CardTitle>Pricing</CardTitle>
-					</CardHeader>
-
-					<CardContent class="space-y-5">
-						<div>
-							<p class="text-sm text-muted-foreground">
-								Current price
-							</p>
-
-							<p
-								v-if="unitPrice !== null"
-								class="mt-1 text-3xl font-semibold tracking-tight"
-							>
-								{{ formatCatalogPrice(unitPrice) }}
-							</p>
-
-							<p
-								v-else
-								class="mt-1 text-lg font-semibold"
-							>
-								Price unavailable
-							</p>
-
-							<p class="mt-1 text-sm text-muted-foreground">
-								Per {{ unitOfMeasure }}
-							</p>
+							<Badge :variant="stockBadgeVariant">
+								{{ stockLabel(itemStockStatus) }}
+							</Badge>
 						</div>
 
-						<Alert v-if="pricingUnavailableReason">
-							<AlertCircle class="size-4" />
+						<h1 class="text-3xl font-semibold tracking-tight">
+							{{ itemName }}
+						</h1>
 
-							<AlertTitle>Pricing not returned</AlertTitle>
+						<p class="text-muted-foreground text-sm">
+							{{ itemCategory }} · {{ itemManufacturer }}
+						</p>
+					</div>
 
-							<AlertDescription>
-								{{ pricingUnavailableReason }}
-							</AlertDescription>
-						</Alert>
+					<Separator />
 
-						<dl class="space-y-3 text-sm">
-							<div class="flex items-center justify-between gap-3">
-								<dt class="text-muted-foreground">
-									Currency
-								</dt>
+					<div class="space-y-1">
+						<p
+							v-if="unitPrice !== null"
+							class="text-4xl font-semibold tracking-tight tabular-nums"
+						>
+							{{ formatCatalogPrice(unitPrice) }}
+						</p>
 
-								<dd class="font-medium">
-									{{ pricing?.CurrencyCode || "-" }}
-								</dd>
-							</div>
+						<p
+							v-else
+							class="text-2xl font-semibold"
+						>
+							Price unavailable
+						</p>
 
-							<div class="flex items-center justify-between gap-3">
-								<dt class="text-muted-foreground">
-									Price list
-								</dt>
+						<p class="text-muted-foreground text-sm">
+							Per {{ unitOfMeasure }}<span v-if="pricing?.PriceListCode || item.DefaultPriceListCode"> · Price list {{ pricing?.PriceListCode || item.DefaultPriceListCode }}</span>
+						</p>
+					</div>
 
-								<dd class="font-medium">
-									{{ pricing?.PriceListCode || item?.DefaultPriceListCode || "-" }}
-								</dd>
-							</div>
+					<Alert v-if="pricingUnavailableReason">
+						<AlertCircle class="size-4" />
 
-							<div class="flex items-center justify-between gap-3">
-								<dt class="text-muted-foreground">
-									Base price
-								</dt>
+						<AlertTitle>Pricing not returned</AlertTitle>
 
-								<dd class="font-medium">
-									{{ formatCatalogPrice(pricing?.BasePrice) }}
-								</dd>
-							</div>
+						<AlertDescription>
+							{{ pricingUnavailableReason }}
+						</AlertDescription>
+					</Alert>
 
-							<div class="flex items-center justify-between gap-3">
-								<dt class="text-muted-foreground">
-									Sale price
-								</dt>
+					<div class="flex flex-wrap items-center gap-3">
+						<NumberField
+							v-model="quantity"
+							:min="1"
+							:default-value="1"
+							class="w-32"
+						>
+							<NumberFieldContent>
+								<NumberFieldDecrement />
 
-								<dd class="font-medium">
-									{{ formatCatalogPrice(pricing?.SalePrice) }}
-								</dd>
-							</div>
+								<NumberFieldInput />
 
-							<div class="flex items-center justify-between gap-3">
-								<dt class="text-muted-foreground">
-									Sale starts
-								</dt>
+								<NumberFieldIncrement />
+							</NumberFieldContent>
+						</NumberField>
 
-								<dd class="font-medium">
-									{{ formatDate(pricing?.SaleStartDate) }}
-								</dd>
-							</div>
+						<Button
+							type="button"
+							:disabled="adding"
+							@click="addToCart"
+						>
+							<LoaderCircle
+								v-if="adding"
+								class="size-4 animate-spin"
+							/>
 
-							<div class="flex items-center justify-between gap-3">
-								<dt class="text-muted-foreground">
-									Sale ends
-								</dt>
+							<Check
+								v-else-if="isInCart"
+								class="size-4"
+							/>
 
-								<dd class="font-medium">
-									{{ formatDate(pricing?.SaleEndDate) }}
-								</dd>
-							</div>
-						</dl>
-					</CardContent>
-				</Card>
+							<Plus
+								v-else
+								class="size-4"
+							/>
+							Add to cart
+						</Button>
+
+						<Button
+							v-if="!isAdmin"
+							as-child
+							variant="outline"
+						>
+							<NuxtLink :to="enquiryLink">
+								<MessageSquarePlus class="size-4" />
+								Ask about this product
+							</NuxtLink>
+						</Button>
+					</div>
+
+					<Separator />
+
+					<p class="text-muted-foreground text-sm leading-6">
+						{{ itemDescription }}
+					</p>
+				</div>
+
+				<div
+					v-else
+					class="space-y-5"
+				>
+					<Skeleton class="h-4 w-28" />
+
+					<Skeleton class="h-9 w-3/4" />
+
+					<Skeleton class="h-4 w-40" />
+
+					<Skeleton class="h-12 w-44" />
+
+					<Skeleton class="h-10 w-full max-w-sm" />
+				</div>
 			</div>
-		</div>
+
+			<!-- Detail tabs -->
+			<Tabs
+				v-if="item"
+				default-value="overview"
+				class="w-full"
+			>
+				<TabsList>
+					<TabsTrigger value="overview">
+						Overview
+					</TabsTrigger>
+
+					<TabsTrigger value="specifications">
+						Specifications
+					</TabsTrigger>
+
+					<TabsTrigger value="inventory">
+						Inventory
+					</TabsTrigger>
+
+					<TabsTrigger value="pricing">
+						Pricing
+					</TabsTrigger>
+				</TabsList>
+
+				<TabsContent value="overview">
+					<div class="max-w-3xl space-y-4 py-2">
+						<p class="text-sm leading-7">
+							{{ itemDescription }}
+						</p>
+
+						<div
+							v-if="comments.length"
+							class="space-y-2"
+						>
+							<p class="text-sm font-medium">
+								Product notes
+							</p>
+
+							<ul class="text-muted-foreground list-disc space-y-1 pl-5 text-sm">
+								<li
+									v-for="comment in comments"
+									:key="comment"
+								>
+									{{ comment }}
+								</li>
+							</ul>
+						</div>
+					</div>
+				</TabsContent>
+
+				<TabsContent value="specifications">
+					<dl class="max-w-3xl divide-y py-2">
+						<div
+							v-for="row in detailRows"
+							:key="row.label"
+							class="flex items-start justify-between gap-6 py-2.5"
+						>
+							<dt class="text-muted-foreground text-sm">
+								{{ row.label }}
+							</dt>
+
+							<dd class="text-right text-sm font-medium wrap-break-word">
+								{{ row.value }}
+							</dd>
+						</div>
+					</dl>
+				</TabsContent>
+
+				<TabsContent value="inventory">
+					<dl class="max-w-3xl divide-y py-2">
+						<div
+							v-for="row in inventoryRows"
+							:key="row.label"
+							class="flex items-center justify-between gap-6 py-2.5"
+						>
+							<dt class="text-muted-foreground text-sm">
+								{{ row.label }}
+							</dt>
+
+							<dd class="text-sm font-medium tabular-nums">
+								{{ row.value }}
+							</dd>
+						</div>
+					</dl>
+				</TabsContent>
+
+				<TabsContent value="pricing">
+					<dl class="max-w-3xl divide-y py-2">
+						<div
+							v-for="row in pricingRows"
+							:key="row.label"
+							class="flex items-center justify-between gap-6 py-2.5"
+						>
+							<dt class="text-muted-foreground text-sm">
+								{{ row.label }}
+							</dt>
+
+							<dd class="text-sm font-medium tabular-nums">
+								{{ row.value }}
+							</dd>
+						</div>
+					</dl>
+				</TabsContent>
+			</Tabs>
+		</template>
 	</div>
 </template>

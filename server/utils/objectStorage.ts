@@ -103,12 +103,17 @@ export async function removeProductImageObject(objectKey: string) {
 
 /** Whether an object actually exists (used to avoid recording rows for failed uploads). */
 export async function productImageObjectExists(objectKey: string) {
+	return (await statProductImageObject(objectKey)) !== null
+}
+
+/** Stat an uploaded object, or null if it does not exist. Used to verify size server-side. */
+export async function statProductImageObject(objectKey: string): Promise<{ size: number } | null> {
 	const c = config()
 	try {
-		await getOpsClient().statObject(c.bucket, objectKey)
-		return true
+		const stat = await getOpsClient().statObject(c.bucket, objectKey)
+		return { size: stat.size }
 	}
 	catch {
-		return false
+		return null
 	}
 }

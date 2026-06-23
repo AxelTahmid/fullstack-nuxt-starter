@@ -1,7 +1,16 @@
 <script setup lang="ts">
-import { ArrowUpRight, LoaderCircle, Plus, Search, X } from "@lucide/vue"
-import type { FetchError } from "ofetch"
 import type { EnquirySourceType, EnquirySummary } from "#shared/types/enquiry"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { NativeSelect } from "@/components/ui/native-select"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Textarea } from "@/components/ui/textarea"
+import { ArrowUpRight, LoaderCircle, MessageSquarePlus, Plus, Search } from "@lucide/vue"
+import type { FetchError } from "ofetch"
+import AppPagination from "~/components/AppPagination.vue"
 import { toast } from "~/components/toast"
 import { useEnquiryStream } from "~/composables/useEnquiryStream"
 
@@ -38,26 +47,54 @@ onEnquiryEvent((realtimeEvent) => {
 })
 
 const searchQuery = ref("")
+const statusFilter = ref<"all" | "open" | "resolved">("all")
+
+const rows = computed(() => data.value ?? [])
+const openCount = computed(() => rows.value.filter(r => r.status !== "resolved").length)
+const resolvedCount = computed(() => rows.value.filter(r => r.status === "resolved").length)
+
 const filtered = computed(() => {
-	const rows = data.value ?? []
-	if (!searchQuery.value.trim())
-		return rows
+	let result = rows.value
+	if (statusFilter.value === "open") {
+		result = result.filter(r => r.status !== "resolved")
+	}
+	else if (statusFilter.value === "resolved") {
+		result = result.filter(r => r.status === "resolved")
+	}
 	const q = searchQuery.value.trim().toLowerCase()
-	return rows.filter(r =>
-		r.enquiryNumber.toLowerCase().includes(q)
-		|| r.subject.toLowerCase().includes(q)
-		|| r.supplierName.toLowerCase().includes(q),
-	)
+	if (q) {
+		result = result.filter(r =>
+			r.enquiryNumber.toLowerCase().includes(q)
+			|| r.subject.toLowerCase().includes(q)
+			|| r.supplierName.toLowerCase().includes(q),
+		)
+	}
+	return result
 })
 
-const priorityStyles: Record<string, string> = {
+const PAGE_SIZE = 8
+const page = ref(1)
+const totalPages = computed(() => Math.max(1, Math.ceil(filtered.value.length / PAGE_SIZE)))
+const paged = computed(() => {
+	const start = (Math.min(page.value, totalPages.value) - 1) * PAGE_SIZE
+	return filtered.value.slice(start, start + PAGE_SIZE)
+})
+// Back to page 1 whenever the filter/search narrows the list, and keep page in range.
+watch([searchQuery, statusFilter], () => (page.value = 1))
+watch(totalPages, (tp) => {
+	if (page.value > tp) {
+		page.value = tp
+	}
+})
+
+const priorityVariants: Record<string, string> = {
 	urgent: "bg-destructive text-destructive-foreground",
 	high: "bg-destructive/15 text-destructive",
 	medium: "bg-primary/10 text-primary",
 	low: "bg-muted text-muted-foreground",
 }
 
-const statusStyles: Record<string, string> = {
+const statusVariants: Record<string, string> = {
 	sent: "bg-muted text-muted-foreground",
 	received: "bg-chart-4/20 text-primary",
 	reviewing: "bg-primary/10 text-primary",
@@ -136,10 +173,6 @@ onMounted(() => {
 	return navigateTo({ query: {} }, { replace: true })
 })
 
-function closeModal() {
-	isModalOpen.value = false
-}
-
 async function submitEnquiry() {
 	if (!form.subject.trim() || !form.supplierName.trim() || !form.initialMessage.trim()) {
 		toast.error("Subject, supplier, and message are required.")
@@ -159,7 +192,7 @@ async function submitEnquiry() {
 			},
 		})
 		toast.success(`Enquiry ${response.enquiryNumber} dispatched.`)
-		closeModal()
+		isModalOpen.value = false
 		await refresh()
 		await navigateTo(`/enquiries/${response.enquiryNumber}`)
 	}
@@ -186,7 +219,7 @@ async function submitEnquiry() {
 			toast.info(appended
 				? "You already have an open enquiry for this — added your message to it."
 				: "You already have an open enquiry for this. Opening it.")
-			closeModal()
+			isModalOpen.value = false
 			await navigateTo(`/enquiries/${existing}`)
 			return
 		}
@@ -199,219 +232,224 @@ async function submitEnquiry() {
 </script>
 
 <template>
-	<div class="space-y-8">
-		<section class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-			<div class="space-y-2">
-				<p class="text-muted-foreground text-[0.68rem] font-bold tracking-[0.24em] uppercase">
-					Supplier Correspondence
-				</p>
-
-				<h1
-					class="text-foreground text-5xl font-extrabold tracking-[-0.045em]"
-					style="font-family: var(--font-display);"
-				>
-					Enquiries &amp; Follow-ups
+	<div class="space-y-6">
+		<div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+			<div class="space-y-1">
+				<h1 class="text-2xl font-semibold tracking-tight">
+					Enquiries
 				</h1>
 
-				<p class="text-muted-foreground max-w-2xl text-sm leading-7">
-					Ticket tracker for all active supplier communications. Priority-weighted and bound to the active operator.
+				<p class="text-muted-foreground text-sm">
+					{{ isAdmin
+						? "Triage and respond to customer enquiries about orders, estimates, and products."
+						: "Raise and track enquiries with the SupplyKey team." }}
 				</p>
 			</div>
 
-			<div class="flex items-center gap-3">
-				<div class="relative">
+			<Button
+				v-if="!isAdmin"
+				type="button"
+				@click="openModal()"
+			>
+				<Plus class="size-4" />
+				New enquiry
+			</Button>
+
+			<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+				<Tabs v-model="statusFilter">
+					<TabsList>
+						<TabsTrigger value="all">
+							All
+							<Badge
+								variant="secondary"
+								class="ml-1.5"
+							>
+								{{ rows.length }}
+							</Badge>
+						</TabsTrigger>
+
+						<TabsTrigger value="open">
+							Open
+							<Badge
+								variant="secondary"
+								class="ml-1.5"
+							>
+								{{ openCount }}
+							</Badge>
+						</TabsTrigger>
+
+						<TabsTrigger value="resolved">
+							Resolved
+							<Badge
+								variant="secondary"
+								class="ml-1.5"
+							>
+								{{ resolvedCount }}
+							</Badge>
+						</TabsTrigger>
+					</TabsList>
+				</Tabs>
+
+				<div class="relative sm:w-64">
 					<Search class="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
 
 					<Input
 						v-model="searchQuery"
 						type="text"
 						placeholder="Search enquiries…"
-						class="border-border/60 bg-card text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 w-64 rounded-md border py-2.5 pr-3 pl-9 text-sm focus:ring-2 focus:outline-none"
+						class="pl-9"
+					/>
+				</div>
+			</div>
+
+			<div class="space-y-4">
+				<div
+					v-if="pending"
+					class="space-y-3"
+				>
+					<div
+						v-for="i in 3"
+						:key="i"
+						class="bg-muted h-24 animate-pulse rounded-lg"
 					/>
 				</div>
 
-				<Button
-					v-if="!isAdmin"
-					type="button"
-					class="bg-primary text-primary-foreground inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-[0.68rem] font-bold tracking-[0.14em] uppercase transition-all hover:brightness-110"
-					style="font-family: var(--font-display);"
-					@click="openModal"
-				>
-					<Plus class="size-4" />
-					New Enquiry
-				</Button>
-			</div>
-		</section>
-
-		<section>
-			<div
-				v-if="pending"
-				class="space-y-3"
-			>
 				<div
-					v-for="i in 3"
-					:key="i"
-					class="bg-muted h-28 animate-pulse rounded-md"
-				/>
-			</div>
-
-			<div
-				v-else-if="!filtered.length"
-				class="border-border/60 bg-card rounded-md border p-12 text-center"
-			>
-				<p class="text-muted-foreground text-sm">
-					{{ isAdmin ? "No enquiries received yet." : "No enquiries match this search." }}
-				</p>
-
-				<Button
-					v-if="!isAdmin"
-					type="button"
-					class="bg-primary text-primary-foreground mt-4 inline-flex items-center gap-2 rounded-md px-4 py-2 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all hover:brightness-110"
-					@click="openModal"
+					v-else-if="!filtered.length"
+					class="flex flex-col items-center gap-3 rounded-lg border border-dashed p-12 text-center"
 				>
-					<Plus class="size-3.5" />
-					New Enquiry
-				</Button>
-			</div>
+					<div class="bg-muted text-muted-foreground flex size-10 items-center justify-center rounded-full">
+						<MessageSquarePlus class="size-5" />
+					</div>
 
-			<ul
-				v-else
-				class="space-y-3"
-			>
-				<li
-					v-for="enquiry in filtered"
-					:key="enquiry.id"
-				>
-					<NuxtLink
-						:to="`/enquiries/${enquiry.enquiryNumber}`"
-						class="group border-border/60 bg-card hover:border-primary/40 flex items-start gap-5 rounded-md border p-6 transition-all"
+					<p class="text-muted-foreground text-sm">
+						{{ isAdmin ? "No enquiries to show." : "No enquiries match this view." }}
+					</p>
+
+					<Button
+						v-if="!isAdmin"
+						type="button"
+						variant="outline"
+						size="sm"
+						@click="openModal()"
 					>
-						<div class="min-w-0 flex-1 space-y-2">
-							<div class="flex items-center gap-2">
-								<span
-									v-if="isAdmin"
-									class="rounded-sm px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.14em] uppercase"
-									:class="priorityStyles[enquiry.priority]"
-								>
-									{{ enquiry.priority }}
-								</span>
+						<Plus class="size-4" />
+						New enquiry
+					</Button>
+				</div>
 
-								<span
-									class="rounded-sm px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.14em] uppercase"
-									:class="statusStyles[enquiry.status]"
-								>
-									{{ enquiry.status }}
-								</span>
-
-								<span class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.16em] uppercase">
-									{{ enquiry.enquiryNumber }}
-								</span>
-							</div>
-
-							<h3
-								class="text-foreground text-lg font-extrabold tracking-[-0.015em]"
-								style="font-family: var(--font-display);"
-							>
-								{{ enquiry.subject }}
-							</h3>
-
-							<p class="text-primary text-xs font-semibold">
-								{{ enquiry.supplierName }}
-							</p>
-
-							<p class="text-muted-foreground line-clamp-2 text-sm">
-								{{ enquiry.lastMessagePreview }}
-							</p>
-						</div>
-
-						<div class="flex flex-col items-end gap-3">
-							<span
-								v-if="(unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount) > 0"
-								class="bg-primary text-primary-foreground inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[0.6rem] font-bold"
-							>
-								{{ unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount }}
-							</span>
-
-							<span class="text-muted-foreground text-[0.62rem] font-semibold tracking-wide whitespace-nowrap">
-								{{ formatDate(enquiry.updatedAt) }}
-							</span>
-
-							<div class="border-border/70 text-muted-foreground group-hover:border-primary group-hover:text-primary flex size-9 items-center justify-center rounded-md border transition-all">
-								<ArrowUpRight class="size-4" />
-							</div>
-						</div>
-					</NuxtLink>
-				</li>
-			</ul>
-		</section>
-
-		<Teleport to="body">
-			<div
-				v-if="isModalOpen"
-				class="fixed inset-0 z-50 flex items-center justify-center p-4"
-			>
-				<div
-					class="bg-foreground/40 absolute inset-0 backdrop-blur-sm"
-					@click="closeModal"
-				/>
-
-				<div class="border-border/60 bg-card relative w-full max-w-xl rounded-md border shadow-2xl">
-					<header class="border-border/40 flex items-start justify-between border-b p-6">
-						<div>
-							<p
-								class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase"
-								style="font-family: var(--font-display);"
-							>
-								New Enquiry
-							</p>
-
-							<h2
-								class="text-foreground mt-1 text-2xl font-extrabold tracking-[-0.02em]"
-								style="font-family: var(--font-display);"
-							>
-								Dispatch to supplier network
-							</h2>
-						</div>
-
-						<Button
-							type="button"
-							class="text-muted-foreground hover:bg-muted hover:text-foreground flex size-9 items-center justify-center rounded-md transition-all"
-							@click="closeModal"
+				<ul
+					v-else
+					class="space-y-2"
+				>
+					<li
+						v-for="enquiry in paged"
+						:key="enquiry.id"
+					>
+						<NuxtLink
+							:to="`/enquiries/${enquiry.enquiryNumber}`"
+							class="group bg-card hover:border-primary/50 flex items-start gap-4 rounded-lg border p-4 transition-colors"
 						>
-							<X class="size-4" />
-						</Button>
-					</header>
+							<div class="min-w-0 flex-1 space-y-1.5">
+								<div class="flex flex-wrap items-center gap-2">
+									<span class="text-muted-foreground font-mono text-xs">
+										{{ enquiry.enquiryNumber }}
+									</span>
+
+									<Badge
+										v-if="isAdmin"
+										class="capitalize"
+										:class="priorityVariants[enquiry.priority]"
+									>
+										{{ enquiry.priority }}
+									</Badge>
+
+									<Badge
+										class="capitalize"
+										:class="statusVariants[enquiry.status]"
+									>
+										{{ enquiry.status }}
+									</Badge>
+								</div>
+
+								<h3 class="truncate font-semibold">
+									{{ enquiry.subject }}
+								</h3>
+
+								<p class="text-muted-foreground truncate text-sm">
+									<span class="text-foreground/80 font-medium">{{ enquiry.supplierName }}</span>
+									· {{ enquiry.lastMessagePreview }}
+								</p>
+							</div>
+
+							<div class="flex shrink-0 flex-col items-end gap-2">
+								<Badge
+									v-if="(unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount) > 0"
+									class="rounded-full"
+								>
+									{{ unreadMap[enquiry.enquiryNumber] ?? enquiry.unreadCount }}
+								</Badge>
+
+								<span class="text-muted-foreground text-xs whitespace-nowrap">
+									{{ formatDate(enquiry.updatedAt) }}
+								</span>
+
+								<ArrowUpRight class="text-muted-foreground group-hover:text-primary size-4 transition-colors" />
+							</div>
+						</NuxtLink>
+					</li>
+				</ul>
+
+				<AppPagination
+					v-if="!pending && filtered.length"
+					v-model:page="page"
+					:total-pages="totalPages"
+					:total-items="filtered.length"
+					:page-size="PAGE_SIZE"
+				/>
+			</div>
+
+			<!-- New enquiry -->
+			<Dialog v-model:open="isModalOpen">
+				<DialogContent class="sm:max-w-xl">
+					<DialogHeader>
+						<DialogTitle>New enquiry</DialogTitle>
+
+						<DialogDescription>
+							Send a question to the SupplyKey team. We'll reply in this thread.
+						</DialogDescription>
+					</DialogHeader>
 
 					<form
-						class="space-y-5 p-6"
+						class="space-y-4"
 						@submit.prevent="submitEnquiry"
 					>
-						<div>
-							<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+						<Field>
+							<FieldLabel for="enquiry-subject">
 								Subject
-							</Label>
+							</FieldLabel>
 
 							<Input
+								id="enquiry-subject"
 								v-model="form.subject"
 								type="text"
 								placeholder="e.g. Hydraulic valve specs — Pit C"
-								class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
 								:disabled="isSubmitting"
 							/>
-						</div>
+						</Field>
 
-						<div class="grid gap-5 sm:grid-cols-2">
-							<div>
-								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+						<FieldGroup class="grid gap-4 sm:grid-cols-2">
+							<Field>
+								<FieldLabel for="enquiry-supplier">
 									Supplier
-								</Label>
+								</FieldLabel>
 
 								<Input
+									id="enquiry-supplier"
 									v-model="form.supplierName"
 									type="text"
 									placeholder="Supplier name"
 									list="supplier-options"
-									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
 									:disabled="isSubmitting"
 								/>
 
@@ -422,35 +460,36 @@ async function submitEnquiry() {
 										:value="s"
 									/>
 								</datalist>
-							</div>
+							</Field>
 
-							<div>
-								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+							<Field>
+								<FieldLabel for="enquiry-sku">
 									Product SKU (optional)
-								</Label>
+								</FieldLabel>
 
 								<Input
+									id="enquiry-sku"
 									v-model="form.productSku"
 									type="text"
 									placeholder="SKI-VLV-XP900"
-									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 font-mono text-sm focus:ring-2 focus:outline-none disabled:opacity-70"
+									class="font-mono"
 									:disabled="isSubmitting || linkLocked"
 								/>
-							</div>
-						</div>
+							</Field>
+						</FieldGroup>
 
-						<div
+						<FieldGroup
 							v-if="!linkLocked || form.sourceType !== 'general'"
-							class="grid gap-5 sm:grid-cols-2"
+							class="grid gap-4 sm:grid-cols-2"
 						>
-							<div>
-								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+							<Field>
+								<FieldLabel for="enquiry-doc-type">
 									Linked document
-								</Label>
+								</FieldLabel>
 
-								<select
+								<NativeSelect
+									id="enquiry-doc-type"
 									v-model="form.sourceType"
-									class="bg-muted text-foreground focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none disabled:opacity-70"
 									:disabled="isSubmitting || linkLocked"
 								>
 									<option value="general">
@@ -464,70 +503,70 @@ async function submitEnquiry() {
 									<option value="quote">
 										Quote
 									</option>
-								</select>
-							</div>
+								</NativeSelect>
+							</Field>
 
-							<div v-if="form.sourceType !== 'general'">
-								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
+							<Field v-if="form.sourceType !== 'general'">
+								<FieldLabel for="enquiry-doc-ref">
 									Document number
-								</Label>
+								</FieldLabel>
 
 								<Input
+									id="enquiry-doc-ref"
 									v-model="form.sourceReference"
 									type="text"
 									placeholder="e.g. ORD-001234"
-									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 font-mono text-sm focus:ring-2 focus:outline-none disabled:opacity-70"
+									class="font-mono"
 									:disabled="isSubmitting || linkLocked"
 								/>
-							</div>
-						</div>
+							</Field>
+						</FieldGroup>
 
 						<p
 							v-if="linkLocked"
-							class="text-muted-foreground -mt-2 text-xs"
+							class="text-muted-foreground text-xs"
 						>
 							Linked from the {{ linkContextLabel }} you came from — these references can't be changed here.
 						</p>
 
-						<div>
-							<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
-								Initial Message
-							</Label>
+						<Field>
+							<FieldLabel for="enquiry-message">
+								Message
+							</FieldLabel>
 
 							<Textarea
+								id="enquiry-message"
 								v-model="form.initialMessage"
 								rows="4"
 								placeholder="Describe your requirement, quantity, and timeline…"
-								class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full resize-none rounded-md px-3 py-2.5 text-sm leading-6 focus:ring-2 focus:outline-none"
 								:disabled="isSubmitting"
 							/>
-						</div>
+						</Field>
 
-						<div class="flex items-center justify-end gap-3 pt-2">
+						<DialogFooter>
 							<Button
 								type="button"
-								class="border-border/70 text-muted-foreground hover:border-foreground hover:text-foreground rounded-md border px-4 py-2 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all"
+								variant="outline"
 								:disabled="isSubmitting"
-								@click="closeModal"
+								@click="isModalOpen = false"
 							>
 								Cancel
 							</Button>
 
 							<Button
 								type="submit"
-								class="bg-primary text-primary-foreground inline-flex items-center gap-2 rounded-md px-5 py-2 text-[0.62rem] font-bold tracking-[0.14em] uppercase transition-all hover:brightness-110 disabled:opacity-60"
 								:disabled="isSubmitting"
 							>
 								<LoaderCircle
 									v-if="isSubmitting"
-									class="size-3.5 animate-spin"
+									class="size-4 animate-spin"
 								/>
-								{{ isSubmitting ? "Dispatching…" : "Dispatch Enquiry" }}
+								{{ isSubmitting ? "Sending…" : "Send enquiry" }}
 							</Button>
-						</div>
+						</DialogFooter>
 					</form>
-				</div>
-			</div>
-		</Teleport>
+				</DialogContent>
+			</Dialog>
+		</div>
 	</div>
 </template>

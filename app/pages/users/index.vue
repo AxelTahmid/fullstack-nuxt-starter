@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import { Eye, LoaderCircle, Pencil, Plus, RefreshCw, RotateCcw, Search } from "@lucide/vue"
-import type { FetchError } from "ofetch"
 import type { AuditLogEntry, SageCustomerLookup, UserListRow, UserRole } from "#shared/types/user"
+import {
+	AlertDialog,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Field, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { NativeSelect } from "@/components/ui/native-select"
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Eye, LoaderCircle, Pencil, Plus, RefreshCw, RotateCcw, Search, ShieldCheck, UserCog, Users as UsersIcon, UserX } from "@lucide/vue"
+import type { FetchError } from "ofetch"
+import AppPagination from "~/components/AppPagination.vue"
 import { toast } from "~/components/toast"
 
 definePageMeta({
@@ -37,6 +47,7 @@ const mode = ref<"create" | "edit">("create")
 const selectedUser = ref<UserListRow | null>(null)
 const selectedAuditUser = ref<UserListRow | null>(null)
 const auditRows = ref<AuditLogEntry[]>([])
+const isAuditOpen = ref(false)
 const isSaving = ref(false)
 const isLookingUpCustomer = ref(false)
 const isResettingId = ref<number | null>(null)
@@ -66,6 +77,30 @@ const filteredRows = computed(() => {
 		|| (user.sageCustomerName ?? "").toLowerCase().includes(query),
 	)
 })
+
+const stats = computed(() => [
+	{ label: "Total users", value: rows.value.length, icon: UsersIcon },
+	{ label: "Admins", value: rows.value.filter(user => user.role === "admin").length, icon: ShieldCheck },
+	{ label: "Customers", value: rows.value.filter(user => user.role === "customer").length, icon: UserCog },
+	{ label: "Deactivated", value: rows.value.filter(user => user.deactivated).length, icon: UserX },
+])
+
+const PAGE_SIZE = 10
+const page = ref(1)
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredRows.value.length / PAGE_SIZE)))
+const pagedRows = computed(() => {
+	const start = (Math.min(page.value, totalPages.value) - 1) * PAGE_SIZE
+	return filteredRows.value.slice(start, start + PAGE_SIZE)
+})
+// Reset to the first page when the search narrows the list, and keep the page in range.
+watch(searchQuery, () => (page.value = 1))
+watch(totalPages, (tp) => {
+	if (page.value > tp) {
+		page.value = tp
+	}
+})
+
+const pendingReset = ref<UserListRow | null>(null)
 
 function formatDateTime(iso: string | null) {
 	if (!iso) {
@@ -187,7 +222,11 @@ async function saveUser() {
 	}
 }
 
-async function resetPassword(user: UserListRow) {
+async function confirmResetPassword() {
+	const user = pendingReset.value
+	if (!user) {
+		return
+	}
 	isResettingId.value = user.id
 	try {
 		await $fetch(`/api/users/${user.id}/password/reset`, { method: "POST" })
@@ -200,11 +239,14 @@ async function resetPassword(user: UserListRow) {
 	}
 	finally {
 		isResettingId.value = null
+		pendingReset.value = null
 	}
 }
 
 async function loadAudit(user: UserListRow) {
 	selectedAuditUser.value = user
+	auditRows.value = []
+	isAuditOpen.value = true
 	isLoadingAudit.value = true
 	try {
 		const response = await $fetch<AuditResponse>(`/api/users/${user.id}/audit`)
@@ -222,17 +264,13 @@ async function loadAudit(user: UserListRow) {
 
 <template>
 	<div class="space-y-6">
-		<section class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-			<div class="space-y-2">
-				<p class="text-muted-foreground text-sm font-semibold tracking-[0.16em] uppercase">
-					Administration
-				</p>
-
-				<h1 class="text-4xl font-semibold tracking-tighter">
+		<div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+			<div class="space-y-1">
+				<h1 class="text-2xl font-semibold tracking-tight">
 					Users
 				</h1>
 
-				<p class="text-muted-foreground max-w-2xl text-sm leading-7">
+				<p class="text-muted-foreground text-sm">
 					Create login accounts, link customer accounts, reset credentials, and review account activity.
 				</p>
 			</div>
@@ -240,248 +278,308 @@ async function loadAudit(user: UserListRow) {
 			<div class="flex items-center gap-2">
 				<Button
 					variant="outline"
-					class="rounded-md"
 					@click="refresh"
 				>
-					<RefreshCw class="mr-2 size-4" />
+					<RefreshCw class="size-4" />
 					Refresh
 				</Button>
 
-				<Button
-					class="rounded-md"
-					@click="openCreate"
-				>
-					<Plus class="mr-2 size-4" />
+				<Button @click="openCreate">
+					<Plus class="size-4" />
 					New user
 				</Button>
 			</div>
-		</section>
+		</div>
 
-		<section class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
-			<div class="border-border/60 bg-card rounded-md border">
-				<div class="border-border/60 flex flex-col gap-3 border-b p-4 md:flex-row md:items-center md:justify-between">
-					<div class="relative max-w-md flex-1">
-						<Search class="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-
-						<Input
-							v-model="searchQuery"
-							placeholder="Search email, name, or customer"
-							class="pl-9"
-						/>
-					</div>
-
-					<p class="text-muted-foreground text-sm">
-						{{ filteredRows.length }} of {{ rows.length }} users
-					</p>
+		<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+			<div
+				v-for="stat in stats"
+				:key="stat.label"
+				class="bg-card flex items-center gap-3 rounded-lg border p-4"
+			>
+				<div class="bg-muted text-muted-foreground flex size-9 items-center justify-center rounded-md">
+					<component
+						:is="stat.icon"
+						class="size-4.5"
+					/>
 				</div>
 
-				<div class="overflow-x-auto">
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead>User</TableHead>
+				<div>
+					<p class="text-2xl font-semibold tabular-nums">
+						{{ stat.value }}
+					</p>
 
-								<TableHead>Role</TableHead>
-
-								<TableHead>Customer account</TableHead>
-
-								<TableHead>Status</TableHead>
-
-								<TableHead>Last active</TableHead>
-
-								<TableHead class="w-52 text-right">
-									Actions
-								</TableHead>
-							</TableRow>
-						</TableHeader>
-
-						<TableBody>
-							<TableRow v-if="pending">
-								<TableCell
-									colspan="6"
-									class="text-muted-foreground h-24 text-center"
-								>
-									Loading users...
-								</TableCell>
-							</TableRow>
-
-							<TableRow v-else-if="!filteredRows.length">
-								<TableCell
-									colspan="6"
-									class="text-muted-foreground h-24 text-center"
-								>
-									No users match this search.
-								</TableCell>
-							</TableRow>
-
-							<template v-else>
-								<TableRow
-									v-for="user in filteredRows"
-									:key="user.id"
-								>
-									<TableCell>
-										<div class="space-y-1">
-											<p class="font-medium">
-												{{ user.name || user.email }}
-											</p>
-
-											<p class="text-muted-foreground text-sm">
-												{{ user.email }}
-											</p>
-										</div>
-									</TableCell>
-
-									<TableCell>
-										<Badge
-											class="rounded-full capitalize"
-											:variant="user.role === 'admin' ? 'default' : 'secondary'"
-										>
-											{{ user.role }}
-										</Badge>
-									</TableCell>
-
-									<TableCell>
-										<div
-											v-if="user.sageCustomerNumber"
-											class="space-y-1"
-										>
-											<p class="font-medium">
-												{{ user.sageCustomerNumber }}
-											</p>
-
-											<p class="text-muted-foreground text-sm">
-												{{ user.sageCustomerName || "Name unavailable" }}
-											</p>
-										</div>
-
-										<span
-											v-else
-											class="text-muted-foreground text-sm"
-										>
-											Not linked
-										</span>
-									</TableCell>
-
-									<TableCell>
-										<div class="flex flex-wrap gap-1.5">
-											<Badge
-												class="rounded-full"
-												:variant="user.deactivated ? 'destructive' : 'default'"
-											>
-												{{ user.deactivated ? "Deactivated" : "Active" }}
-											</Badge>
-
-											<Badge
-												class="rounded-full"
-												variant="secondary"
-											>
-												{{ user.emailVerified ? "Verified" : "Pending" }}
-											</Badge>
-										</div>
-									</TableCell>
-
-									<TableCell class="text-muted-foreground text-sm">
-										{{ formatDateTime(user.lastActiveAt) }}
-									</TableCell>
-
-									<TableCell>
-										<div class="flex justify-end gap-1">
-											<Button
-												size="sm"
-												variant="ghost"
-												@click="loadAudit(user)"
-											>
-												<Eye class="size-4" />
-											</Button>
-
-											<Button
-												size="sm"
-												variant="ghost"
-												@click="openEdit(user)"
-											>
-												<Pencil class="size-4" />
-											</Button>
-
-											<Button
-												size="sm"
-												variant="ghost"
-												:disabled="isResettingId === user.id"
-												@click="resetPassword(user)"
-											>
-												<LoaderCircle
-													v-if="isResettingId === user.id"
-													class="size-4 animate-spin"
-												/>
-
-												<RotateCcw
-													v-else
-													class="size-4"
-												/>
-											</Button>
-										</div>
-									</TableCell>
-								</TableRow>
-							</template>
-						</TableBody>
-					</Table>
+					<p class="text-muted-foreground text-xs">
+						{{ stat.label }}
+					</p>
 				</div>
 			</div>
+		</div>
 
-			<aside class="border-border/60 bg-card rounded-md border p-4">
-				<div class="mb-4">
-					<p class="text-sm font-semibold">
-						Audit trail
-					</p>
+		<div class="bg-card rounded-lg border">
+			<div class="flex flex-col gap-3 border-b p-4 md:flex-row md:items-center md:justify-between">
+				<div class="relative max-w-md flex-1">
+					<Search class="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
 
-					<p class="text-muted-foreground text-sm">
-						{{ selectedAuditUser ? selectedAuditUser.email : "Select a user to inspect activity." }}
-					</p>
+					<Input
+						v-model="searchQuery"
+						placeholder="Search email, name, or customer"
+						class="pl-9"
+					/>
 				</div>
 
-				<div
-					v-if="isLoadingAudit"
-					class="text-muted-foreground py-8 text-center text-sm"
-				>
-					Loading audit...
-				</div>
+				<p class="text-muted-foreground text-sm">
+					{{ filteredRows.length }} of {{ rows.length }} users
+				</p>
+			</div>
 
-				<div
-					v-else-if="!selectedAuditUser"
-					class="text-muted-foreground rounded-md border border-dashed p-6 text-center text-sm"
-				>
-					Use the view action on a user row.
-				</div>
+			<div class="overflow-x-auto">
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead>User</TableHead>
 
-				<ul
-					v-else-if="auditRows.length"
-					class="space-y-3"
-				>
-					<li
-						v-for="entry in auditRows"
-						:key="entry.id"
-						class="bg-muted rounded-md p-3"
+							<TableHead>Role</TableHead>
+
+							<TableHead>Customer account</TableHead>
+
+							<TableHead>Status</TableHead>
+
+							<TableHead>Last active</TableHead>
+
+							<TableHead class="w-44 text-right">
+								Actions
+							</TableHead>
+						</TableRow>
+					</TableHeader>
+
+					<TableBody>
+						<TableRow v-if="pending">
+							<TableCell
+								colspan="6"
+								class="text-muted-foreground h-24 text-center"
+							>
+								Loading users...
+							</TableCell>
+						</TableRow>
+
+						<TableRow v-else-if="!filteredRows.length">
+							<TableCell
+								colspan="6"
+								class="text-muted-foreground h-24 text-center"
+							>
+								No users match this search.
+							</TableCell>
+						</TableRow>
+
+						<template v-else>
+							<TableRow
+								v-for="user in pagedRows"
+								:key="user.id"
+							>
+								<TableCell>
+									<div class="space-y-1">
+										<p class="font-medium">
+											{{ user.name || user.email }}
+										</p>
+
+										<p class="text-muted-foreground text-sm">
+											{{ user.email }}
+										</p>
+									</div>
+								</TableCell>
+
+								<TableCell>
+									<Badge
+										class="capitalize"
+										:variant="user.role === 'admin' ? 'default' : 'secondary'"
+									>
+										{{ user.role }}
+									</Badge>
+								</TableCell>
+
+								<TableCell>
+									<div
+										v-if="user.sageCustomerNumber"
+										class="space-y-1"
+									>
+										<p class="font-medium">
+											{{ user.sageCustomerNumber }}
+										</p>
+
+										<p class="text-muted-foreground text-sm">
+											{{ user.sageCustomerName || "Name unavailable" }}
+										</p>
+									</div>
+
+									<span
+										v-else
+										class="text-muted-foreground text-sm"
+									>
+										Not linked
+									</span>
+								</TableCell>
+
+								<TableCell>
+									<div class="flex flex-wrap gap-1.5">
+										<Badge :variant="user.deactivated ? 'destructive' : 'default'">
+											{{ user.deactivated ? "Deactivated" : "Active" }}
+										</Badge>
+
+										<Badge variant="secondary">
+											{{ user.emailVerified ? "Verified" : "Pending" }}
+										</Badge>
+									</div>
+								</TableCell>
+
+								<TableCell class="text-muted-foreground text-sm">
+									{{ formatDateTime(user.lastActiveAt) }}
+								</TableCell>
+
+								<TableCell>
+									<div class="flex justify-end gap-1">
+										<Button
+											size="icon-sm"
+											variant="ghost"
+											title="View activity"
+											@click="loadAudit(user)"
+										>
+											<Eye class="size-4" />
+										</Button>
+
+										<Button
+											size="icon-sm"
+											variant="ghost"
+											title="Edit user"
+											@click="openEdit(user)"
+										>
+											<Pencil class="size-4" />
+										</Button>
+
+										<Button
+											size="icon-sm"
+											variant="ghost"
+											title="Send temporary password"
+											:disabled="isResettingId === user.id"
+											@click="pendingReset = user"
+										>
+											<LoaderCircle
+												v-if="isResettingId === user.id"
+												class="size-4 animate-spin"
+											/>
+
+											<RotateCcw
+												v-else
+												class="size-4"
+											/>
+										</Button>
+									</div>
+								</TableCell>
+							</TableRow>
+						</template>
+					</TableBody>
+				</Table>
+			</div>
+
+			<div
+				v-if="!pending && filteredRows.length"
+				class="border-t p-4"
+			>
+				<AppPagination
+					v-model:page="page"
+					:total-pages="totalPages"
+					:total-items="filteredRows.length"
+					:page-size="PAGE_SIZE"
+				/>
+			</div>
+		</div>
+
+		<!-- Reset password confirmation -->
+		<AlertDialog
+			:open="pendingReset !== null"
+			@update:open="(v: boolean) => { if (!v) pendingReset = null }"
+		>
+			<AlertDialogContent>
+				<AlertDialogHeader>
+					<AlertDialogTitle>Send a temporary password?</AlertDialogTitle>
+
+					<AlertDialogDescription>
+						This generates a new temporary password for
+						{{ pendingReset?.name || pendingReset?.email }} and emails it to them. Their current
+						password will stop working.
+					</AlertDialogDescription>
+				</AlertDialogHeader>
+
+				<AlertDialogFooter>
+					<AlertDialogCancel @click="pendingReset = null">
+						Cancel
+					</AlertDialogCancel>
+
+					<Button
+						:disabled="isResettingId !== null"
+						@click="confirmResetPassword"
 					>
-						<p class="text-sm font-medium">
-							{{ entry.summary }}
-						</p>
+						<LoaderCircle
+							v-if="isResettingId !== null"
+							class="size-4 animate-spin"
+						/>
+						Send temporary password
+					</Button>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
 
-						<p class="text-muted-foreground mt-1 text-xs">
-							{{ entry.action }} · {{ formatDateTime(entry.createdAt) }}
-						</p>
-					</li>
-				</ul>
+		<!-- Audit trail: progressive disclosure via a side sheet -->
+		<Sheet v-model:open="isAuditOpen">
+			<SheetContent class="flex w-full flex-col sm:max-w-md">
+				<SheetHeader>
+					<SheetTitle>Activity</SheetTitle>
 
-				<div
-					v-else
-					class="text-muted-foreground rounded-md border border-dashed p-6 text-center text-sm"
-				>
-					No audit entries for this user yet.
+					<SheetDescription>
+						{{ selectedAuditUser ? selectedAuditUser.email : "" }}
+					</SheetDescription>
+				</SheetHeader>
+
+				<div class="min-h-0 flex-1 overflow-y-auto px-4 pb-4">
+					<div
+						v-if="isLoadingAudit"
+						class="text-muted-foreground py-10 text-center text-sm"
+					>
+						Loading activity...
+					</div>
+
+					<ul
+						v-else-if="auditRows.length"
+						class="space-y-3"
+					>
+						<li
+							v-for="entry in auditRows"
+							:key="entry.id"
+							class="bg-muted rounded-md p-3"
+						>
+							<p class="text-sm font-medium">
+								{{ entry.summary }}
+							</p>
+
+							<p class="text-muted-foreground mt-1 text-xs">
+								{{ entry.action }} · {{ formatDateTime(entry.createdAt) }}
+							</p>
+						</li>
+					</ul>
+
+					<div
+						v-else
+						class="text-muted-foreground rounded-md border border-dashed p-6 text-center text-sm"
+					>
+						No activity recorded for this user yet.
+					</div>
 				</div>
-			</aside>
-		</section>
+			</SheetContent>
+		</Sheet>
 
+		<!-- Create / edit user -->
 		<Sheet v-model:open="isSheetOpen">
-			<SheetContent class="w-full overflow-y-auto sm:max-w-xl">
+			<SheetContent class="flex w-full flex-col overflow-y-auto sm:max-w-xl">
 				<SheetHeader>
 					<SheetTitle>
 						{{ mode === "create" ? "Create user" : "Edit user" }}
@@ -493,151 +591,176 @@ async function loadAudit(user: UserListRow) {
 				</SheetHeader>
 
 				<form
-					class="mt-6 space-y-5"
+					class="flex min-h-0 flex-1 flex-col"
 					@submit.prevent="saveUser"
 				>
-					<div class="grid gap-4 md:grid-cols-2">
-						<div class="space-y-2">
-							<Label for="user-email">Email</Label>
+					<div class="min-h-0 flex-1 space-y-6 overflow-y-auto px-4">
+						<FieldSet>
+							<FieldLegend>Account</FieldLegend>
 
-							<Input
-								id="user-email"
-								v-model="form.email"
-								type="email"
-								autocomplete="email"
-							/>
-						</div>
+							<FieldGroup class="grid gap-4 sm:grid-cols-2">
+								<Field>
+									<FieldLabel for="user-email">
+										Email
+									</FieldLabel>
 
-						<div class="space-y-2">
-							<Label for="user-name">Name</Label>
+									<Input
+										id="user-email"
+										v-model="form.email"
+										type="email"
+										autocomplete="email"
+									/>
+								</Field>
 
-							<Input
-								id="user-name"
-								v-model="form.name"
-								autocomplete="name"
-							/>
-						</div>
+								<Field>
+									<FieldLabel for="user-name">
+										Name
+									</FieldLabel>
 
-						<div class="space-y-2">
-							<Label for="user-role">Role</Label>
+									<Input
+										id="user-name"
+										v-model="form.name"
+										autocomplete="name"
+									/>
+								</Field>
+							</FieldGroup>
+						</FieldSet>
 
-							<NativeSelect
-								id="user-role"
-								v-model="form.role"
+						<FieldSet>
+							<FieldLegend>Role &amp; access</FieldLegend>
+
+							<FieldGroup class="grid gap-4 sm:grid-cols-2">
+								<Field>
+									<FieldLabel for="user-role">
+										Role
+									</FieldLabel>
+
+									<NativeSelect
+										id="user-role"
+										v-model="form.role"
+									>
+										<option value="customer">
+											Customer
+										</option>
+
+										<option value="admin">
+											Admin
+										</option>
+									</NativeSelect>
+								</Field>
+
+								<Field
+									v-if="mode === 'edit'"
+									orientation="horizontal"
+									class="self-end pb-2"
+								>
+									<Checkbox
+										id="user-deactivated"
+										v-model:checked="form.deactivated"
+									/>
+
+									<FieldLabel for="user-deactivated">
+										Deactivated
+									</FieldLabel>
+								</Field>
+							</FieldGroup>
+						</FieldSet>
+
+						<FieldSet>
+							<FieldLegend>Customer account</FieldLegend>
+
+							<div class="flex flex-col gap-3 sm:flex-row sm:items-end">
+								<Field class="flex-1">
+									<FieldLabel for="customer-number">
+										Customer account number
+									</FieldLabel>
+
+									<Input
+										id="customer-number"
+										v-model="form.sageCustomerNumber"
+										placeholder="Customer number"
+									/>
+								</Field>
+
+								<Button
+									type="button"
+									variant="outline"
+									:disabled="isLookingUpCustomer"
+									@click="lookupCustomer"
+								>
+									<LoaderCircle
+										v-if="isLookingUpCustomer"
+										class="size-4 animate-spin"
+									/>
+									Lookup
+								</Button>
+							</div>
+
+							<div
+								v-if="customerPreview"
+								class="bg-muted grid gap-3 rounded-md p-4 text-sm sm:grid-cols-2"
 							>
-								<option value="customer">
-									Customer
-								</option>
+								<div>
+									<p class="text-muted-foreground text-xs">
+										Name
+									</p>
 
-								<option value="admin">
-									Admin
-								</option>
-							</NativeSelect>
-						</div>
+									<p class="font-medium">
+										{{ customerPreview.customerName }}
+									</p>
+								</div>
 
-						<div
-							v-if="mode === 'edit'"
-							class="flex items-center gap-2 pt-7"
-						>
-							<Checkbox
-								id="user-deactivated"
-								v-model:checked="form.deactivated"
-							/>
+								<div>
+									<p class="text-muted-foreground text-xs">
+										Status
+									</p>
 
-							<Label for="user-deactivated">Deactivated</Label>
-						</div>
+									<p class="font-medium">
+										{{ customerPreview.status || "Unavailable" }} · Hold {{ customerPreview.onHold || "N/A" }}
+									</p>
+								</div>
+
+								<div>
+									<p class="text-muted-foreground text-xs">
+										Terms / price list
+									</p>
+
+									<p class="font-medium">
+										{{ customerPreview.terms || "N/A" }} · {{ customerPreview.priceList || "N/A" }}
+									</p>
+								</div>
+
+								<div>
+									<p class="text-muted-foreground text-xs">
+										Credit / balance
+									</p>
+
+									<p class="font-medium">
+										{{ money(customerPreview.creditLimit) }} · {{ money(customerPreview.balanceDue) }}
+									</p>
+								</div>
+
+								<div class="sm:col-span-2">
+									<p class="text-muted-foreground text-xs">
+										Contact
+									</p>
+
+									<p class="font-medium">
+										{{ customerPreview.contactName || "N/A" }} · {{ customerPreview.email || "No email" }} · {{ customerPreview.phoneNumber || "No phone" }}
+									</p>
+								</div>
+							</div>
+
+							<p
+								v-else-if="form.sageCustomerName"
+								class="bg-muted rounded-md p-4 text-sm"
+							>
+								Linked to {{ form.sageCustomerName }}.
+							</p>
+						</FieldSet>
 					</div>
 
-					<div class="border-border/60 rounded-md border p-4">
-						<div class="flex flex-col gap-3 md:flex-row md:items-end">
-							<div class="flex-1 space-y-2">
-								<Label for="customer-number">Customer account number</Label>
-
-								<Input
-									id="customer-number"
-									v-model="form.sageCustomerNumber"
-									placeholder="Customer number"
-								/>
-							</div>
-
-							<Button
-								type="button"
-								variant="outline"
-								:disabled="isLookingUpCustomer"
-								@click="lookupCustomer"
-							>
-								<LoaderCircle
-									v-if="isLookingUpCustomer"
-									class="mr-2 size-4 animate-spin"
-								/>
-								Lookup
-							</Button>
-						</div>
-
-						<div
-							v-if="customerPreview"
-							class="bg-muted mt-4 grid gap-3 rounded-md p-4 text-sm md:grid-cols-2"
-						>
-							<div>
-								<p class="text-muted-foreground text-xs uppercase">
-									Name
-								</p>
-
-								<p class="font-medium">
-									{{ customerPreview.customerName }}
-								</p>
-							</div>
-
-							<div>
-								<p class="text-muted-foreground text-xs uppercase">
-									Status
-								</p>
-
-								<p class="font-medium">
-									{{ customerPreview.status || "Unavailable" }} · Hold {{ customerPreview.onHold || "N/A" }}
-								</p>
-							</div>
-
-							<div>
-								<p class="text-muted-foreground text-xs uppercase">
-									Terms / price list
-								</p>
-
-								<p class="font-medium">
-									{{ customerPreview.terms || "N/A" }} · {{ customerPreview.priceList || "N/A" }}
-								</p>
-							</div>
-
-							<div>
-								<p class="text-muted-foreground text-xs uppercase">
-									Credit / balance
-								</p>
-
-								<p class="font-medium">
-									{{ money(customerPreview.creditLimit) }} · {{ money(customerPreview.balanceDue) }}
-								</p>
-							</div>
-
-							<div class="md:col-span-2">
-								<p class="text-muted-foreground text-xs uppercase">
-									Contact
-								</p>
-
-								<p class="font-medium">
-									{{ customerPreview.contactName || "N/A" }} · {{ customerPreview.email || "No email" }} · {{ customerPreview.phoneNumber || "No phone" }}
-								</p>
-							</div>
-						</div>
-
-						<div
-							v-else-if="form.sageCustomerName"
-							class="bg-muted mt-4 rounded-md p-4 text-sm"
-						>
-							Linked to {{ form.sageCustomerName }}.
-						</div>
-					</div>
-
-					<SheetFooter class="pt-4">
+					<SheetFooter>
 						<Button
 							type="button"
 							variant="outline"
@@ -652,7 +775,7 @@ async function loadAudit(user: UserListRow) {
 						>
 							<LoaderCircle
 								v-if="isSaving"
-								class="mr-2 size-4 animate-spin"
+								class="size-4 animate-spin"
 							/>
 							{{ mode === "create" ? "Create user" : "Save changes" }}
 						</Button>
