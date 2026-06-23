@@ -1,11 +1,12 @@
 import { updateEnquirySchema } from "#shared/schemas/enquiry"
 import type { EnquiryPriority, EnquiryStatus } from "#shared/types/enquiry"
 import { enquiryRepo } from "~~/server/db/repository"
-import { requireSessionUser } from "~~/server/utils/auth"
+import { requireAdmin } from "~~/server/utils/auth"
 import { publishEnquiryEvent } from "~~/server/utils/enquiryBus"
 
 export default defineEventHandler(async (event): Promise<{ status: EnquiryStatus, priority: EnquiryPriority }> => {
-	const sessionUser = await requireSessionUser(event)
+	// Status and priority are admin-only triage controls; customers cannot mutate them.
+	await requireAdmin(event)
 	const number = getRouterParam(event, "number")?.trim()
 
 	if (!number) {
@@ -16,7 +17,7 @@ export default defineEventHandler(async (event): Promise<{ status: EnquiryStatus
 	}
 
 	const enquiry = await enquiryRepo.findByNumber(number)
-	if (!enquiry || (sessionUser.role !== "admin" && enquiry.user_id !== sessionUser.id)) {
+	if (!enquiry) {
 		throw createError({
 			statusCode: 404,
 			statusMessage: "Enquiry not found",
@@ -24,14 +25,6 @@ export default defineEventHandler(async (event): Promise<{ status: EnquiryStatus
 	}
 
 	const body = await readValidatedBody(event, updateEnquirySchema.parse)
-
-	// Priority is an admin-only triage control.
-	if (body.priority !== undefined && sessionUser.role !== "admin") {
-		throw createError({
-			statusCode: 403,
-			statusMessage: "Only admins can change priority",
-		})
-	}
 
 	const updated = await enquiryRepo.updateEnquiry(enquiry.id, {
 		status: body.status,

@@ -23,6 +23,11 @@ const {
 }>()
 
 const defaultOpen = useCookie<boolean>("sidebar_state", { default: () => true })
+
+// Pages can opt into a viewport-bounded content area (no page scroll; the page
+// owns its own internal scrolling) by setting `definePageMeta({ fullHeight: true })`.
+const route = useRoute()
+const isFullHeight = computed(() => (route.meta as { fullHeight?: boolean }).fullHeight === true)
 </script>
 
 <template>
@@ -33,7 +38,7 @@ const defaultOpen = useCookie<boolean>("sidebar_state", { default: () => true })
 
 		<NuxtLoadingIndicator />
 
-		<main class="app-shell-grid relative flex min-h-screen flex-1 flex-col overflow-hidden transition-all duration-300 ease-in-out">
+		<main :class="cn('app-shell-grid relative flex min-h-screen flex-1 flex-col overflow-hidden transition-all duration-300 ease-in-out', isFullHeight && 'xl:h-dvh xl:min-h-0')">
 			<div class="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_top,var(--page-glow-1),transparent_72%)] opacity-75 dark:opacity-35" />
 
 			<div class="pointer-events-none absolute inset-y-0 right-0 w-80 bg-[radial-gradient(circle_at_center,var(--page-glow-2),transparent_70%)] opacity-55 dark:opacity-20" />
@@ -46,7 +51,7 @@ const defaultOpen = useCookie<boolean>("sidebar_state", { default: () => true })
 				:show-theme-toggle="showThemeToggle"
 			/>
 
-			<div :class="cn('relative z-10 mx-auto flex w-full max-w-420 flex-1 flex-col px-4 pb-8 pt-4 md:px-8 md:pb-10 md:pt-6', contentClass)">
+			<div :class="cn('relative z-10 mx-auto flex w-full max-w-420 flex-1 flex-col px-4 pb-8 pt-4 md:px-8 md:pb-10 md:pt-6', isFullHeight && 'xl:min-h-0', contentClass)">
 				<slot />
 			</div>
 

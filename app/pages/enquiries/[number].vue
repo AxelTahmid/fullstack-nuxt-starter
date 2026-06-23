@@ -8,6 +8,7 @@ import { useEnquiryStream } from "~/composables/useEnquiryStream"
 definePageMeta({
 	layout: "dashboard",
 	middleware: ["authenticated"],
+	fullHeight: true,
 })
 
 const route = useRoute()
@@ -237,7 +238,7 @@ onScopeDispose(() => {
 </script>
 
 <template>
-	<div class="space-y-6">
+	<div class="flex flex-col gap-6 xl:min-h-0 xl:flex-1">
 		<NuxtLink
 			to="/enquiries"
 			class="text-muted-foreground hover:text-primary inline-flex items-center gap-2 text-[0.68rem] font-bold tracking-[0.16em] uppercase transition-colors"
@@ -266,9 +267,9 @@ onScopeDispose(() => {
 
 		<section
 			v-else
-			class="grid gap-5 xl:grid-cols-[18rem_1fr_16rem]"
+			class="grid gap-5 xl:min-h-0 xl:flex-1 xl:grid-cols-[18rem_1fr_16rem] xl:grid-rows-1"
 		>
-			<aside class="border-border/60 bg-card rounded-md border">
+			<aside class="border-border/60 bg-card rounded-md border xl:flex xl:min-h-0 xl:flex-col xl:overflow-hidden">
 				<header class="border-border/40 border-b p-4">
 					<p
 						class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.2em] uppercase"
@@ -282,7 +283,7 @@ onScopeDispose(() => {
 					</p>
 				</header>
 
-				<ul class="max-h-128 space-y-0.5 overflow-y-auto p-2">
+				<ul class="max-h-128 space-y-0.5 overflow-y-auto p-2 xl:max-h-none xl:flex-1">
 					<li
 						v-for="row in enquiries ?? []"
 						:key="row.id"
@@ -338,7 +339,7 @@ onScopeDispose(() => {
 				</ul>
 			</aside>
 
-			<div class="border-border/60 bg-card flex flex-col rounded-md border">
+			<div class="border-border/60 bg-card flex min-h-0 flex-col rounded-md border">
 				<header class="border-border/40 flex flex-col gap-3 border-b p-6">
 					<div class="flex items-center gap-2">
 						<span
@@ -375,7 +376,7 @@ onScopeDispose(() => {
 
 				<div
 					ref="messagesContainer"
-					class="flex-1 space-y-5 overflow-y-auto p-6"
+					class="min-h-0 flex-1 space-y-5 overflow-y-auto p-6"
 				>
 					<article
 						v-for="message in thread.messages"
@@ -505,7 +506,7 @@ onScopeDispose(() => {
 				</footer>
 			</div>
 
-			<aside class="space-y-3">
+			<aside class="space-y-3 xl:min-h-0 xl:overflow-y-auto">
 				<div class="border-border/60 bg-card rounded-md border p-5">
 					<div class="text-muted-foreground mb-3 flex items-center gap-2">
 						<Factory class="size-4" />
@@ -572,7 +573,10 @@ onScopeDispose(() => {
 					</Button>
 				</div>
 
-				<div class="border-border/60 bg-card rounded-md border p-5">
+				<div
+					v-if="thread.viewerSide === 'support'"
+					class="border-border/60 bg-card rounded-md border p-5"
+				>
 					<p class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
 						Status
 					</p>

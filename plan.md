@@ -16,6 +16,7 @@ Sage 300 owns all business data: products, pricing, customer accounts, orders, a
 | `cart_items` | Pre-submission working draft. Becomes a Sage document only at checkout/estimate. | In place |
 | `enquiries` | Threaded customer/admin conversation. Sage has no messaging concept. Approved (option A, section 7). | In place |
 | `enquiry_messages` | Messages within an enquiry thread. | In place |
+| `enquiry_reads` | Per-side (customer/support) last-read marker per enquiry. Powers unread counts and read receipts. Kept separate from `enquiries` so marking a thread read does not fire the `updated_at` trigger. Migration 0011. | In place |
 | `audit_logs` | Security/admin action trail. Sage has no app-user audit concept. | In place |
 | pg-boss tables | Background job queue. Infrastructure, not Sage. | In place |
 
@@ -45,7 +46,7 @@ Anything not on this list lives in Sage and is read/written through the generate
 | Checkout / order submit | In place | `POST /api/orders` posts `OrderType: "Active"` via `oeOrdersPost`; clears cart on success. No local order tables. |
 | Order reads | In place | `GET /api/orders` is **server-paginated** (Sage `$skip`/`$top`/`$count` + OData `contains()` search; route-query `?page&pageSize&search`), rendered on the shared DataTable (server pagination + search) with an Orders sidebar nav. `GET /api/orders/[number]` detail reads Sage `OEOrders`. Quotes excluded; OE list has no `$orderby`, so no column sort. |
 | Request estimate (RFQ) | In place | `POST/GET /api/estimates` + `GET /api/estimates/[number]` create/read Sage OE **Quote** documents. No local quote tables. Routes: `/estimate` (server-paginated list on the shared DataTable), `/estimate/new` (request form), `/estimate/[number]` (detail) — shadcn primitives + route-owned `_lib` components; Estimates sidebar nav. |
-| Enquiries | In place | Local `enquiries` + `enquiry_messages` tables (migrations 0006/0007). Repository + 5 endpoints back the existing pages. |
+| Enquiries | In place | Real-time customer↔admin messaging. Local `enquiries` + `enquiry_messages` + `enquiry_reads` (migrations 0006/0007/0011). SSE live delivery, unread counts, "seen" receipts, role-derived authorship (Customer↔Support), auto status workflow, admin-only status/priority, customer-only creation, presence-gated email notifications. |
 | Admin user management | In place | `/users` is admin-only and supports create/edit/deactivate, customer account lookup/linking, welcome/reset credential email, and per-user audit review. |
 | Role enforcement | In place | `requireAdmin`/`requireRole` exist; user/audit/customer-lookup/brand mutation routes are admin-only; orders, quotes, and enquiries are scoped by role; admin-only navigation is hidden for customers. |
 
@@ -118,11 +119,15 @@ Status mapping (`EstimateStatus`): `converted` if `OrderNumberActivatedFromQuot`
 - Quote → order conversion in Sage (if/when that workflow is enabled) — read-only surfacing first.
 - Optionally open an enquiry thread for discussion after the Sage quote exists (depends on section 7).
 
-## 7. Enquiries — IMPLEMENTED (option A: local tables, approved)
+## 7. Enquiries — IMPLEMENTED (option A: local tables, approved) — real-time messaging
 
-Enquiries are threaded customer/admin conversation. **Sage 300 has no general threaded-messaging concept**, so this is the one feature that cannot be Sage-backed. Local tables were approved as the only option supporting a persistent multi-message thread.
+Enquiries are a threaded, **real-time** customer↔admin conversation. **Sage 300 has no general threaded-messaging concept**, so this is the one feature that cannot be Sage-backed. Local tables were approved as the only option supporting a persistent multi-message thread.
 
-Applied schema (one migration per table):
+### Model
+
+Customers raise enquiries; admins see the full queue and reply as **Support**. Admins never originate an enquiry (`POST /api/enquiries` is 403 for admins). Authorship is derived from the real session role, not impersonation — the old `asSupplier` demo flag is gone: an admin reply is the `support` side, everything else is the `customer` side.
+
+### Applied schema (one migration per table)
 
 ```text
 enquiries (0006_create_enquiries_table):
@@ -133,13 +138,35 @@ enquiries (0006_create_enquiries_table):
   created_at, updated_at (set_updated_at trigger)
 indexes: (user_id, updated_at), (status, updated_at), (source_type, source_reference)
 
-enquiry_messages (0007_create_enquiry_messages_table):
+enquiry_messages (0007 + sender_side added in 0011):
   id, enquiry_id -> enquiries(id) cascade, author_user_id -> users(id) set null,
-  author_name text, author_role text, body text, attachment_name text null, created_at
+  author_name text, author_role text, body text, attachment_name text null, created_at,
+  sender_side text not null default 'customer' check in ('customer','support')   -- 0011
 index: (enquiry_id, created_at)
+
+enquiry_reads (0011_add_enquiry_messaging_fields):
+  enquiry_id -> enquiries(id) cascade, side text check in ('customer','support'),
+  last_read_message_id int not null default 0, last_read_at timestamptz,
+  primary key (enquiry_id, side)
 ```
 
-Implementation: `server/db/repository/enquiry.ts` (singleton repo: list summaries with latest-message preview, find-by-number, list messages, create-with-first-message, add-message, update). All five routes replaced their `501` stubs. Access control: customers see only their own threads; admins see all. Message authorship: `asSupplier` → role `Supplier`/name = supplier; otherwise role `Buyer`/name = current user (matches the page's buyer-vs-supplier alignment). Statuses reuse the shared enum (`sent/received/reviewing/responded/resolved`). Quote linkage is available via `source_type = 'quote'` + `source_reference` = Sage quote number (columns present; not yet wired into the estimate flow).
+`sender_side` makes the customer/support split first-class (drives UI alignment, unread counts, receipts). `enquiry_reads` is its own table so advancing a read marker never trips the `enquiries.updated_at` trigger (which would wrongly re-sort the thread to the top).
+
+### Real-time transport
+
+Server-Sent Events, one connection per browser tab: `GET /api/enquiries/stream` authenticates via the session cookie and subscribes the connection to a single channel — customers to `user:{id}`, admins to the shared `admins` firehose. An in-process pub/sub bus (`server/utils/enquiryBus.ts`) fans `message`/`status`/`read` events out; the message, read, patch, and create handlers publish to it. **Single-instance only by design** — the bus is in-memory; horizontal scaling would swap it for Postgres LISTEN/NOTIFY behind the same interface. The client owns one `EventSource` in a Nuxt plugin (`app/plugins/enquiryStream.client.ts`); pages subscribe through `useEnquiryStream()`. (Verified end-to-end: connection, delivery, and live DOM append all confirmed via DevTools-Protocol headless test.)
+
+### Behavior
+
+- **Live append**: new messages appear in the open thread instantly (dedup by id); the list re-orders; unread badges update on the list rows, the sidebar "Enquiries" item, and the dashboard "Open Enquiries" KPI.
+- **Read receipts**: a "Seen" indicator shows once the other side's read marker passes your latest message; opening a thread (or receiving an inbound message while viewing) marks it read and emits a `read` event.
+- **Auto status workflow**: a customer message returns the thread to `sent` (awaiting support, reopening a resolved thread); a support reply sets `responded`; deliberate `reviewing`/`resolved` states are preserved. Statuses reuse the shared enum (`sent/received/reviewing/responded/resolved`).
+- **Triage controls are admin-only**: status and priority are changed only by admins (`PATCH /api/enquiries/[number]` requires admin). Priority is hidden from customers entirely; status stays read-only-visible to customers. New enquiries default to `low` priority until triaged.
+- **Email**: a new message queues a pg-boss notification to the other side, **presence-gated** — skipped when that side has a live SSE connection (in-app realtime is enough). Customer→support notifies active admins; support→customer notifies the thread owner.
+
+### Implementation
+
+`server/db/repository/enquiry.ts` (singleton repo): list summaries with latest-message preview + per-viewer unread count, find-by-number, list messages, read markers, mark-read (forward-only upsert), create-with-first-message, side-aware add-message (advances the author's own read marker in-txn), open count, update. The thread payload carries `viewerSide`, both read markers, and the customer identity (for the admin's participant panel). Quote linkage remains available via `source_type = 'quote'` + `source_reference` = Sage quote number (columns present; not yet wired into the estimate flow).
 
 ## 8. Customer And Sage Linkage
 
@@ -285,7 +312,7 @@ Implemented:
 - `GET /api/cart`, `POST /api/cart/items`, `PATCH /api/cart/items/[id]`, `DELETE /api/cart/items/[id]`
 - `POST /api/orders`, `GET /api/orders`, `GET /api/orders/[number]`
 - `POST /api/estimates`, `GET /api/estimates`, `GET /api/estimates/[number]`, `POST /api/estimates/[number]/convert`
-- `GET/POST /api/enquiries`, `GET /api/enquiries/[number]`, `POST /api/enquiries/[number]/messages`, `PATCH /api/enquiries/[number]`
+- `GET/POST /api/enquiries`, `GET /api/enquiries/stream` (SSE), `GET /api/enquiries/[number]`, `POST /api/enquiries/[number]/messages`, `POST /api/enquiries/[number]/read`, `PATCH /api/enquiries/[number]` (admin-only)
 - `GET/POST /api/users`, `PATCH /api/users/[id]`, `POST /api/users/[id]/password/reset`, `GET /api/users/[id]/audit`
 - `GET /api/audit`, `GET /api/sage/customers/[customerNumber]`, `POST /api/auth/password`, `POST /api/auth/password/change`
 
@@ -323,12 +350,20 @@ SDK generation, Nitro Sage client, backend product list, shop page rework.
 - [x] Estimate UI on shadcn primitives + route-owned `_lib` (`EstimateLineItem`, `EstimateStatusBadge`, `EstimateStatCard`, `EstimateListRow`, `format.ts`): `/estimate` (list, `GET /api/estimates`), `/estimate/new` (cart-backed request form), `/estimate/[number]` (quote detail). Estimates sidebar nav; dashboard quick-action → `/estimate/new`.
 - [x] Quote → order conversion: `POST /api/estimates/[number]/convert` (Sage `CreateOrderFromQuotes` process command on `OEOrders`, no SDK regeneration) + "Convert to order" action on the quote detail; converted quotes link to the resulting order. Exact Sage field combo to verify on first real run.
 
-### Phase 4 — Enquiries — Done (option A)
+### Phase 4 — Enquiries — Done (option A) + real-time messaging
 
 - [x] `enquiries` (0006) + `enquiry_messages` (0007) migrations applied; `server/db/types.ts` regenerated.
 - [x] `enquiry` repository + registered in `repository/index.ts`.
-- [x] All five routes replaced their `501` stubs (list, create, thread, patch, post message).
-- [x] Verified: server + shared typecheck, lint, and a DB smoke test (schema, FKs, `updated_at` trigger, summary query).
+- [x] REST routes (list, create, thread, patch, post message).
+- [x] `0011_add_enquiry_messaging_fields`: `enquiry_messages.sender_side` + `enquiry_reads` table (per-side read markers); types updated.
+- [x] Real-time delivery: `GET /api/enquiries/stream` (SSE) + in-memory pub/sub bus + client `EventSource` plugin + `useEnquiryStream()`.
+- [x] Unread counts (list rows, sidebar badge, dashboard KPI) + "seen" read receipts (`POST /api/enquiries/[number]/read`).
+- [x] Role-derived authorship (Customer↔Support); demo `asSupplier` impersonation removed.
+- [x] Customer-only creation (admins 403); admin-only status/priority (`PATCH` requires admin); priority hidden from customers, status read-only for customers.
+- [x] Auto status workflow (customer reply → `sent`/reopen; support reply → `responded`).
+- [x] Presence-gated email notifications (pg-boss `send-enquiry-message-notification`).
+- [x] Real participant/activity panel (customer identity, message count, last reply) replaces demo routing/SLA filler.
+- [x] Verified: lint, production build, and a DevTools-Protocol headless test confirming live SSE delivery + DOM append.
 - [ ] (Optional) link a thread to a Sage quote from the estimate flow via `source_type/source_reference`.
 
 ### Phase 5 — Pricing And Contract Detail
