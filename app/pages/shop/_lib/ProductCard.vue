@@ -16,6 +16,10 @@ const emit = defineEmits<{
 	add: [product: ProductListItem]
 }>()
 
+const { user } = useUserSession()
+// Only customers have a cart; admins browse the catalog to manage it.
+const isAdmin = computed(() => user.value?.role === "admin")
+
 function productPath(product: ProductListItem) {
 	return `/shop/${encodeURIComponent(product.sourceKey)}`
 }
@@ -83,6 +87,7 @@ function productPath(product: ProductListItem) {
 					</Button>
 
 					<Button
+						v-if="!isAdmin"
 						type="button"
 						size="icon-sm"
 						:title="inCart ? `${product.name} is in cart` : `Add ${product.name}`"

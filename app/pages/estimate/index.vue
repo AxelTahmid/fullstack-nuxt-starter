@@ -175,6 +175,7 @@ const columns = computed<ColumnDef<EstimateSummary>[]>(() => {
 				</Button>
 
 				<NuxtLink
+					v-if="!isAdmin"
 					to="/cart"
 					:class="buttonVariants()"
 				>
@@ -222,11 +223,12 @@ const columns = computed<ColumnDef<EstimateSummary>[]>(() => {
 						</p>
 
 						<p class="text-muted-foreground text-sm">
-							Request a quote from your cart to get started.
+							{{ isAdmin ? "Customer quote requests will appear here." : "Request a quote from your cart to get started." }}
 						</p>
 					</div>
 
 					<NuxtLink
+						v-if="!isAdmin"
 						to="/cart"
 						:class="buttonVariants()"
 					>

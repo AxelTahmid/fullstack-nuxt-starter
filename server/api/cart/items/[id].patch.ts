@@ -1,10 +1,10 @@
 import { cartItemUpdateSchema } from "#shared/schemas/checkout"
 import { cartRepo } from "~~/server/db/repository"
 import { auditNonCustomerAction } from "~~/server/utils/audit"
-import { requireSessionUser } from "~~/server/utils/auth"
+import { requireCustomer } from "~~/server/utils/auth"
 
 export default defineEventHandler(async (event) => {
-	const user = await requireSessionUser(event)
+	const user = await requireCustomer(event)
 	const rawId = getRouterParam(event, "id")
 	const itemId = rawId ? Number.parseInt(rawId, 10) : Number.NaN
 	if (!Number.isFinite(itemId)) {

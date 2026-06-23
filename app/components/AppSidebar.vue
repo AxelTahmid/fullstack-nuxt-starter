@@ -18,6 +18,7 @@ import { useEnquiryStream } from "~/composables/useEnquiryStream"
 
 type NavItem = AppNavItem & {
 	adminOnly?: boolean
+	customerOnly?: boolean
 }
 
 const route = useRoute()
@@ -51,6 +52,7 @@ const allMenuGroups = computed<{ title: string, items: NavItem[] }[]>(() => [
 				description: "Active order in build",
 				href: "/cart",
 				icon: ShoppingCart,
+				customerOnly: true,
 			},
 			{
 				label: "Orders",
@@ -112,7 +114,7 @@ const allMenuGroups = computed<{ title: string, items: NavItem[] }[]>(() => [
 const menuGroups = computed(() => allMenuGroups.value
 	.map(group => ({
 		...group,
-		items: group.items.filter(item => !item.adminOnly || isAdmin.value),
+		items: group.items.filter(item => (!item.adminOnly || isAdmin.value) && (!item.customerOnly || !isAdmin.value)),
 	}))
 	.filter(group => group.items.length > 0))
 

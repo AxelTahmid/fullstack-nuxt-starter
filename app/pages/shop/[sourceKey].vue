@@ -297,7 +297,10 @@ async function addToCart() {
 						</AlertDescription>
 					</Alert>
 
-					<div class="flex flex-wrap items-center gap-3">
+					<div
+						v-if="!isAdmin"
+						class="flex flex-wrap items-center gap-3"
+					>
 						<NumberField
 							v-model="quantity"
 							:min="1"
@@ -336,7 +339,6 @@ async function addToCart() {
 						</Button>
 
 						<Button
-							v-if="!isAdmin"
 							as-child
 							variant="outline"
 						>

@@ -4,7 +4,7 @@ import { createEstimateSchema } from "#shared/schemas/estimate"
 import type { EstimateResponse } from "#shared/types/estimate"
 import { authRepo, cartRepo } from "~~/server/db/repository"
 import { auditNonCustomerAction } from "~~/server/utils/audit"
-import { requireSessionUser } from "~~/server/utils/auth"
+import { requireCustomer } from "~~/server/utils/auth"
 import {
 	escapeODataString,
 	itemKey,
@@ -58,7 +58,7 @@ function quoteExpiry() {
 }
 
 export default defineEventHandler(async (event): Promise<EstimateResponse> => {
-	const sessionUser = await requireSessionUser(event)
+	const sessionUser = await requireCustomer(event)
 	const user = await authRepo.findUserById(sessionUser.id)
 	const body = await readValidatedBody(event, createEstimateSchema.parse)
 

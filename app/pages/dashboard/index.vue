@@ -78,12 +78,15 @@ const projectedLabel = computed(() => {
 
 const supplyHealthLabel = computed(() => `${(data.value?.kpis.supplyChainHealthPct ?? 0).toFixed(1)}%`)
 
-const quickLaunch = [
+const isAdmin = computed(() => (user.value as { role?: string } | null)?.role === "admin")
+
+// Requesting an estimate (via the cart) is a customer action; admins don't shop.
+const quickLaunch = computed(() => [
 	{ label: "Order Hub", href: "/shop", icon: Store },
-	{ label: "Request Estimate", href: "/cart", icon: ShoppingBasket },
+	...(isAdmin.value ? [] : [{ label: "Request Estimate", href: "/cart", icon: ShoppingBasket }]),
 	{ label: "Contract Pricing", href: "/rfp", icon: FileText },
 	{ label: "Enquiries", href: "/enquiries", icon: MessagesSquare },
-]
+])
 
 const activityIconMap: Record<string, typeof ShoppingCart> = {
 	ShoppingCart,

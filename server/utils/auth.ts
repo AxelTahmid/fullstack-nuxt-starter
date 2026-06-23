@@ -109,3 +109,7 @@ export async function requireRole(event: H3Event, roles: UserRole[]) {
 export async function requireAdmin(event: H3Event) {
 	return requireRole(event, ["admin"])
 }
+
+export async function requireCustomer(event: H3Event) {
+	return requireRole(event, ["customer"])
+}

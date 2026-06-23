@@ -15,7 +15,7 @@ import { useCart } from "~/composables/useCart"
 
 definePageMeta({
 	layout: "dashboard",
-	middleware: ["authenticated"],
+	middleware: ["authenticated", "customer"],
 })
 
 useHead({

@@ -25,9 +25,14 @@ const {
 }>()
 
 const route = useRoute()
+const { user } = useUserSession()
+// The cart belongs to customers; admins triage and fulfil rather than shop.
+const isCustomer = computed(() => user.value?.role === "customer")
 const cart = useCart()
 onMounted(() => {
-	cart.refresh()
+	if (isCustomer.value) {
+		cart.refresh()
+	}
 })
 
 const generatedBreadcrumbItems = computed<AppBreadcrumbItem[]>(() => {
@@ -106,6 +111,7 @@ const breadcrumbItems = computed(() => breadcrumbs ?? generatedBreadcrumbItems.v
 
 		<div class="ml-auto flex items-center gap-2">
 			<NuxtLink
+				v-if="isCustomer"
 				to="/cart"
 				class="border-border/70 bg-card text-foreground hover:border-primary hover:text-primary relative inline-flex items-center gap-2 rounded-md border px-3 py-2 text-[0.62rem] font-bold tracking-[0.16em] uppercase transition-all"
 			>

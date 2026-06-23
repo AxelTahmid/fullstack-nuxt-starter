@@ -3,7 +3,7 @@ import { icItemsGetByUnformattedItemNumber } from "#shared/sage300"
 import { cartItemAddSchema } from "#shared/schemas/checkout"
 import { cartRepo } from "~~/server/db/repository"
 import { auditNonCustomerAction } from "~~/server/utils/audit"
-import { requireSessionUser } from "~~/server/utils/auth"
+import { requireCustomer } from "~~/server/utils/auth"
 
 function sagePath() {
 	const { sage300 } = useRuntimeConfig()
@@ -45,7 +45,7 @@ async function requireItem(sourceKey: string) {
 }
 
 export default defineEventHandler(async (event) => {
-	const user = await requireSessionUser(event)
+	const user = await requireCustomer(event)
 	const body = await readValidatedBody(event, cartItemAddSchema.parse)
 
 	await requireItem(body.sourceKey)
