@@ -9,7 +9,10 @@ import {
 	icItemPricingGetByCurrencyCodeAndUnformattedItemNumberAndPriceListCode,
 	icItemsGetByUnformattedItemNumber,
 } from "#shared/sage300"
+import type { ProductImage } from "#shared/types/product"
+import { productImageRepo } from "~~/server/db/repository"
 import { requireSessionUser } from "~~/server/utils/auth"
+import { toProductImageDto } from "~~/server/utils/productImage"
 
 function sagePath() {
 	const { sage300 } = useRuntimeConfig()
@@ -27,6 +30,12 @@ function escapeODataString(value: string) {
 
 function itemKey(item: ICItemT) {
 	return item.UnformattedItemNumber || item.ItemNumber || ""
+}
+
+// Mirrors the web-store gate on the product list: an item is only viewable (by
+// customers AND admins) when it's flagged for the web store, sellable, and stocked.
+function isWebStoreVisible(item: ICItemT) {
+	return item.AllowItemInWebStore === true && item.Sellable === true && item.StockItem === true
 }
 
 function firstItem(data: ICItemListResponseT | ICItemT | undefined): ICItemT | undefined {
@@ -94,6 +103,7 @@ export default defineEventHandler(async (event): Promise<{
 	item: ICItemT
 	pricing: ICItemPricingT | null
 	pricingUnavailableReason: string | null
+	images: ProductImage[]
 }> => {
 	await requireSessionUser(event)
 
@@ -112,7 +122,7 @@ export default defineEventHandler(async (event): Promise<{
 		},
 	})
 	const item = firstItem(itemResponse.data)
-	if (!item || !itemKey(item)) {
+	if (!item || !itemKey(item) || !isWebStoreVisible(item)) {
 		throw createError({
 			statusCode: 404,
 			statusMessage: "Product not found",
@@ -120,10 +130,12 @@ export default defineEventHandler(async (event): Promise<{
 	}
 
 	const pricingResult = await loadPricing(item, itemKey(item))
+	const images = (await productImageRepo.listBySourceKey(itemKey(item))).map(toProductImageDto)
 
 	return {
 		item,
 		pricing: pricingResult.pricing,
 		pricingUnavailableReason: pricingResult.pricingUnavailableReason,
+		images,
 	}
 })

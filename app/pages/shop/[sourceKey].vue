@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { AlertCircle, ArrowLeft, Check, ImageIcon, LoaderCircle, MessageSquarePlus, Plus } from "@lucide/vue"
+import { AlertCircle, ArrowLeft, Check, LoaderCircle, MessageSquarePlus, Plus } from "@lucide/vue"
 import type { FetchError } from "ofetch"
 import type { ICItemPricingDetailT, ICItemPricingT, ICItemT } from "#shared/sage300"
-import type { StockStatus } from "#shared/types/product"
+import type { ProductImage, StockStatus } from "#shared/types/product"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { toast } from "~/components/toast"
 import { useCart } from "~/composables/useCart"
 import { formatPrice, stockLabel } from "./_lib/format"
+import ProductImages from "./_lib/ProductImages.vue"
 
 definePageMeta({
 	layout: "dashboard",
@@ -30,6 +31,7 @@ const { data, error } = await useFetch<{
 	item: ICItemT
 	pricing: ICItemPricingT | null
 	pricingUnavailableReason: string | null
+	images: ProductImage[]
 }>(() => `/api/products/${encodeURIComponent(sourceKey.value)}`)
 
 const item = computed(() => data.value?.item)
@@ -286,13 +288,12 @@ async function addToCart() {
 			v-else
 			class="grid gap-6 xl:grid-cols-[minmax(18rem,24rem)_1fr]"
 		>
-			<Card class="overflow-hidden py-0">
-				<div class="aspect-square bg-muted">
-					<div class="flex size-full items-center justify-center text-muted-foreground">
-						<ImageIcon class="size-12" />
-					</div>
-				</div>
-			</Card>
+			<ProductImages
+				:source-key="itemSourceKey"
+				:product-name="itemName"
+				:is-admin="isAdmin"
+				:initial-images="data?.images ?? []"
+			/>
 
 			<div class="grid gap-6 lg:grid-cols-[1fr_20rem]">
 				<div class="space-y-6">

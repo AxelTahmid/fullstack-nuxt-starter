@@ -6,10 +6,17 @@ import {
 	icItemsGet,
 } from "#shared/sage300"
 import type { ProductListItem, ProductListResponse } from "#shared/types/product"
+import { productImageRepo } from "~~/server/db/repository"
 import { requireSessionUser } from "~~/server/utils/auth"
+import { productImagePublicUrl } from "~~/server/utils/objectStorage"
 
 const DEFAULT_PAGE_SIZE = 24
 const DEFAULT_MANUFACTURER = "Manufacturer unavailable"
+
+// Web-store catalog gate: a product is visible (to customers AND admins) only when
+// all three Sage I/C Item flags are set — "Allow Item in Web Store", "Sellable",
+// and "Stock Item". Stock level is surfaced as a badge, not used to hide products.
+const WEB_STORE_FILTER = "AllowItemInWebStore eq true and Sellable eq true and StockItem eq true"
 
 function sagePath() {
 	const { sage300 } = useRuntimeConfig()
@@ -130,7 +137,7 @@ function countFacets(items: ProductListItem[]) {
 }
 
 export default defineEventHandler(async (event): Promise<ProductListResponse> => {
-	const sessionUser = await requireSessionUser(event)
+	await requireSessionUser(event)
 
 	const query = getQuery(event)
 	const category = typeof query.category === "string" && query.category.length > 0 ? query.category : undefined
@@ -140,12 +147,9 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 	const page = Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1
 	const filter = buildItemFilter(category, manufacturer, q)
 
-	// Customers only see items they can actually purchase: active, sellable, and
-	// in stock. Admins see the full catalog for management.
-	const availabilityFilter = sessionUser.role === "admin"
-		? undefined
-		: "Sellable eq true and Status eq true and QuantityAvailable gt 0"
-	const $filter = [filter, availabilityFilter].filter(Boolean).join(" and ") || undefined
+	// The web-store catalog (customers and admins alike): items flagged for the web
+	// store, sellable, and stocked. Stock level is shown as a badge, not a filter.
+	const $filter = [filter, WEB_STORE_FILTER].filter(Boolean).join(" and ")
 
 	const productsResponse = await icItemsGet({
 		path: sagePath(),
@@ -165,8 +169,12 @@ export default defineEventHandler(async (event): Promise<ProductListResponse> =>
 	const totalPages = Math.max(1, Math.ceil(total / DEFAULT_PAGE_SIZE))
 	const facets = countFacets(items)
 
+	// Attach each item's primary image (stored in object storage, linked by source key).
+	const primaryImages = await productImageRepo.listPrimaryBySourceKeys(items.map(item => item.sourceKey))
+	const imageUrlByKey = new Map(primaryImages.map(row => [row.source_key, productImagePublicUrl(row.object_key)]))
+
 	return {
-		items,
+		items: items.map(item => ({ ...item, imageUrl: imageUrlByKey.get(item.sourceKey) ?? null })),
 		total,
 		page,
 		pageSize: DEFAULT_PAGE_SIZE,

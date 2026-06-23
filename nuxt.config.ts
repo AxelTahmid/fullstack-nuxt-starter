@@ -133,6 +133,19 @@ export default defineNuxtConfig({
 			migrate: process.env.PGBOSS_MIGRATE !== "false",
 			max: process.env.PGBOSS_MAX_CONN ? Number.parseInt(process.env.PGBOSS_MAX_CONN, 10) : 10,
 		},
+		minio: {
+			// Server-side host (Docker overrides to `minio`); used for bucket ops + deletes.
+			endpoint: process.env.MINIO_ENDPOINT || "localhost",
+			port: process.env.MINIO_PORT ? Number.parseInt(process.env.MINIO_PORT, 10) : 9000,
+			useSSL: process.env.MINIO_USE_SSL === "true",
+			// Explicit region so the client signs without a network region lookup.
+			region: process.env.MINIO_REGION || "us-east-1",
+			accessKey: process.env.MINIO_ACCESS_KEY || "",
+			secretKey: process.env.MINIO_SECRET_KEY || "",
+			bucket: process.env.MINIO_BUCKET || "product-images",
+			// Browser-facing base URL: presigned uploads + public image URLs.
+			publicUrl: process.env.MINIO_PUBLIC_URL || "http://localhost:9000",
+		},
 	},
 
 	dir: {

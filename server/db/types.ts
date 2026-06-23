@@ -116,6 +116,19 @@ export interface EnquiryReads {
 	side: string
 }
 
+export interface ProductImages {
+	alt: string | null
+	content_type: string | null
+	created_at: Generated<Timestamp>
+	created_by: number | null
+	file_size: number | null
+	id: Generated<number>
+	is_primary: Generated<boolean>
+	object_key: string
+	sort_order: Generated<number>
+	source_key: string
+}
+
 export interface QueueBam {
 	command: string
 	completed_on: Timestamp | null
@@ -252,6 +265,7 @@ export interface DB {
 	"enquiries": Enquiries
 	"enquiry_messages": EnquiryMessages
 	"enquiry_reads": EnquiryReads
+	"product_images": ProductImages
 	"queue.bam": QueueBam
 	"queue.job": QueueJob
 	"queue.job_dependency": QueueJobDependency
