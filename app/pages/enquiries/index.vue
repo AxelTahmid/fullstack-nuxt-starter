@@ -89,13 +89,30 @@ const supplierSuggestions = [
 	"Cummins Power Systems",
 ]
 
-function openModal(prefill?: Partial<typeof form>) {
+// When raised from an order/estimate/product the linkage is fixed context and
+// must not be edited; a manual "New Enquiry" keeps those fields editable.
+const linkLocked = ref(false)
+const linkContextLabel = computed(() => {
+	if (form.sourceType === "order") {
+		return "order"
+	}
+	if (form.sourceType === "quote") {
+		return "estimate"
+	}
+	if (form.productSku) {
+		return "product"
+	}
+	return "page"
+})
+
+function openModal(prefill?: Partial<typeof form>, locked = false) {
 	form.subject = prefill?.subject ?? ""
 	form.supplierName = prefill?.supplierName ?? ""
 	form.productSku = prefill?.productSku ?? ""
 	form.sourceType = prefill?.sourceType ?? "general"
 	form.sourceReference = prefill?.sourceReference ?? ""
 	form.initialMessage = ""
+	linkLocked.value = locked
 	isModalOpen.value = true
 }
 
@@ -114,7 +131,7 @@ onMounted(() => {
 		productSku: str(q.productSku),
 		sourceType,
 		sourceReference: str(q.sourceReference),
-	})
+	}, true)
 	// Drop the params so a refresh does not reopen the modal.
 	return navigateTo({ query: {} }, { replace: true })
 })
@@ -416,22 +433,25 @@ async function submitEnquiry() {
 									v-model="form.productSku"
 									type="text"
 									placeholder="SKI-VLV-XP900"
-									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 font-mono text-sm focus:ring-2 focus:outline-none"
-									:disabled="isSubmitting"
+									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 font-mono text-sm focus:ring-2 focus:outline-none disabled:opacity-70"
+									:disabled="isSubmitting || linkLocked"
 								/>
 							</div>
 						</div>
 
-						<div class="grid gap-5 sm:grid-cols-2">
+						<div
+							v-if="!linkLocked || form.sourceType !== 'general'"
+							class="grid gap-5 sm:grid-cols-2"
+						>
 							<div>
 								<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
-									Linked document (optional)
+									Linked document
 								</Label>
 
 								<select
 									v-model="form.sourceType"
-									class="bg-muted text-foreground focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none"
-									:disabled="isSubmitting"
+									class="bg-muted text-foreground focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 text-sm focus:ring-2 focus:outline-none disabled:opacity-70"
+									:disabled="isSubmitting || linkLocked"
 								>
 									<option value="general">
 										None
@@ -456,11 +476,18 @@ async function submitEnquiry() {
 									v-model="form.sourceReference"
 									type="text"
 									placeholder="e.g. ORD-001234"
-									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 font-mono text-sm focus:ring-2 focus:outline-none"
-									:disabled="isSubmitting"
+									class="bg-muted text-foreground placeholder:text-muted-foreground/60 focus:ring-primary/40 mt-2 w-full rounded-md px-3 py-2.5 font-mono text-sm focus:ring-2 focus:outline-none disabled:opacity-70"
+									:disabled="isSubmitting || linkLocked"
 								/>
 							</div>
 						</div>
+
+						<p
+							v-if="linkLocked"
+							class="text-muted-foreground -mt-2 text-xs"
+						>
+							Linked from the {{ linkContextLabel }} you came from — these references can't be changed here.
+						</p>
 
 						<div>
 							<Label class="text-muted-foreground text-[0.62rem] font-bold tracking-[0.18em] uppercase">
